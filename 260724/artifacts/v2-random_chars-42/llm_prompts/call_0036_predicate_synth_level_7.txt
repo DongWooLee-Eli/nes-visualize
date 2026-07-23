@@ -1,0 +1,346 @@
+You are a software engineer that must write Python predicate evaluators. These functions implement the PDDL predicates declared in the domain file: each function takes the state and predicate arguments, then returns True or False. You will need to write Python predicates for ALL the predicates you see in the domain file. The problem file and raw state are also given to help guide you.
+
+Return your code blocks with
+```python ```
+markup tags so I can easily extract it.
+
+BEGIN EXAMPLE - note that BOTH predicates are defined (do not omit any):
+
+predicate: key_exists(arg1)
+predicate: same_value(arg1, arg2)
+
+def key_exists(state, arg1):
+    """True when arg1 is an observed raw-state key."""
+    return arg1 in state
+
+def same_value(state, arg1, arg2):
+    """True when two observed raw-state keys have equal values."""
+    return arg1 in state and arg2 in state and state[arg1] == state[arg2]
+
+END EXAMPLE
+
+Rules:
+- ALWAYS include `state` as the first argument.
+- Use the EXACT predicate name from the domain file (case-sensitive).
+- Define every predicate the domain declares - even 0-arity ones.
+- For 0-arity predicates use `def name(state, *args): ...` so callers
+  passing extra args don't break.
+- Return `bool` (or a truthy/falsy value coercible to bool).
+
+MANDATORY - you MUST define ALL of these predicate functions, with EXACTLY these names (one `def <name>(state, ...):` per name). Omitting any one will cause the run to fail:
+  - ach_collect_sgqeje
+  - ach_collect_tpkhxk
+  - ach_make_sgqeje_bcwrvm
+  - ach_make_sgqeje_wqiqzh
+  - ach_make_tpkhxk_bcwrvm
+  - ach_make_tpkhxk_wqiqzh
+  - ach_place_sgqeje
+  - ach_place_zezroc
+  - inv_sgqeje_ge1
+  - inv_sgqeje_ge2
+
+Starter stubs (you must fill in each body - do not delete any):
+```python
+def ach_collect_sgqeje(state, *args):
+    ...  # implement
+
+def ach_collect_tpkhxk(state, *args):
+    ...  # implement
+
+def ach_make_sgqeje_bcwrvm(state, *args):
+    ...  # implement
+
+def ach_make_sgqeje_wqiqzh(state, *args):
+    ...  # implement
+
+def ach_make_tpkhxk_bcwrvm(state, *args):
+    ...  # implement
+
+def ach_make_tpkhxk_wqiqzh(state, *args):
+    ...  # implement
+
+def ach_place_sgqeje(state, *args):
+    ...  # implement
+
+def ach_place_zezroc(state, *args):
+    ...  # implement
+
+def inv_sgqeje_ge1(state, *args):
+    ...  # implement
+
+def inv_sgqeje_ge2(state, *args):
+    ...  # implement
+```
+
+Domain File:
+
+(define (domain collect_place_make_domain)
+  (:requirements :strips :typing :negative-preconditions)
+  (:predicates (ach_collect_tpkhxk) (ach_collect_sgqeje) (ach_place_zezroc) (ach_place_sgqeje) (ach_make_tpkhxk_bcwrvm) (ach_make_sgqeje_bcwrvm) (ach_make_tpkhxk_wqiqzh) (ach_make_sgqeje_wqiqzh) (inv_sgqeje_ge1) (inv_sgqeje_ge2))
+  (:action collect_tpkhxk
+    :parameters ()
+    :precondition (and)
+    :effect (and (ach_collect_tpkhxk))
+  )
+  (:action collect_sgqeje
+    :parameters ()
+    :precondition (and (not (inv_sgqeje_ge1)))
+    :effect (and (ach_collect_sgqeje) (inv_sgqeje_ge1))
+  )
+  (:action collect_sgqeje_again
+    :parameters ()
+    :precondition (and (inv_sgqeje_ge1) (not (inv_sgqeje_ge2)))
+    :effect (and (ach_collect_sgqeje) (inv_sgqeje_ge2))
+  )
+  (:action place_zezroc
+    :parameters ()
+    :precondition (and)
+    :effect (and (ach_place_zezroc))
+  )
+  (:action place_sgqeje
+    :parameters ()
+    :precondition (and (inv_sgqeje_ge2))
+    :effect (and (ach_place_sgqeje) (not (inv_sgqeje_ge1)) (not (inv_sgqeje_ge2)))
+  )
+  (:action make_tpkhxk_bcwrvm
+    :parameters ()
+    :precondition (and)
+    :effect (and (ach_make_tpkhxk_bcwrvm))
+  )
+  (:action make_sgqeje_bcwrvm
+    :parameters ()
+    :precondition (and (inv_sgqeje_ge1))
+    :effect (and (ach_make_sgqeje_bcwrvm) (not (inv_sgqeje_ge1)) (not (inv_sgqeje_ge2)))
+  )
+  (:action make_tpkhxk_wqiqzh
+    :parameters ()
+    :precondition (and)
+    :effect (and (ach_make_tpkhxk_wqiqzh))
+  )
+  (:action make_sgqeje_wqiqzh
+    :parameters ()
+    :precondition (and (inv_sgqeje_ge1))
+    :effect (and (ach_make_sgqeje_wqiqzh) (not (inv_sgqeje_ge1)) (not (inv_sgqeje_ge2)))
+  )
+)
+
+Problem File:
+
+(define (problem collect_place_make_problem)
+  (:domain collect_place_make_domain)
+  (:objects)
+  (:init)
+  (:goal (ach_make_sgqeje_wqiqzh))
+)
+
+Raw State:
+
+{'player': [[4, 3]], 'player_facing': [0, 1], 'player_health': 9, 'player_hunger': 0.0, 'player_thirst': 0.0, 'player_fatigue': 0.0, 'player_sleeping': False, 'daylight': 1.0, 'step_count': 0, 'inv_health': 9, 'inv_food': 9, 'inv_drink': 9, 'inv_energy': 9, 'inv_wcgshh': 0, 'inv_tpkhxk': 0, 'inv_sgqeje': 0, 'inv_grpoqi': 0, 'inv_bzracx': 0, 'inv_mwzvua': 0, 'inv_tpkhxk_bcwrvm': 0, 'inv_sgqeje_bcwrvm': 0, 'inv_bzracx_bcwrvm': 0, 'inv_tpkhxk_wqiqzh': 0, 'inv_sgqeje_wqiqzh': 0, 'inv_bzracx_wqiqzh': 0, 'mynbiq': [[6, 0], [7, 0]], 'pmzjpl': [[0, 0], [0, 2], [0, 3], [0, 4], [1, 1], [1, 2], [2, 0], [2, 1], [2, 2], [2, 3], [3, 1], [3, 2], [3, 3], [4, 2], [4, 3], [4, 4], [5, 2], [5, 5], [6, 1], [6, 2], [6, 4], [6, 6], [7, 1], [7, 2], [7, 3], [7, 4], [7, 6], [8, 0], [8, 1], [8, 2], [8, 3], [8, 6]], 'sgqeje': [[0, 6], [1, 4], [1, 5], [1, 6], [2, 6], [3, 5], [3, 6], [4, 6], [5, 6]], 'wztejd': [[4, 0], [5, 0], [5, 1]], 'xcvkpr': [[0, 1], [1, 0], [1, 3], [3, 0], [4, 1], [5, 3], [5, 4], [6, 3], [6, 5], [7, 5], [8, 4], [8, 5]], 'grpoqi': [[2, 5], [3, 4]], 'bzracx': [[0, 5], [2, 4]], 'mwzvua': [[4, 5]], 'ach_collect_grpoqi': 0, 'ach_collect_mwzvua': 0, 'ach_collect_bzracx': 0, 'ach_collect_sgqeje': 0, 'ach_collect_tpkhxk': 0, 'ach_make_bzracx_bcwrvm': 0, 'ach_make_bzracx_wqiqzh': 0, 'ach_make_sgqeje_bcwrvm': 0, 'ach_make_sgqeje_wqiqzh': 0, 'ach_make_tpkhxk_bcwrvm': 0, 'ach_make_tpkhxk_wqiqzh': 0, 'ach_place_ckqpdj': 0, 'ach_place_sgqeje': 0, 'ach_place_zezroc': 0}
+
+Current Python Low Level World Model:
+
+from copy import deepcopy
+
+def transition_model(state, action):
+    new_state = deepcopy(state)
+    new_state["step_count"] = state.get("step_count", 0) + 1
+
+    directions = {
+        "move_left": (-1, 0),
+        "move_right": (1, 0),
+        "move_up": (0, -1),
+        "move_down": (0, 1),
+    }
+
+    def positions(key):
+        return new_state.get(key, []) or []
+
+    def contains(key, pos):
+        return pos in positions(key)
+
+    def remove_at(key, pos):
+        if contains(key, pos):
+            new_state[key].remove(pos)
+            return True
+        return False
+
+    def add_at(key, pos):
+        new_state.setdefault(key, [])
+        if pos not in new_state[key]:
+            new_state[key].append(pos)
+            new_state[key].sort(key=lambda p: (p[0], p[1]))
+
+    def tile_key_at(pos):
+        ignored = {"player", "player_facing"}
+        for key, value in new_state.items():
+            if key in ignored or key.startswith("inv_"):
+                continue
+            if isinstance(value, list) and pos in value:
+                return key
+        return None
+
+    def map_bounds():
+        coords = []
+        for key, value in new_state.items():
+            if key == "player" or key.startswith("inv_"):
+                continue
+            if isinstance(value, list):
+                coords.extend(
+                    p for p in value
+                    if isinstance(p, list) and len(p) == 2
+                )
+        if not coords:
+            return None
+        return (
+            min(p[0] for p in coords),
+            max(p[0] for p in coords),
+            min(p[1] for p in coords),
+            max(p[1] for p in coords),
+        )
+
+    def in_bounds(pos):
+        bounds = map_bounds()
+        if bounds is None:
+            return True
+        min_x, max_x, min_y, max_y = bounds
+        return min_x <= pos[0] <= max_x and min_y <= pos[1] <= max_y
+
+    def nearby(key, pos):
+        return any(
+            abs(other[0] - pos[0]) <= 1
+            and abs(other[1] - pos[1]) <= 1
+            for other in positions(key)
+        )
+
+    player = positions("player")
+    if not player:
+        return new_state
+
+    x, y = player[0]
+
+    if action in directions:
+        dx, dy = directions[action]
+        new_state["player_facing"] = [dx, dy]
+        destination = [x + dx, y + dy]
+
+        destination_tile = tile_key_at(destination)
+        traversable = destination_tile in {"pmzjpl", "wztejd"}
+
+        if in_bounds(destination) and traversable:
+            new_state["player"] = [destination]
+        return new_state
+
+    facing = new_state.get("player_facing", [0, 1])
+    target = [x + facing[0], y + facing[1]]
+
+    if action == "do":
+        tile = tile_key_at(target)
+        if tile is None:
+            return new_state
+
+        collected = None
+        required_tool = None
+        replacement_tile = "pmzjpl"
+
+        if tile == "xcvkpr":
+            collected = "tpkhxk"
+        elif tile == "sgqeje":
+            collected = "sgqeje"
+            required_tool = "tpkhxk_bcwrvm"
+            replacement_tile = "ydtzir"
+        elif tile == "grpoqi":
+            collected = "grpoqi"
+            required_tool = "tpkhxk_bcwrvm"
+        elif tile == "bzracx":
+            collected = "bzracx"
+            required_tool = "sgqeje_bcwrvm"
+        elif tile == "mwzvua":
+            collected = "mwzvua"
+            required_tool = "bzracx_bcwrvm"
+
+        if collected is not None:
+            can_collect = (
+                required_tool is None
+                or new_state.get("inv_" + required_tool, 0) > 0
+            )
+            if can_collect and remove_at(tile, target):
+                add_at(replacement_tile, target)
+                inv_key = "inv_" + collected
+                new_state[inv_key] = new_state.get(inv_key, 0) + 1
+                achievement_key = "ach_collect_" + collected
+                new_state[achievement_key] = (
+                    new_state.get(achievement_key, 0) + 1
+                )
+
+        return new_state
+
+    if action.startswith("place_"):
+        entity = action[len("place_"):]
+        costs = {
+            "sgqeje": {"sgqeje": 1},
+            "zezroc": {"tpkhxk": 2},
+            "ckqpdj": {"sgqeje": 4},
+            "rjwdrk": {"wcgshh": 1},
+        }
+        cost = costs.get(entity, {entity: 1})
+
+        target_tile = tile_key_at(target)
+        can_place = (
+            in_bounds(target)
+            and target_tile in {"pmzjpl", "wztejd"}
+            and all(
+                new_state.get("inv_" + item, 0) >= amount
+                for item, amount in cost.items()
+            )
+        )
+
+        if can_place:
+            remove_at(target_tile, target)
+            add_at(entity, target)
+            for item, amount in cost.items():
+                key = "inv_" + item
+                new_state[key] = new_state.get(key, 0) - amount
+            achievement_key = "ach_place_" + entity
+            new_state[achievement_key] = (
+                new_state.get(achievement_key, 0) + 1
+            )
+
+        return new_state
+
+    if action.startswith("make_"):
+        output = action[len("make_"):]
+        material = output.split("_", 1)[0]
+
+        recipes = {
+            "tpkhxk": {"tpkhxk": 1},
+            "sgqeje": {"tpkhxk": 1, "sgqeje": 1},
+            "bzracx": {"tpkhxk": 1, "grpoqi": 1, "bzracx": 1},
+        }
+        cost = recipes.get(material)
+
+        can_craft = (
+            cost is not None
+            and nearby("zezroc", [x, y])
+            and all(
+                new_state.get("inv_" + item, 0) >= amount
+                for item, amount in cost.items()
+            )
+        )
+
+        if can_craft:
+            for item, amount in cost.items():
+                key = "inv_" + item
+                new_state[key] = new_state.get(key, 0) - amount
+
+            output_key = "inv_" + output
+            new_state[output_key] = new_state.get(output_key, 0) + 1
+
+            achievement_key = "ach_make_" + output
+            new_state[achievement_key] = (
+                new_state.get(achievement_key, 0) + 1
+            )
+
+        return new_state
+
+    return new_state
+

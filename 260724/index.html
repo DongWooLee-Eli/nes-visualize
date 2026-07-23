@@ -3,1206 +3,549 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="TC2 high-level abstraction 병목을 개선한 v1, v2, v3 실험 발표">
-  <title>TC2 · Grounding High-level Abstraction</title>
+  <meta name="description" content="TC2 high-level abstraction v1, v2, v3 실험 시각화와 로그">
+  <title>TC2 · High-level Abstraction</title>
   <style>
     :root {
-      --ink: #121815;
-      --muted: #63706a;
-      --paper: #f2f0e9;
-      --paper-2: #e8e5dc;
-      --panel: #fbfaf6;
-      --line: #c9cdc5;
-      --green: #0d7658;
-      --green-soft: #d8e9df;
-      --blue: #315ec8;
-      --blue-soft: #dde5f8;
-      --orange: #d8642b;
-      --orange-soft: #f4dfd2;
-      --red: #aa3636;
-      --red-soft: #f2dddd;
+      --ink: #202124;
+      --muted: #73777c;
+      --line: #e2e3e1;
+      --soft: #f6f6f4;
+      --blue: #2867f0;
+      --blue-soft: #eaf0ff;
+      --red: #a54848;
       --mono: "SFMono-Regular", "Cascadia Code", "Roboto Mono", Consolas, monospace;
-      --sans: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
-      --shadow: 0 18px 50px rgba(18, 24, 21, .09);
+      --sans: Inter, "Helvetica Neue", Pretendard, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif;
     }
-
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; scroll-padding-top: 20px; }
+    html { scroll-behavior: auto; }
     body {
       margin: 0;
       color: var(--ink);
-      background:
-        linear-gradient(rgba(18, 24, 21, .035) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(18, 24, 21, .035) 1px, transparent 1px),
-        var(--paper);
-      background-size: 32px 32px;
-      font: 15px/1.7 var(--sans);
+      background: #fff;
+      font: 14px/1.65 var(--sans);
+      letter-spacing: -.004em;
       word-break: keep-all;
     }
-    ::selection { color: white; background: var(--green); }
-    a { color: inherit; }
+    a { color: var(--blue); text-underline-offset: 3px; }
     button, input, select { font: inherit; }
     code, pre, .mono { font-family: var(--mono); }
     code {
-      padding: .12rem .35rem;
-      color: #174b3a;
-      background: rgba(13, 118, 88, .09);
-      border-radius: 4px;
+      padding: .1rem .3rem;
+      color: #244eaa;
+      background: var(--blue-soft);
+      border-radius: 3px;
       font-size: .9em;
-      word-break: break-word;
     }
     pre {
-      margin: 0;
+      margin: 12px 0 22px;
+      padding: 16px;
       overflow: auto;
+      color: #2c2e31;
+      background: var(--soft);
+      border-radius: 4px;
+      font-size: 12px;
+      line-height: 1.6;
       white-space: pre-wrap;
       word-break: break-word;
     }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin-bottom: 28px; font-size: 25px; font-weight: 650; letter-spacing: -.025em; }
+    h2 {
+      margin: 38px 0 14px;
+      padding-top: 24px;
+      border-top: 1px solid var(--line);
+      font-size: 18px;
+      font-weight: 650;
+      letter-spacing: -.015em;
+    }
+    h3 { margin: 26px 0 10px; font-size: 15px; font-weight: 650; }
+    p { margin-bottom: 14px; }
+    ul, ol { margin: 10px 0 20px; padding-left: 22px; }
+    li { margin: 5px 0; }
+    .caption, .note { color: var(--muted); font-size: 12px; }
+    .question { margin-bottom: 26px; font-size: 16px; }
 
-    #reading-progress {
-      position: fixed;
+    .topbar {
+      position: sticky;
       z-index: 100;
       top: 0;
-      left: 0;
-      width: 0;
-      height: 4px;
-      background: var(--orange);
-    }
-    .page-shell {
-      display: grid;
-      grid-template-columns: 250px minmax(0, 1fr);
-      min-height: 100vh;
-    }
-    .rail {
-      position: sticky;
-      top: 0;
-      align-self: start;
-      height: 100vh;
-      padding: 28px 24px;
-      overflow: auto;
-      color: #dce7e0;
-      background: #14211b;
-      border-right: 1px solid rgba(255, 255, 255, .08);
-    }
-    .rail-brand {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 34px;
-      font: 700 13px/1.2 var(--mono);
-      letter-spacing: .08em;
-      text-transform: uppercase;
-    }
-    .rail-brand::before {
-      width: 11px;
-      height: 11px;
-      background: #78d7ae;
-      border-radius: 50%;
-      content: "";
-      box-shadow: 0 0 0 5px rgba(120, 215, 174, .12);
-    }
-    .rail small {
-      display: block;
-      margin: -20px 0 24px;
-      color: #8ba095;
-      font: 11px/1.5 var(--mono);
-    }
-    .rail ul { margin: 0; padding: 0; list-style: none; }
-    .rail a {
-      display: grid;
-      grid-template-columns: 30px 1fr;
-      gap: 8px;
-      padding: 8px 0;
-      color: #8fa29a;
-      text-decoration: none;
-      transition: color .15s ease, transform .15s ease;
-    }
-    .rail a span:first-child { font: 11px/1.9 var(--mono); }
-    .rail a:hover, .rail a.active { color: white; transform: translateX(3px); }
-    .rail a.active span:first-child { color: #78d7ae; }
-    .rail-foot {
-      margin-top: 34px;
-      padding-top: 18px;
-      color: #81948b;
-      border-top: 1px solid rgba(255, 255, 255, .1);
-      font: 11px/1.6 var(--mono);
-    }
-
-    main { min-width: 0; }
-    .slide {
-      position: relative;
-      min-height: 88vh;
-      padding: clamp(64px, 8vw, 118px) clamp(28px, 7vw, 110px);
+      height: 58px;
+      padding: 0 max(20px, calc((100vw - 1040px) / 2));
+      background: rgba(255, 255, 255, .96);
       border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(12px);
     }
-    .slide.compact { min-height: 0; }
-    .slide-inner { width: min(1180px, 100%); margin: 0 auto; }
-    .slide-number {
-      position: absolute;
-      top: 28px;
-      right: clamp(28px, 7vw, 110px);
-      color: #a9afa8;
-      font: 12px/1 var(--mono);
-      letter-spacing: .12em;
+    .brand {
+      flex: 0 0 auto;
+      margin-right: 34px;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 650;
+      text-decoration: none;
     }
-    .eyebrow {
+    .tabs { min-width: 0; overflow-x: auto; scrollbar-width: none; }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tabs ul {
+      display: flex;
+      gap: 26px;
+      width: max-content;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .tabs a {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 16px;
-      color: var(--green);
-      font: 700 12px/1.3 var(--mono);
-      letter-spacing: .12em;
-      text-transform: uppercase;
-    }
-    .eyebrow::before { width: 28px; height: 2px; background: currentColor; content: ""; }
-    h1, h2, h3, p { margin-top: 0; }
-    h1 {
-      max-width: 980px;
-      margin-bottom: 26px;
-      font-size: clamp(46px, 7.5vw, 108px);
-      font-weight: 760;
-      line-height: .96;
-      letter-spacing: -.055em;
-    }
-    h2 {
-      max-width: 930px;
-      margin-bottom: 24px;
-      font-size: clamp(36px, 5vw, 72px);
-      font-weight: 740;
-      line-height: 1.04;
-      letter-spacing: -.045em;
-    }
-    h3 {
-      margin-bottom: 12px;
-      font-size: clamp(20px, 2.2vw, 30px);
-      line-height: 1.25;
-      letter-spacing: -.025em;
-    }
-    .lede {
-      max-width: 850px;
-      color: #3f4a45;
-      font-size: clamp(18px, 2vw, 26px);
-      line-height: 1.55;
-    }
-    .small { color: var(--muted); font-size: 13px; }
-    .caption {
-      margin-top: 12px;
+      height: 58px;
       color: var(--muted);
-      font-size: 12px;
-      line-height: 1.55;
+      border-bottom: 2px solid transparent;
+      font-size: 13px;
+      text-decoration: none;
+      white-space: nowrap;
     }
-    .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
-    .tag, .pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 10px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: rgba(255, 255, 255, .35);
-      font: 600 11px/1.2 var(--mono);
-    }
-    .pill.ok { color: var(--green); border-color: #99c7b5; background: var(--green-soft); }
-    .pill.bad { color: var(--red); border-color: #d9aaaa; background: var(--red-soft); }
-    .pill.info { color: var(--blue); border-color: #aebde5; background: var(--blue-soft); }
-    .pill.warn { color: #9f471e; border-color: #dfb596; background: var(--orange-soft); }
+    .tabs a:hover { color: var(--ink); }
+    .tabs a.active { color: var(--ink); border-bottom-color: var(--blue); }
 
-    .hero { color: #f5f8f5; background: #14211b; border-bottom-color: #14211b; }
-    .hero .eyebrow { color: #78d7ae; }
-    .hero .lede { color: #bed0c7; }
-    .hero .tag { color: #b9cec4; border-color: #3f574b; background: transparent; }
-    .hero-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 360px;
-      gap: 70px;
-      align-items: end;
-    }
-    .hero-thesis {
-      padding: 22px 24px;
-      color: #dae6e0;
-      background: rgba(255, 255, 255, .045);
-      border: 1px solid rgba(255, 255, 255, .12);
-      border-radius: 2px;
-    }
-    .hero-thesis .label { color: #78d7ae; font: 11px/1.2 var(--mono); }
-    .hero-thesis strong { display: block; margin-top: 10px; font-size: 20px; line-height: 1.45; }
-    .result-strip {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      margin-top: 56px;
-      border-top: 1px solid #385046;
-      border-bottom: 1px solid #385046;
-    }
-    .result-strip > div { padding: 20px 18px; border-right: 1px solid #385046; }
-    .result-strip > div:last-child { border-right: 0; }
-    .result-strip .version { color: #78d7ae; font: 12px/1 var(--mono); }
-    .result-strip .score { margin: 8px 0 2px; font-size: clamp(28px, 4vw, 50px); font-weight: 760; line-height: 1; }
-    .result-strip .sub { color: #8ea69a; font-size: 12px; }
-
-    .grid-2, .grid-3, .grid-4 {
-      display: grid;
-      gap: 18px;
-      margin-top: 28px;
-    }
-    .grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    .card {
-      padding: 22px;
-      overflow-wrap: anywhere;
-      background: rgba(251, 250, 246, .8);
-      border: 1px solid var(--line);
-      box-shadow: 0 1px 0 rgba(255, 255, 255, .7) inset;
-    }
-    .card.accent { border-top: 4px solid var(--green); }
-    .card.warn { border-top: 4px solid var(--orange); }
-    .card.bad { border-top: 4px solid var(--red); }
-    .card.blue { border-top: 4px solid var(--blue); }
-    .card .kicker { color: var(--muted); font: 11px/1.3 var(--mono); text-transform: uppercase; }
-    .card .big { margin: 8px 0 4px; font-size: clamp(28px, 3vw, 44px); font-weight: 760; line-height: 1; }
-    .card p:last-child { margin-bottom: 0; }
-    .question-box {
-      max-width: 970px;
-      margin: 38px 0;
-      padding: 30px 34px;
-      background: var(--green);
-      color: white;
-      box-shadow: var(--shadow);
-    }
-    .question-box span { display: block; margin-bottom: 10px; color: #bcead5; font: 11px/1 var(--mono); }
-    .question-box strong { font-size: clamp(24px, 3vw, 42px); line-height: 1.32; letter-spacing: -.025em; }
+    main { width: min(1000px, calc(100% - 40px)); margin: 0 auto; padding: 44px 0 80px; }
+    .panel { display: none; }
+    .panel.active { display: block; animation: reveal .15s ease both; }
+    @keyframes reveal { from { opacity: 0; } }
+    .section-block { margin: 34px 0; }
+    .split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
+    .triple { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; }
 
     table {
       width: 100%;
-      margin: 24px 0;
+      margin: 12px 0 24px;
       border-collapse: collapse;
-      background: rgba(251, 250, 246, .82);
       font-variant-numeric: tabular-nums;
     }
-    th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--line); }
-    th { color: var(--muted); background: rgba(18, 24, 21, .045); font: 700 11px/1.3 var(--mono); text-transform: uppercase; }
+    th, td { padding: 9px 10px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+    th { color: #55595d; background: var(--soft); font-size: 12px; font-weight: 650; }
     td.num, th.num { text-align: right; }
-    tr:last-child td { border-bottom: 0; }
-    tr.dim { color: #7d8580; background: rgba(18, 24, 21, .035); }
-    tr.highlight td:first-child { box-shadow: 4px 0 0 var(--green) inset; }
-    .check { color: var(--green); font-weight: 800; }
-    .cross { color: #a6aaa7; }
-
-    .bottleneck-map {
-      display: grid;
-      grid-template-columns: 1fr 36px 1fr;
-      align-items: stretch;
-      margin-top: 30px;
-      background: var(--panel);
-      border: 1px solid var(--line);
-    }
-    .bottleneck-map > div { padding: 24px; }
-    .bottleneck-map .arrow {
-      display: grid;
-      place-items: center;
-      padding: 0;
-      color: var(--red);
-      background: var(--paper-2);
-      font-size: 22px;
-    }
-    .mini-map {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 4px;
-      width: min(330px, 100%);
-      margin-top: 18px;
-    }
-    .mini-map span { aspect-ratio: 1; background: #dfe3dc; border: 1px solid #d2d6d0; }
-    .mini-map .table-cell { background: var(--blue-soft); border-color: var(--blue); }
-    .mini-map .furnace-cell { background: var(--orange-soft); border-color: var(--orange); }
-    .mini-map .player-cell { background: var(--green-soft); border-color: var(--green); border-radius: 50%; }
-    .budget-line { display: flex; gap: 5px; margin: 22px 0 12px; }
-    .budget-line span { width: 42px; height: 42px; border: 1px solid var(--green); background: var(--green-soft); }
-    .budget-line span.missing { border-style: dashed; border-color: var(--red); background: transparent; }
-
-    .version-head {
-      display: grid;
-      grid-template-columns: 110px 1fr;
-      gap: 28px;
-      align-items: start;
-      margin-bottom: 28px;
-    }
-    .version-stamp {
-      display: grid;
-      place-items: center;
-      width: 110px;
-      height: 110px;
-      color: white;
-      background: var(--green);
-      font: 800 36px/1 var(--mono);
-      box-shadow: 12px 12px 0 var(--green-soft);
-    }
-    .version-head p { max-width: 820px; color: #3f4a45; font-size: 19px; }
-    .hypothesis {
-      margin: 28px 0;
-      padding: 18px 22px;
-      background: var(--panel);
-      border-left: 5px solid var(--blue);
-      font-size: 18px;
-    }
-    .hypothesis span { display: block; color: var(--blue); font: 700 11px/1.2 var(--mono); }
+    tbody tr:hover { background: #fafafa; }
+    .em { color: var(--blue); font-weight: 700; }
+    .leak { color: var(--red); }
 
     .diagram {
-      margin: 28px 0;
-      padding: 24px;
-      overflow: auto;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow);
+      margin: 14px 0 20px;
+      padding: 22px 8px;
+      overflow-x: auto;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
     }
     .diagram .mermaid { min-width: 620px; text-align: center; }
-    .evidence {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 1px;
-      margin: 28px 0;
-      overflow: hidden;
-      background: #36433d;
-      border: 1px solid #36433d;
-    }
-    .evidence-panel { min-width: 0; padding: 20px; color: #dce8e1; background: #18241e; }
-    .evidence-panel .label { margin-bottom: 12px; color: #78d7ae; font: 11px/1.2 var(--mono); }
-    .evidence-panel pre { max-height: 380px; color: #dce8e1; font-size: 12px; line-height: 1.6; }
-    .evidence-panel mark { padding: 0 2px; color: #fff; background: rgba(216, 100, 43, .75); }
-    .verdict {
-      display: grid;
-      grid-template-columns: 170px 1fr;
+    .params { width: min(620px, 100%); }
+
+    .bar-chart { margin: 16px 0 28px; }
+    .bar-group { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 12px; margin: 15px 0; }
+    .bar-group > strong { padding-top: 3px; font: 650 12px/1.2 var(--mono); }
+    .bar-lines { display: grid; gap: 7px; }
+    .bar-line { display: grid; grid-template-columns: 92px minmax(0, 1fr) 48px; gap: 10px; align-items: center; }
+    .bar-label { color: #666a6e; font-size: 12px; }
+    .track { height: 12px; background: #ececea; }
+    .fill { width: var(--w); height: 100%; background: var(--blue); }
+    .fill.gray { background: #9a9e9a; }
+    .bar-value { text-align: right; font: 650 11px/1 var(--mono); }
+
+    .metric-chart { display: grid; grid-template-columns: 190px 1fr 56px; gap: 10px; align-items: center; margin: 10px 0; }
+    .metric-chart .track { height: 14px; }
+    .metric-chart strong { text-align: right; font: 650 11px/1 var(--mono); }
+
+    .log-stats {
+      display: flex;
+      flex-wrap: wrap;
       gap: 22px;
-      align-items: start;
-      margin-top: 32px;
-      padding-top: 24px;
-      border-top: 1px solid var(--line);
+      margin: 0 0 24px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line);
     }
-    .verdict strong { font: 800 13px/1.4 var(--mono); text-transform: uppercase; }
-    .verdict p { margin: 0; font-size: 18px; }
-
-    .trigger-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0; padding: 0; list-style: none; }
-    .trigger-list li {
-      padding: 8px 11px;
-      color: #4e392c;
-      background: var(--orange-soft);
-      border: 1px solid #dfb99f;
-      border-radius: 3px;
-      font-size: 13px;
-    }
-    .params { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 28px 0; }
-    .param { padding: 16px; background: var(--panel); border: 1px solid var(--line); }
-    .param strong { display: block; margin-bottom: 6px; color: var(--green); font: 800 23px/1 var(--mono); }
-    .param span { color: var(--muted); font-size: 12px; }
-
-    .bars { display: grid; gap: 22px; margin: 28px 0; }
-    .bar-row { display: grid; grid-template-columns: 100px 1fr 80px; gap: 16px; align-items: center; }
-    .bar-track { height: 20px; overflow: hidden; background: #dfe1dc; }
-    .bar-fill { height: 100%; width: var(--w); background: var(--green); transform-origin: left; animation: grow .8s ease both; }
-    .bar-fill.random { background: #8b958f; }
-    .bar-value { text-align: right; font: 700 13px/1 var(--mono); }
-    @keyframes grow { from { transform: scaleX(0); } }
-    .solve-chart {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-      margin: 34px 0;
-    }
-    .solve-col { padding: 22px; background: var(--panel); border: 1px solid var(--line); }
-    .solve-col h3 { font: 800 18px/1 var(--mono); }
-    .solve-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; align-items: end; height: 210px; margin-top: 18px; }
-    .solve-bar {
-      position: relative;
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      height: calc(var(--v) * 12.5%);
-      min-height: 6px;
-      padding-top: 8px;
-      color: white;
-      background: var(--green);
-      font: 800 13px/1 var(--mono);
-    }
-    .solve-bar.random { background: #87928c; }
-    .solve-labels { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; margin-top: 8px; color: var(--muted); text-align: center; font: 10px/1.2 var(--mono); }
-    .coverage-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin: 28px 0; }
-    .metric-box { padding: 24px; background: var(--panel); border: 1px solid var(--line); }
-    .metric-box h3 { font-size: 20px; }
-
-    .causal-chain {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      margin: 28px 0;
-      overflow-x: auto;
-      padding: 18px;
-      background: #15221c;
-      color: #e4eee9;
-    }
-    .causal-chain span {
-      flex: 0 0 auto;
-      padding: 9px 12px;
-      border: 1px solid #486257;
-      font: 12px/1.3 var(--mono);
-    }
-    .causal-chain b { color: #78d7ae; font-size: 18px; }
-    .contradiction { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 30px 0; }
-    .module { position: relative; padding: 24px; overflow-wrap: anywhere; background: var(--panel); border: 1px solid var(--line); }
-    .module::after {
-      position: absolute;
-      top: 20px;
-      right: 18px;
-      color: var(--red);
-      font: 800 11px/1 var(--mono);
-      content: "DISAGREE";
-    }
-    .module h3 { font: 800 15px/1.3 var(--mono); }
-    .module strong { display: block; margin: 14px 0 8px; font-size: 21px; }
-    .formula {
-      padding: 22px;
-      overflow-x: auto;
-      color: #e7f1ec;
-      background: #15221c;
-      font: 14px/1.6 var(--mono);
-      white-space: nowrap;
-    }
-
-    .conclusion-line {
-      max-width: 1050px;
-      margin: 40px 0;
-      padding: 34px;
-      color: white;
-      background: var(--green);
-      font-size: clamp(24px, 3.2vw, 44px);
-      font-weight: 720;
-      line-height: 1.35;
-      letter-spacing: -.03em;
-    }
-    .next-list { counter-reset: next; display: grid; gap: 10px; margin: 26px 0; padding: 0; list-style: none; }
-    .next-list li {
-      display: grid;
-      grid-template-columns: 52px 1fr;
-      gap: 16px;
-      padding: 16px 0;
-      border-top: 1px solid var(--line);
-      counter-increment: next;
-    }
-    .next-list li::before { color: var(--green); font: 800 22px/1 var(--mono); content: "0" counter(next); }
-
-    .artifact-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 28px 0; }
-    .artifact-stat { padding: 18px; background: var(--panel); border: 1px solid var(--line); }
-    .artifact-stat strong { display: block; font: 800 26px/1 var(--mono); }
-    .artifact-stat span { color: var(--muted); font-size: 11px; }
-    .artifact-shell { margin-top: 26px; background: var(--panel); border: 1px solid var(--line); box-shadow: var(--shadow); }
-    .artifact-tools {
+    .log-stats span { color: var(--muted); }
+    .log-stats strong { margin-right: 5px; color: var(--ink); font: 650 14px/1 var(--mono); }
+    .log-tools {
       display: grid;
       grid-template-columns: 2fr repeat(3, 1fr);
       gap: 8px;
-      padding: 14px;
-      background: var(--paper-2);
-      border-bottom: 1px solid var(--line);
+      margin: 18px 0 10px;
     }
-    .artifact-tools input, .artifact-tools select {
-      width: 100%;
+    .log-tools input, .log-tools select {
       min-width: 0;
-      padding: 9px 10px;
+      width: 100%;
+      padding: 8px 9px;
       color: var(--ink);
-      background: white;
-      border: 1px solid #bcc2bb;
-      border-radius: 0;
+      background: #fff;
+      border: 1px solid #d2d3d1;
+      border-radius: 3px;
     }
-    .artifact-actions { display: flex; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--line); }
-    .btn {
-      padding: 7px 10px;
-      color: var(--ink);
-      background: transparent;
-      border: 1px solid #afb6ae;
+    .log-actions { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .small-button {
+      padding: 5px 8px;
+      color: #55595d;
+      background: #fff;
+      border: 1px solid #d2d3d1;
+      border-radius: 3px;
       cursor: pointer;
     }
-    .btn:hover { color: white; background: var(--green); border-color: var(--green); }
-    #artifact-count { margin-left: auto; color: var(--muted); font: 11px/2.8 var(--mono); }
-    #artifact-tree { max-height: 720px; padding: 10px 14px 20px; overflow: auto; }
-    .tree-node { margin: 5px 0 5px 14px; border-left: 1px solid #d3d6d1; }
+    .small-button:hover { color: var(--blue); border-color: #a9bcec; }
+    #artifact-count { margin-left: auto; color: var(--muted); font: 11px/1 var(--mono); }
+    #artifact-tree { padding: 8px 0 20px; border-top: 1px solid var(--line); }
+    .tree-node { margin-left: 17px; }
     .tree-node > summary {
       display: flex;
       align-items: center;
-      gap: 8px;
-      padding: 5px 8px;
+      gap: 7px;
+      padding: 5px 4px;
       cursor: pointer;
       list-style: none;
       font-size: 13px;
-      font-weight: 650;
+      font-weight: 550;
     }
     .tree-node > summary::-webkit-details-marker { display: none; }
-    .tree-node > summary::before { width: 12px; color: var(--green); font: 11px/1 var(--mono); content: "›"; transition: transform .15s; }
+    .tree-node > summary::before { width: 10px; color: #9a9d99; content: "›"; transition: transform .1s; }
     .tree-node[open] > summary::before { transform: rotate(90deg); }
-    .tree-node .count { margin-left: auto; color: #8a928d; font: 10px/1 var(--mono); }
-    .tree-files { display: grid; gap: 4px; padding: 4px 8px 8px 32px; }
+    .tree-node .count { margin-left: auto; color: #a0a3a0; font: 10px/1 var(--mono); }
+    .tree-files { margin-left: 22px; border-left: 1px solid var(--line); }
     .file-button {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 12px;
-      padding: 7px 9px;
-      color: #304039;
+      width: 100%;
+      padding: 6px 9px;
+      color: #3f4245;
       text-align: left;
-      background: white;
-      border: 1px solid #d6d9d4;
+      background: transparent;
+      border: 0;
       cursor: pointer;
     }
-    .file-button:hover { color: var(--green); border-color: #86bda8; }
-    .file-button .name { overflow: hidden; font: 11px/1.35 var(--mono); text-overflow: ellipsis; white-space: nowrap; }
-    .file-button .size { color: #919993; font: 10px/1.35 var(--mono); }
-    .empty { padding: 40px; color: var(--muted); text-align: center; }
+    .file-button:hover { color: var(--blue); background: #f8f8f7; }
+    .file-button .name { overflow: hidden; font: 11px/1.4 var(--mono); text-overflow: ellipsis; white-space: nowrap; }
+    .file-button .size { color: #a0a3a0; font: 10px/1.4 var(--mono); }
+    .empty { padding: 28px 0; color: var(--muted); text-align: center; }
 
     .viewer {
       position: fixed;
-      z-index: 120;
+      z-index: 200;
       inset: 0;
       display: none;
-      grid-template-columns: minmax(0, 1fr) min(860px, 92vw);
-      background: rgba(13, 18, 15, .58);
+      grid-template-columns: minmax(0, 1fr) min(860px, 94vw);
+      background: rgba(0, 0, 0, .26);
     }
     .viewer.open { display: grid; }
     .viewer-backdrop { cursor: pointer; }
-    .viewer-panel { display: grid; grid-template-rows: auto 1fr; min-width: 0; height: 100vh; background: #101713; box-shadow: -20px 0 50px rgba(0, 0, 0, .25); }
+    .viewer-panel { display: grid; grid-template-rows: auto 1fr; min-width: 0; height: 100vh; background: #fff; }
     .viewer-head {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
-      gap: 14px;
-      padding: 16px 18px;
-      color: #dce7e1;
-      border-bottom: 1px solid #33423a;
+      gap: 12px;
+      padding: 12px 15px;
+      border-bottom: 1px solid var(--line);
     }
-    .viewer-title { overflow: hidden; font: 12px/1.5 var(--mono); text-overflow: ellipsis; white-space: nowrap; }
-    .viewer-buttons { display: flex; gap: 7px; }
+    .viewer-title { overflow: hidden; font: 11px/1.6 var(--mono); text-overflow: ellipsis; white-space: nowrap; }
+    .viewer-buttons { display: flex; gap: 6px; }
     .viewer-buttons a, .viewer-buttons button {
-      padding: 5px 8px;
-      color: #cde0d6;
-      background: transparent;
-      border: 1px solid #46594f;
+      padding: 3px 7px;
+      color: #55595d;
+      background: #fff;
+      border: 1px solid #d2d3d1;
+      border-radius: 3px;
       text-decoration: none;
       cursor: pointer;
     }
-    #viewer-content { padding: 20px; color: #dbe8e1; font-size: 12px; line-height: 1.6; background: #101713; }
+    #viewer-content { margin: 0; padding: 18px; border-radius: 0; }
+    .source-links { display: flex; flex-wrap: wrap; gap: 14px; margin: 8px 0 24px; font-size: 12px; }
 
-    footer { padding: 34px clamp(28px, 7vw, 110px); color: #90a299; background: #14211b; font: 11px/1.7 var(--mono); }
-    footer .footer-inner { display: flex; justify-content: space-between; gap: 20px; width: min(1180px, 100%); margin: 0 auto; }
-
-    @media (max-width: 980px) {
-      .page-shell { grid-template-columns: 1fr; }
-      .rail { position: static; z-index: 90; width: 100%; height: auto; padding: 14px 18px; }
-      .rail-brand { margin: 0; }
-      .rail small, .rail-foot { display: none; }
-      .rail ul { display: flex; gap: 15px; margin-top: 12px; overflow-x: auto; }
-      .rail a { display: block; white-space: nowrap; }
-      .rail a span:first-child { margin-right: 5px; }
-      .hero-grid { grid-template-columns: 1fr; gap: 30px; }
-      .params { grid-template-columns: repeat(3, 1fr); }
-      .contradiction { grid-template-columns: 1fr; }
-      .artifact-tools { grid-template-columns: 1fr 1fr; }
-    }
-    @media (max-width: 700px) {
+    @media (max-width: 760px) {
       body { word-break: normal; }
-      .slide { min-height: 0; padding: 62px 20px; }
-      .slide-number { right: 20px; }
-      .result-strip, .grid-2, .grid-3, .grid-4, .solve-chart, .coverage-grid,
-      .artifact-stats, .evidence { grid-template-columns: 1fr; }
-      .result-strip > div { border-right: 0; border-bottom: 1px solid #385046; }
-      .result-strip > div:last-child { border-bottom: 0; }
-      .version-head { grid-template-columns: 72px 1fr; }
-      .version-stamp { width: 72px; height: 72px; font-size: 24px; box-shadow: 7px 7px 0 var(--green-soft); }
-      .params { grid-template-columns: repeat(2, 1fr); }
-      .bottleneck-map { grid-template-columns: 1fr; }
-      .bottleneck-map .arrow { padding: 8px; transform: rotate(90deg); }
-      .verdict { grid-template-columns: 1fr; }
-      .artifact-tools { grid-template-columns: 1fr; }
+      .topbar { padding: 0 16px; }
+      .brand { margin-right: 20px; }
+      .tabs { flex: 1 1 auto; }
+      .tabs ul { gap: 20px; padding-right: 100px; }
+      main { width: min(100% - 32px, 1000px); padding-top: 34px; }
+      .split, .triple { grid-template-columns: 1fr; gap: 0; }
+      .log-tools { grid-template-columns: 1fr 1fr; }
+      .bar-line { grid-template-columns: 82px minmax(0, 1fr) 42px; }
+      .metric-chart { grid-template-columns: 150px 1fr 48px; }
       .viewer { grid-template-columns: 1fr; }
       .viewer-backdrop { display: none; }
-      footer .footer-inner { flex-direction: column; }
+    }
+    @media (max-width: 480px) {
+      .brand { max-width: 76px; overflow: hidden; white-space: nowrap; }
+      .log-tools { grid-template-columns: 1fr; }
+      th, td { padding: 8px 6px; font-size: 12px; }
+      .metric-chart { grid-template-columns: 120px 1fr 44px; }
     }
     @media print {
-      .rail, #reading-progress, .artifact-tools, .artifact-actions, .viewer { display: none !important; }
-      .page-shell { display: block; }
-      .slide { min-height: 0; break-after: page; padding: 32px; }
-      .hero { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .topbar, .log-tools, .log-actions, .viewer { display: none !important; }
+      main { width: 100%; padding: 0; }
+      .panel { display: block !important; break-after: page; }
       #artifact-tree { max-height: none; }
-    }
-
-    /* Minimal tabbed research interface */
-    :root {
-      --ink: #171817;
-      --muted: #727773;
-      --paper: #f7f7f5;
-      --paper-2: #f0f1ef;
-      --panel: #fff;
-      --line: #dedfdd;
-      --green: #2867f0;
-      --green-soft: #eaf0ff;
-      --blue: #2867f0;
-      --blue-soft: #eaf0ff;
-      --orange: #b8642e;
-      --orange-soft: #fff4eb;
-      --red: #a94848;
-      --red-soft: #fff0f0;
-      --sans: Inter, "Helvetica Neue", Pretendard, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif;
-      --shadow: none;
-    }
-    html { scroll-behavior: auto; scroll-padding-top: 68px; }
-    body {
-      background: var(--paper);
-      font: 15px/1.65 var(--sans);
-      letter-spacing: -.006em;
-    }
-    ::selection { color: var(--ink); background: #cddcff; }
-    #reading-progress { display: none; }
-    .page-shell { display: block; min-height: 100vh; }
-
-    .rail {
-      position: sticky;
-      z-index: 100;
-      top: 0;
-      display: flex;
-      align-items: center;
-      width: 100%;
-      height: 64px;
-      padding: 0 max(24px, calc((100vw - 1240px) / 2));
-      overflow: hidden;
-      color: var(--ink);
-      background: rgba(255, 255, 255, .94);
-      border: 0;
-      border-bottom: 1px solid var(--line);
-      backdrop-filter: blur(14px);
-    }
-    .rail-brand {
-      flex: 0 0 auto;
-      gap: 9px;
-      margin: 0 30px 0 0;
-      color: var(--ink);
-      font: 700 13px/1 var(--sans);
-      letter-spacing: -.01em;
-      text-decoration: none;
-      text-transform: none;
-    }
-    .rail-brand::before {
-      width: 14px;
-      height: 14px;
-      background: var(--blue);
-      border-radius: 4px;
-      box-shadow: none;
-    }
-    .rail nav { min-width: 0; margin-left: auto; overflow-x: auto; scrollbar-width: none; }
-    .rail nav::-webkit-scrollbar { display: none; }
-    .rail ul { display: flex; gap: 2px; width: max-content; margin: 0; }
-    .rail nav a {
-      display: flex;
-      grid-template-columns: none;
-      gap: 5px;
-      align-items: center;
-      height: 64px;
-      padding: 3px 9px 0;
-      color: #777b78;
-      border-bottom: 3px solid transparent;
-      font-size: 12px;
-      text-decoration: none;
-      white-space: nowrap;
-      transform: none;
-      transition: color .15s ease, border-color .15s ease;
-    }
-    .rail nav a span:first-child { color: #a6aaa7; font: 10px/1 var(--mono); }
-    .rail nav a:hover { color: var(--ink); transform: none; }
-    .rail nav a.active { color: var(--ink); border-bottom-color: var(--blue); transform: none; }
-    .rail nav a.active span:first-child { color: var(--blue); }
-
-    main { min-width: 0; }
-    .slide {
-      display: none;
-      min-height: calc(100vh - 64px);
-      padding: clamp(58px, 7vw, 92px) clamp(22px, 5vw, 64px) 104px;
-      background: transparent;
-      border: 0;
-    }
-    .slide.active { display: block; animation: tab-in .2s ease both; }
-    @keyframes tab-in { from { opacity: 0; transform: translateY(4px); } }
-    .slide.compact { min-height: calc(100vh - 64px); }
-    .slide-inner { width: min(1120px, 100%); }
-    .slide-number {
-      top: 24px;
-      right: max(24px, calc((100vw - 1240px) / 2));
-      color: #a1a5a2;
-      font-size: 10px;
-    }
-    .eyebrow {
-      gap: 0;
-      margin-bottom: 19px;
-      color: var(--blue);
-      font: 700 11px/1.3 var(--mono);
-      letter-spacing: .08em;
-    }
-    .eyebrow::before { display: none; }
-    h1 {
-      max-width: 820px;
-      margin-bottom: 26px;
-      font-size: clamp(46px, 6vw, 72px);
-      font-weight: 650;
-      line-height: 1.02;
-      letter-spacing: -.055em;
-    }
-    h2 {
-      max-width: 820px;
-      margin-bottom: 22px;
-      font-size: clamp(36px, 4.5vw, 52px);
-      font-weight: 650;
-      line-height: 1.08;
-      letter-spacing: -.045em;
-    }
-    h3 {
-      font-size: clamp(19px, 2vw, 24px);
-      font-weight: 640;
-      letter-spacing: -.025em;
-    }
-    .lede { max-width: 760px; color: #565b57; font-size: clamp(17px, 1.8vw, 21px); line-height: 1.6; }
-    .small, .caption { color: var(--muted); }
-    code { color: #2556ba; background: #edf2fc; border-radius: 3px; }
-
-    .hero { color: var(--ink); background: transparent; }
-    .hero .eyebrow { color: var(--blue); }
-    .hero .lede { color: #565b57; }
-    .hero-grid { grid-template-columns: minmax(0, 1fr) 330px; gap: 68px; }
-    .hero .tag, .tag, .pill {
-      color: #575b58;
-      background: #fff;
-      border-color: var(--line);
-      border-radius: 999px;
-    }
-    .hero-thesis {
-      padding: 22px;
-      color: var(--ink);
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 10px;
-    }
-    .hero-thesis .label { color: var(--blue); }
-    .hero-thesis strong { font-size: 18px; font-weight: 600; }
-    .result-strip { margin-top: 58px; background: #fff; border-color: var(--line); }
-    .result-strip > div { padding: 20px; border-color: var(--line); }
-    .result-strip .version { color: var(--blue); }
-    .result-strip .score { font-size: clamp(30px, 3.5vw, 42px); font-weight: 650; }
-    .result-strip .sub { color: var(--muted); }
-
-    .card, .module, .param, .metric-box, .solve-col, .artifact-stat {
-      background: #fff;
-      border: 1px solid var(--line);
-      border-radius: 9px;
-      box-shadow: none;
-    }
-    .card.accent, .card.warn, .card.bad, .card.blue { border-top: 1px solid var(--line); }
-    .card.accent .kicker, .card.blue .kicker { color: var(--blue); }
-    .card.warn .kicker { color: var(--orange); }
-    .card.bad .kicker { color: var(--red); }
-    .card .big { font-weight: 650; }
-    .question-box {
-      color: var(--ink);
-      background: #fff;
-      border: 1px solid var(--line);
-      border-left: 4px solid var(--blue);
-      border-radius: 0 9px 9px 0;
-      box-shadow: none;
-    }
-    .question-box span { color: var(--blue); }
-    table { background: #fff; }
-    th { background: #f1f2f0; }
-    tr.highlight td:first-child { box-shadow: 3px 0 0 var(--blue) inset; }
-    .check { color: var(--blue); }
-
-    .bottleneck-map {
-      overflow: hidden;
-      background: #fff;
-      border-color: var(--line);
-      border-radius: 10px;
-    }
-    .bottleneck-map .arrow { color: var(--blue); background: #f1f2f0; }
-    .mini-map .table-cell { background: var(--blue-soft); border-color: var(--blue); }
-    .budget-line span { background: var(--blue-soft); border-color: var(--blue); }
-    .version-head { grid-template-columns: 86px 1fr; gap: 24px; }
-    .version-stamp {
-      display: block;
-      width: auto;
-      height: auto;
-      color: var(--blue);
-      background: transparent;
-      font: 650 52px/1 var(--sans);
-      letter-spacing: -.06em;
-      box-shadow: none;
-    }
-    .version-head p { color: #565b57; font-size: 18px; }
-    .hypothesis {
-      background: #fff;
-      border: 1px solid var(--line);
-      border-left: 4px solid var(--blue);
-      border-radius: 0 9px 9px 0;
-      font-size: 17px;
-    }
-    .diagram {
-      background: #fff;
-      border-color: var(--line);
-      border-radius: 10px;
-      box-shadow: none;
-    }
-    .evidence { overflow: hidden; border-radius: 10px; }
-    .evidence-panel { background: #151716; }
-    .evidence-panel .label { color: #78a4ff; }
-    .verdict { border-color: var(--line); }
-    .trigger-list li { color: #555a56; background: #fff; border-color: var(--line); border-radius: 6px; }
-    .param strong { color: var(--blue); }
-    .bar-track { background: #e7e8e6; border-radius: 999px; }
-    .bar-fill, .solve-bar { background: var(--blue); }
-    .bar-fill { border-radius: inherit; }
-    .causal-chain, .formula { background: #151716; border-radius: 9px; }
-    .causal-chain b { color: #78a4ff; }
-    .conclusion-line {
-      color: var(--ink);
-      background: #fff;
-      border: 1px solid var(--line);
-      border-left: 4px solid var(--blue);
-      border-radius: 0 9px 9px 0;
-      font-size: clamp(23px, 3vw, 38px);
-      font-weight: 600;
-    }
-    .next-list li { border-color: var(--line); }
-    .next-list li::before { color: var(--blue); }
-
-    .artifact-shell { overflow: hidden; background: #fff; border-color: var(--line); border-radius: 10px; box-shadow: none; }
-    .artifact-tools { background: #f1f2f0; border-color: var(--line); }
-    .artifact-tools input, .artifact-tools select { border-color: #d0d2cf; border-radius: 5px; }
-    .artifact-actions { border-color: var(--line); }
-    .btn { border-color: #c9cbc8; border-radius: 5px; }
-    .btn:hover { background: var(--blue); border-color: var(--blue); }
-    .tree-node > summary::before, .file-button:hover { color: var(--blue); }
-    .file-button { border-radius: 5px; }
-    .file-button:hover { border-color: #9bb7f3; }
-    footer { color: var(--muted); background: #fff; border-top: 1px solid var(--line); }
-
-    @media (max-width: 980px) {
-      .rail {
-        position: sticky;
-        display: flex;
-        height: 64px;
-        padding: 0 18px;
-      }
-      .rail-brand { margin: 0 18px 0 0; }
-      .rail nav { flex: 1 1 auto; width: auto; margin: 0; }
-      .rail nav a { height: 64px; padding: 3px 9px 0; }
-      .hero-grid { grid-template-columns: 1fr; gap: 28px; }
-    }
-    @media (max-width: 700px) {
-      .slide { min-height: calc(100vh - 64px); padding: 54px 20px 72px; }
-      .slide-number { top: 20px; right: 20px; }
-      .version-head { grid-template-columns: 1fr; gap: 8px; }
-      .version-stamp { font-size: 40px; }
-    }
-    @media print {
-      .slide { display: block !important; min-height: 0; }
-      footer { display: none; }
     }
   </style>
 </head>
 <body>
-  <div class="page-shell">
-    <header class="rail">
-      <a class="rail-brand" href="../" aria-label="날짜별 발표 목록으로 이동">TC2 / 260724</a>
-      <nav aria-label="발표 섹션">
-        <ul role="tablist">
-          <li><a href="#intro"><span>00</span><span>질문</span></a></li>
-          <li><a href="#bottleneck"><span>01</span><span>기존 병목</span></a></li>
-          <li><a href="#protocol"><span>02</span><span>실험 기준</span></a></li>
-          <li><a href="#v1"><span>03</span><span>v1 · Ground</span></a></li>
-          <li><a href="#v2"><span>04</span><span>v2 · Revise</span></a></li>
-          <li><a href="#v3"><span>05</span><span>v3 · Explore</span></a></li>
-          <li><a href="#results"><span>06</span><span>주요 결과</span></a></li>
-          <li><a href="#random-chars"><span>07</span><span>Random chars</span></a></li>
-          <li><a href="#conclusion"><span>08</span><span>결론</span></a></li>
-          <li><a href="#artifacts"><span>09</span><span>Prompt & history</span></a></li>
-        </ul>
-      </nav>
-    </header>
+  <header class="topbar">
+    <a class="brand" href="../">TC2 / 260724</a>
+    <nav class="tabs" aria-label="상위 구성">
+      <ul role="tablist">
+        <li><a href="#versions">버전</a></li>
+        <li><a href="#results">주요 결과</a></li>
+        <li><a href="#log">Log</a></li>
+        <li><a href="#examples">구체적 예시</a></li>
+        <li><a href="#random-chars">random_chars</a></li>
+      </ul>
+    </nav>
+  </header>
 
-    <main>
-      <section class="slide hero active" id="intro">
-        <span class="slide-number">00 / 09</span>
-        <div class="slide-inner">
-          <div class="eyebrow">TC2 · Online abstraction recovery</div>
-          <div class="hero-grid">
-            <div>
-              <h1>관측으로<br>상위 추상을<br>복원할 수 있는가?</h1>
-              <p class="lede">Domain knowledge가 없고 상호작용만 가능한 조건에서, LLM이 만든 PDDL abstraction을 실제 transition에 접지시키는 세 번의 실험.</p>
-              <div class="tags">
-                <span class="tag">MiniCrafter-OO</span>
-                <span class="tag">Level 0–7</span>
-                <span class="tag">Domain description OFF</span>
-                <span class="tag">Original / random_chars</span>
-              </div>
+  <main>
+    <section class="panel active" id="versions">
+      <h1>버전별 가설과 핵심 차이</h1>
+
+      <h2>기존 병목</h2>
+      <p class="question"><strong>domain knowledge가 없음 + online learning setting에서 high-level을 어떻게 복원할까?</strong></p>
+      <table aria-label="TC2 domain description ablation">
+        <thead>
+          <tr><th>TC2</th><th class="num">Original</th><th class="num">Random Chars</th><th class="num">Random Words</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Domain desc. ON</td><td class="num">11</td><td class="num">10</td><td class="num">11</td></tr>
+          <tr><td>Domain desc. OFF</td><td class="num">0</td><td class="num">0</td><td class="num">1</td></tr>
+        </tbody>
+      </table>
+
+      <h2>검증 가설</h2>
+      <table aria-label="버전별 가설">
+        <thead><tr><th>버전</th><th>가설</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">v1</td><td>실제 transition을 관측하면 PDDL 생성이 grounded 될 수 있다.</td></tr>
+          <tr><td class="mono">v2</td><td>실행 중 드러난 abstraction failure를 실제 interaction evidence로 수정·개선할 수 있다.</td></tr>
+          <tr><td class="mono">v3</td><td>LLM을 이용해 exploration에서 유용한 mechanics를 찾을 수 있다.</td></tr>
+        </tbody>
+      </table>
+
+      <h2>v1 · Initial PDDL grounding</h2>
+      <div class="diagram">
+        <pre class="mermaid">
+graph TD
+    A["Random transition 수집"]
+    A --> B["Initial PDDL prompt에 전달"]
+        </pre>
+      </div>
+      <p class="caption">초기 WM이 비어 있는 첫 level에서 random action 200개 수집 · PDDL에는 action과 non-empty delta 전달.</p>
+
+      <h2>v2 · Failure-driven revision</h2>
+      <div class="diagram">
+        <pre class="mermaid">
+graph TD
+    A["Predicate, planner, execution failure"]
+    A --> B["Failure signal과 실제 transition delta 수집"]
+    B --> C["현재 PDDL과 함께 revision prompt에 전달"]
+    C --> D["LLM PDDL revision"]
+    D --> E["Replan"]
+        </pre>
+      </div>
+      <h3>Trigger</h3>
+      <ul>
+        <li>predicate classifier 생성 실패</li>
+        <li>high-level planner 실패 또는 empty plan</li>
+        <li>high-level subplan의 low-level BFS가 0 actions 반환</li>
+        <li>실행은 됐지만 goal에 도달하지 못하고 대체 grounded operator도 없음</li>
+        <li>revision loop 종료 시에도 world-model prediction mismatch가 남음</li>
+      </ul>
+
+      <h2>v3 · LLM-guided exploration</h2>
+      <div class="diagram">
+        <pre class="mermaid">
+flowchart TB
+    A["random transition 수집"]
+    B["Python scorer 생성"]
+    D["scorer 점수로<br/>대표 transition 선택"]
+    E["Initial PDDL prompt에 전달"]
+    A -->|LLM| B
+    subgraph BS["Beam search"]
+        direction TB
+        C["현재 prefix에서 모든 액션 수행"]
+        K["scorer 점수로 top-k prefix 유지"]
+        C --> K
+        K -->|다음 depth| C
+    end
+    B --> BS
+    BS -->|탐색 종료| D
+    D --> E
+        </pre>
+      </div>
+      <table class="params" aria-label="v3 exploration parameters">
+        <thead><tr><th>Parameter</th><th class="num">Value</th></tr></thead>
+        <tbody>
+          <tr><td>warmup</td><td class="num">15 / level</td></tr>
+          <tr><td>beam width</td><td class="num">3</td></tr>
+          <tr><td>fixed depth cap</td><td class="num">없음</td></tr>
+          <tr><td>candidate budget</td><td class="num">2,000 / level</td></tr>
+          <tr><td>PDDL representatives</td><td class="num">≤ 200</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="panel" id="results">
+      <h1>주요 결과</h1>
+
+      <h2>Solve rate</h2>
+      <p class="caption">MiniCrafter-OO lv0–7 · original은 seed 42/43 평균 · random_chars headline은 leakage run 제외.</p>
+      <div class="split">
+        <table aria-label="버전별 solve rate">
+          <thead><tr><th>버전</th><th class="num">original</th><th class="num">random_chars</th></tr></thead>
+          <tbody>
+            <tr><td>v1</td><td class="num">4 / 8</td><td class="num">0 / 8</td></tr>
+            <tr><td>v2</td><td class="num">6.5 / 8</td><td class="num">0 / 8</td></tr>
+            <tr><td>v3</td><td class="num em">8 / 8</td><td class="num">1 / 8</td></tr>
+          </tbody>
+        </table>
+        <div class="bar-chart" aria-label="solve rate bar chart">
+          <div class="bar-group">
+            <strong>v1</strong>
+            <div class="bar-lines">
+              <div class="bar-line"><span class="bar-label">original</span><div class="track"><div class="fill" style="--w:50%"></div></div><span class="bar-value">4</span></div>
+              <div class="bar-line"><span class="bar-label">random_chars</span><div class="track"><div class="fill gray" style="--w:0%"></div></div><span class="bar-value">0</span></div>
             </div>
-            <aside class="hero-thesis">
-              <span class="label">THE ANSWER, IN ONE LINE</span>
-              <strong>관측은 유용한 effect를 찾게 했지만, 모듈들이 공유하는 causal theory까지 만들지는 못했다.</strong>
-            </aside>
           </div>
-          <div class="result-strip" aria-label="버전별 결과 요약">
-            <div>
-              <span class="version">v1 · GROUND</span>
-              <div class="score">4 / 8</div>
-              <div class="sub">original 평균 · random_chars 0/8</div>
+          <div class="bar-group">
+            <strong>v2</strong>
+            <div class="bar-lines">
+              <div class="bar-line"><span class="bar-label">original</span><div class="track"><div class="fill" style="--w:81.25%"></div></div><span class="bar-value">6.5</span></div>
+              <div class="bar-line"><span class="bar-label">random_chars</span><div class="track"><div class="fill gray" style="--w:0%"></div></div><span class="bar-value">0</span></div>
             </div>
-            <div>
-              <span class="version">v2 · REVISE</span>
-              <div class="score">6.5 / 8</div>
-              <div class="sub">original 평균 · random_chars 0/8</div>
-            </div>
-            <div>
-              <span class="version">v3 · EXPLORE</span>
-              <div class="score">8 / 8</div>
-              <div class="sub">original 평균 · random_chars 1/8</div>
+          </div>
+          <div class="bar-group">
+            <strong>v3</strong>
+            <div class="bar-lines">
+              <div class="bar-line"><span class="bar-label">original</span><div class="track"><div class="fill" style="--w:100%"></div></div><span class="bar-value">8</span></div>
+              <div class="bar-line"><span class="bar-label">random_chars</span><div class="track"><div class="fill gray" style="--w:12.5%"></div></div><span class="bar-value">1</span></div>
             </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      <section class="slide" id="bottleneck">
-        <span class="slide-number">01 / 09</span>
-        <div class="slide-inner">
-          <div class="eyebrow">Starting point</div>
-          <h2>문제는 계획이 아니라<br>계획이 믿는 세계다.</h2>
-          <div class="question-box">
-            <span>RESEARCH QUESTION</span>
-            <strong>domain knowledge가 없는 online setting에서, 실행 가능한 high-level abstraction을 어떻게 복원할까?</strong>
-          </div>
+      <h2>Leakage run</h2>
+      <table aria-label="random chars seed별 solve rate">
+        <thead><tr><th>버전</th><th class="num">seed 42</th><th class="num">seed 43</th></tr></thead>
+        <tbody>
+          <tr><td>v1</td><td class="num">0 / 8</td><td class="num leak">8 / 8*</td></tr>
+          <tr><td>v2</td><td class="num leak">8 / 8*</td><td class="num">0 / 8</td></tr>
+          <tr><td>v3</td><td class="num">0 / 8</td><td class="num">1 / 8</td></tr>
+        </tbody>
+      </table>
+      <pre># v2 · random_chars · seed 42 · initial WM
+observed transitions: do = 0, successful craft/place delta = 0
 
-          <div class="grid-2">
-            <div>
-              <h3>난이도 순서</h3>
-              <ol>
-                <li>일반 이름 + domain description <strong>ON</strong></li>
-                <li>일반 이름 + domain description <strong>OFF</strong></li>
-                <li>이름까지 randomization</li>
-              </ol>
-              <p class="small">출발점에서는 가장 쉬운 1번조차 안정적으로 해결하지 못했다.</p>
-            </div>
-            <div>
-              <h3>Domain description ablation</h3>
-              <table aria-label="TC2 도메인 설명 ablation">
-                <thead><tr><th>TC2</th><th class="num">Original</th><th class="num">Random chars</th><th class="num">Random words</th></tr></thead>
-                <tbody>
-                  <tr><td>Domain desc. ON</td><td class="num">11</td><td class="num">10</td><td class="num">11</td></tr>
-                  <tr><td>Domain desc. OFF</td><td class="num">0</td><td class="num">0</td><td class="num">1</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+# generated response
+xcvkpr  → "trees" → tpkhxk
+place_zezroc cost = 2 × tpkhxk
+make_* recipes and tool hierarchy reconstructed</pre>
+      <div class="source-links">
+        <a href="artifacts/leakage/v2-random_chars-42-initial-prompt.txt" target="_blank">initial prompt</a>
+        <a href="artifacts/leakage/v2-random_chars-42-initial-response.txt" target="_blank">generated WM</a>
+        <a href="artifacts/leakage/v2-random_chars-42-results.json" target="_blank">8/8 result</a>
+      </div>
+      <p class="caption">* 이름은 opaque인데 관측되지 않은 Crafter recipe까지 복원한 run은 headline random_chars 결과에서 제외.</p>
 
-          <div class="bottleneck-map">
-            <div>
-              <span class="pill bad">공간 조건 실패</span>
-              <h3 style="margin-top:14px">사라지지 않는 인접성</h3>
-              <p>PDDL은 <code>adjacent_to table</code>을 얻은 뒤 이동해도 지우지 않는다. 작업대와 화로가 떨어져 있어도 동시에 인접했다고 믿는다.</p>
-              <div class="mini-map" aria-label="작업대와 화로가 떨어진 예시">
-                <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-                <span></span><span></span><span></span><span class="furnace-cell" title="furnace (3,2)"></span><span></span><span></span><span class="table-cell" title="table (6,2)"></span>
-                <span></span><span></span><span></span><span></span><span class="player-cell" title="player"></span><span></span><span></span>
-              </div>
-              <p class="caption"><span class="pill info">table</span> (6,2) · <span class="pill warn">furnace</span> (3,2)</p>
-            </div>
-            <div class="arrow">→</div>
-            <div>
-              <span class="pill bad">재료 조건 실패</span>
-              <h3 style="margin-top:14px">4개로 계산한 5개의 나무</h3>
-              <p>작업대 2 + 나무 곡괭이 1 + 돌 곡괭이 1 + 철 곡괭이 1 = 실제로는 나무 5개가 필요하다.</p>
-              <div class="budget-line" aria-label="필요 나무 다섯 개 중 하나 부족">
-                <span></span><span></span><span></span><span></span><span class="missing"></span>
-              </div>
-              <p class="caption">PDDL plan은 가능 · 실제 <code>make_iron_pickaxe</code> 시점에는 <code>wood = 0</code></p>
-            </div>
-          </div>
-
-          <div class="verdict">
-            <strong>Root bottleneck</strong>
-            <p>LLM이 만든 abstraction이 실제 환경의 transition system을 보존하는지 검증하지 않은 채, 실행 가능한 상위 모델로 신뢰했다.</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="slide" id="protocol">
-        <span class="slide-number">02 / 09</span>
-        <div class="slide-inner">
-          <div class="eyebrow">Experimental contract</div>
-          <h2>세 버전은 무엇을<br>하나씩 추가했나?</h2>
-
-          <div class="diagram">
-            <pre class="mermaid">
-flowchart LR
-  B["LLM PDDL을<br/>검증 없이 신뢰"] --> V1["v1<br/>실제 transition으로 초기 grounding"]
-  V1 --> V2["v2<br/>실패 evidence로 실행 중 revision"]
-  V2 --> V3["v3<br/>LLM scorer + real-env beam"]
-  V1 -. "static evidence" .-> C1["local grounding"]
-  V2 -. "closed loop" .-> C2["failure repair"]
-  V3 -. "directed search" .-> C3["mechanics discovery"]
-            </pre>
-          </div>
-
-          <div class="grid-3">
-            <article class="card accent">
-              <div class="kicker">v1 / Ground</div>
-              <h3>관측을 넣는다</h3>
-              <p>실제 action–delta를 initial PDDL induction의 근거로 사용한다.</p>
-            </article>
-            <article class="card blue">
-              <div class="kicker">v2 / Revise</div>
-              <h3>실패에서 고친다</h3>
-              <p>planner·predicate·grounding·execution 실패를 실제 delta와 함께 되먹임한다.</p>
-            </article>
-            <article class="card warn">
-              <div class="kicker">v3 / Explore</div>
-              <h3>찾을 evidence를 고른다</h3>
-              <p>LLM scorer가 실제 transition을 평가하고 beam이 긴 productive prefix를 보존한다.</p>
-            </article>
-          </div>
-
-          <h3 style="margin-top:46px">평가 대상</h3>
-          <table aria-label="버전별 평가 run">
-            <thead><tr><th>Version</th><th>Original</th><th>Random chars</th><th>선택 원칙</th></tr></thead>
-            <tbody>
-              <tr><td><strong>v1</strong></td><td>seed 42, 43 평균</td><td>seed <strong>42</strong></td><td>누출 진단 seed 43 제외</td></tr>
-              <tr><td><strong>v2</strong></td><td>seed 42, 43 평균</td><td>seed <strong>43</strong></td><td>누출 진단 seed 42 제외</td></tr>
-              <tr><td><strong>v3</strong></td><td>seed 42, 43 평균</td><td>seed <strong>43</strong></td><td>동일 선택 규칙</td></tr>
-            </tbody>
+      <h2>v3 exploration coverage</h2>
+      <div class="split">
+        <div>
+          <h3>Unique state / 100 candidate</h3>
+          <div class="metric-chart"><span>Random</span><div class="track"><div class="fill gray" style="--w:81.1%"></div></div><strong>13.52</strong></div>
+          <div class="metric-chart"><span>Beam</span><div class="track"><div class="fill" style="--w:100%"></div></div><strong>16.67</strong></div>
+          <table>
+            <thead><tr><th>전략</th><th class="num">100 candidate당</th></tr></thead>
+            <tbody><tr><td>Random</td><td class="num">13.52</td></tr><tr><td>Beam</td><td class="num em">16.67</td></tr></tbody>
           </table>
-          <p class="caption">MiniCrafter-OO lv0–7 · domain description OFF. Random chars의 다른 seed는 pretrained/domain-schema knowledge 누출을 보인 진단 사례로만 사용한다.</p>
         </div>
-      </section>
+        <div>
+          <h3>Distinct achievement / 1,000 candidate</h3>
+          <div class="metric-chart"><span>Random</span><div class="track"><div class="fill gray" style="--w:43%"></div></div><strong>3.00</strong></div>
+          <div class="metric-chart"><span>Beam</span><div class="track"><div class="fill" style="--w:100%"></div></div><strong>6.97</strong></div>
+          <table>
+            <thead><tr><th>전략</th><th class="num">1,000 candidate당</th></tr></thead>
+            <tbody><tr><td>Random</td><td class="num">3.00</td></tr><tr><td>Beam</td><td class="num em">6.97</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+      <p class="caption">Original naming · seed 42 · candidate phase · warmup/replay 제외. Unique state는 level별 distinct state 합, achievement는 positive <code>(level, ach_* key)</code> 발견.</p>
+      <div class="source-links"><a href="artifacts/coverage/exploration_efficiency_c2000.json" target="_blank">coverage source</a></div>
+    </section>
 
-      <section class="slide" id="v1">
-        <span class="slide-number">03 / 09</span>
-        <div class="slide-inner">
-          <div class="version-head">
-            <div class="version-stamp">v1</div>
-            <div>
-              <div class="eyebrow">Ground with observation</div>
-              <h2>추측 대신<br>실제 delta를 본다.</h2>
-              <p>초기 PDDL 생성에 real-environment transition을 직접 전달한다.</p>
-            </div>
-          </div>
+    <section class="panel" id="log">
+      <h1>Log</h1>
+      <div class="log-stats">
+        <span><strong id="stat-runs">–</strong>runs</span>
+        <span><strong id="stat-prompts">–</strong>canonical prompts</span>
+        <span><strong id="stat-files">–</strong>indexed files</span>
+      </div>
+      <p class="caption">version → benchmark → seed → level → role → init/revise/history. Raw exploration trace는 level별 compact summary로 대체. 실행 중 overwrite된 PDDL inner output은 복구 불가.</p>
 
-          <div class="hypothesis">
-            <span>H1 · EMPIRICAL GROUNDING</span>
-            Domain description 없이도, 실제 action–delta에 조건화한 초기 PDDL induction은 state-only induction보다 transition mismatch를 줄일 것이다.
-          </div>
+      <div class="log-tools">
+        <input id="artifact-search" type="search" placeholder="파일명, run, stage 검색" aria-label="artifact 검색">
+        <select id="filter-version" aria-label="버전"><option value="">All versions</option></select>
+        <select id="filter-role" aria-label="역할"><option value="">All roles</option></select>
+        <select id="filter-kind" aria-label="종류">
+          <option value="">Prompt + generated history</option>
+          <option value="prompt">Prompts</option>
+          <option value="history">Generated history</option>
+        </select>
+      </div>
+      <div class="log-actions">
+        <button class="small-button" id="expand-tree" type="button">모두 펼치기</button>
+        <button class="small-button" id="collapse-tree" type="button">모두 접기</button>
+        <span id="artifact-count" aria-live="polite"></span>
+      </div>
+      <div id="artifact-tree"><div class="empty">Manifest loading…</div></div>
+    </section>
 
-          <div class="diagram">
-            <pre class="mermaid">
-flowchart LR
-  R["첫 level random rollout<br/>200 actions"] --> D["action + non-empty delta"]
-  D --> P["Initial PDDL synthesis"]
-  R -->|"첫 15개 full transition"| W["WM synthesis"]
-  P --> H["High-level plan"]
-  W --> L["WM-guided low-level BFS"]
-  H --> L
-            </pre>
-          </div>
-          <p class="caption">중요: 200-step rollout은 매 level이 아니라 WM이 비어 있는 최초 level에서만 수행됐다. lv1–7의 신규 random rollout은 0이다.</p>
+    <section class="panel" id="examples">
+      <h1>버전별 구체적 예시</h1>
 
-          <div class="evidence">
-            <div class="evidence-panel">
-              <div class="label">REAL TRANSITION · original seed 43 · lv0</div>
-              <pre>Action: do
-Observed delta:
-  ach_collect_wood: 0 → 1
-  inv_wood:         0 → 1
-  tree:             target removed
-  grass:            target added</pre>
-            </div>
-            <div class="evidence-panel">
-              <div class="label">INDUCED HIGH-LEVEL OPERATOR</div>
-              <pre>(:action collect
+      <h2>v1 · transition → initial PDDL</h2>
+      <p class="caption">original · seed 43 · level 0</p>
+      <div class="split">
+        <div>
+          <h3>Observed transition</h3>
+          <pre>Action: do
+ach_collect_wood: 0 → 1
+inv_wood:          0 → 1
+tree:              target removed
+grass:             target added</pre>
+        </div>
+        <div>
+          <h3>Generated abstraction</h3>
+          <pre>(:action collect
   :parameters (?who ?target ?result)
   :precondition
     (and (close_to ?who ?target)
          (not (is_set ?result)))
-  :effect (is_set ?result))</pre>
-            </div>
-          </div>
-
-          <div class="grid-3">
-            <div class="card accent"><div class="kicker">Original</div><div class="big">4 / 8</div><p>seed 42 = 1, seed 43 = 7</p></div>
-            <div class="card bad"><div class="kicker">Random chars · selected</div><div class="big">0 / 8</div><p>seed 42</p></div>
-            <div class="card warn"><div class="kicker">What it proves</div><div class="big">Local</div><p>lv0는 해결했지만 operator가 inventory/tree-removal effect를 버려 transition preservation까지 증명하지는 못했다.</p></div>
-          </div>
-
-          <div class="verdict">
-            <strong>v1 conclusion</strong>
-            <p>관측은 목표와 가까운 local operator를 접지하는 데 유효했다. 그러나 최초 evidence에 없는 mechanics와 이후 abstraction failure는 고칠 수 없었다.</p>
-          </div>
+  :effect (is_set ?result)
+)</pre>
         </div>
-      </section>
+      </div>
+      <p class="caption">결과: level 0 solved.</p>
 
-      <section class="slide" id="v2">
-        <span class="slide-number">04 / 09</span>
-        <div class="slide-inner">
-          <div class="version-head">
-            <div class="version-stamp">v2</div>
-            <div>
-              <div class="eyebrow">Revise from failure</div>
-              <h2>틀린 추상을<br>실행 중에 고친다.</h2>
-              <p>v1의 초기 grounding은 유지하고, 실패 유형과 실제 interaction evidence로 current abstraction을 수정한다.</p>
-            </div>
-          </div>
-
-          <div class="hypothesis">
-            <span>H2 · CLOSED-LOOP REPAIR</span>
-            실행 중 드러난 abstraction failure의 유형과 real interaction evidence를 current PDDL에 되먹이면, 이후 attempt에서 실행 가능한 abstraction으로 수렴할 수 있다.
-          </div>
-
-          <div class="diagram">
-            <pre class="mermaid">
-flowchart LR
-  P["Current PDDL"] --> X["Predicate → planner → BFS → execute"]
-  X --> F{"outcome"}
-  F -->|"PDDL abstraction failure"| R["LLM PDDL revision"]
-  R --> N["problem / predicate 재생성<br/>+ replan"]
-  N --> P
-  F -->|"WM prediction mismatch"| W["기존 WM revision loop"]
-  W --> X
-  F -->|"goal reached"| S["Solved"]
-            </pre>
-          </div>
-
-          <h3>주요 PDDL revision trigger</h3>
-          <ul class="trigger-list">
-            <li>predicate classifier 생성 실패</li>
-            <li>high-level planner 실패 / empty plan</li>
-            <li>fresh-reset low-level grounding 전체가 0 actions 반환</li>
-            <li>goal 미도달 + 적용 가능한 대체 operator 없음</li>
-            <li>대체 operator가 goal 도달 → main route로 승격 필요</li>
-            <li>main·대체 실행이 WM과 일치하지만 모두 goal 미도달</li>
-          </ul>
-
-          <div class="evidence">
-            <div class="evidence-panel">
-              <div class="label">PDDL FAILURE · original seed 42 · lv1</div>
-              <pre># attempt 1 · high-level plan
-collect_wood player tree
-collect_wood player tree
-place_table
-
-# fresh-reset low-level grounding
-first subplan → <mark>[]</mark>
+      <h2>v2 · failure → PDDL revision</h2>
+      <p class="caption">original · seed 42 · level 1</p>
+      <div class="split">
+        <div>
+          <h3>Attempt 1</h3>
+          <pre>HL: collect_wood player tree
+LL: []
 visited: 0
 
-signal: "returned no actions"</pre>
-            </div>
-            <div class="evidence-panel">
-              <div class="label">INTERACTION-FAILURE PDDL REVISION</div>
-              <pre># before
+signal:
+"Fresh-reset low-level search
+ returned no actions"</pre>
+        </div>
+        <div>
+          <h3>Revision → Attempt 2</h3>
+          <pre># before
 collect_wood(?who, ?target)
 pre: close_to(?who, ?target)
 
@@ -1210,360 +553,120 @@ pre: close_to(?who, ?target)
 collect_wood()
 pre: true
 
-# attempt 2
-collect_wood → [move_down, do]
-collect_wood → [move_left, do]
-13 actions grounded · <mark>level solved</mark></pre>
-            </div>
-          </div>
-
-          <div class="grid-3">
-            <div class="card accent"><div class="kicker">Original</div><div class="big">6.5 / 8</div><p>seed 42 = 8, seed 43 = 5</p></div>
-            <div class="card bad"><div class="kicker">Random chars · selected</div><div class="big">0 / 8</div><p>seed 43</p></div>
-            <div class="card blue"><div class="kicker">Delta from v1</div><div class="big">+2.5</div><p>original 평균 solve level</p></div>
-          </div>
-
-          <div class="verdict">
-            <strong>v2 conclusion</strong>
-            <p>Failure-driven repair는 관측된 불일치를 한 곳에서 고쳐 original 성능을 높였다. 그러나 opaque name에서 prerequisite chain 자체를 모르면, 실패 signal만으로 올바른 원인 구조를 식별하기 어렵다.</p>
-          </div>
+LL: [move_down, do]
+LL: [move_left, do]
+13 actions · level solved</pre>
         </div>
-      </section>
+      </div>
 
-      <section class="slide" id="v3">
-        <span class="slide-number">05 / 09</span>
-        <div class="slide-inner">
-          <div class="version-head">
-            <div class="version-stamp">v3</div>
-            <div>
-              <div class="eyebrow">Explore for mechanics</div>
-              <h2>유용한 transition을<br>의도적으로 찾는다.</h2>
-              <p>15-step warmup으로 LLM transition scorer를 만들고, 실제 환경에서 beam search를 수행한다.</p>
-            </div>
-          </div>
-
-          <div class="hypothesis">
-            <span>H3 · MECHANICS-DIRECTED EXPLORATION</span>
-            관측 결과의 task relevance를 평가하는 LLM scorer는 productive prefix를 보존해, PDDL grounding에 유용한 mechanics transition을 제한된 candidate budget 안에서 찾을 수 있다.
-          </div>
-
-          <div class="diagram">
-            <pre class="mermaid">
-flowchart LR
-  W["15-step warmup<br/>매 level"] --> S["LLM transition scorer"]
-  W --> M["WM<br/>warmup only if empty"]
-  S --> B["real-env beam<br/>width 3 · depth uncapped<br/>candidate ≤ 2,000"]
-  B --> R["(action, delta) representatives<br/>≤ 200"]
-  R --> P["PDDL synth / revise"]
-  P --> H["ENHSP plan"]
-  H --> L["WM-guided BFS"]
-  M --> L
-            </pre>
-          </div>
-
-          <div class="params">
-            <div class="param"><strong>15</strong><span>warmup actions / level</span></div>
-            <div class="param"><strong>3</strong><span>beam width</span></div>
-            <div class="param"><strong>∞*</strong><span>fixed depth cap 없음</span></div>
-            <div class="param"><strong>2,000</strong><span>candidate actions 상한</span></div>
-            <div class="param"><strong>200</strong><span>PDDL representative 상한</span></div>
-          </div>
-          <p class="caption">각 candidate는 <code>reset → prefix replay → real candidate action</code>. 점수는 누적이 아니라 해당 transition의 관측 결과에만 매긴다. frontier가 비거나 candidate budget을 쓰면 종료한다.</p>
-
-          <div class="evidence">
-            <div class="evidence-panel">
-              <div class="label">DISCOVERED · original seed 43 · lv6 · #1708</div>
-              <pre>38-action real prefix
-  table placement
-  wood pickaxe
-  stone collection
-→ make_stone_pickaxe
+      <h2>v3 · scored prefix → mechanics</h2>
+      <p class="caption">original · seed 43 · level 6 · candidate #1708</p>
+      <div class="split">
+        <div>
+          <h3>Beam discovery</h3>
+          <pre>prefix length: 38
+action: make_stone_pickaxe
+score: 10000
 
 ach_make_stone_pickaxe: 0 → 1
 inv_stone:              1 → 0
 inv_wood:               1 → 0
-inv_stone_pickaxe:      0 → 1
-score: 10,000 · selected</pre>
-            </div>
-            <div class="evidence-panel">
-              <div class="label">GROUNDED PDDL → EXECUTION</div>
-              <pre>(:action make_stone_pickaxe
-  :precondition (and
-    (>= (inv_wood) 1)
-    (>= (inv_stone) 1)
-    (>= (ach_place_table) 1))
-  :effect (...))
-
-ENHSP: 8 high-level operators
-low-level BFS: all 8 succeed
-result: <mark>LEVEL 6 SOLVED</mark></pre>
-            </div>
-          </div>
-
-          <div class="grid-3">
-            <div class="card accent"><div class="kicker">Original</div><div class="big">8 / 8</div><p>seed 42 = 8, seed 43 = 8</p></div>
-            <div class="card bad"><div class="kicker">Random chars · selected</div><div class="big">1 / 8</div><p>seed 43 · lv0만 해결</p></div>
-            <div class="card warn"><div class="kicker">Observed max prefix</div><div class="big">47</div><p>random_chars seed 43 · 고정 depth는 없음</p></div>
-          </div>
-
-          <div class="verdict">
-            <strong>v3 conclusion</strong>
-            <p>Original feasibility는 지지됐다. 그러나 “관측 결과만 점수화하면 name invariance도 생긴다”는 더 강한 가설은 end-to-end에서 기각됐다.</p>
-          </div>
+inv_stone_pickaxe:      0 → 1</pre>
         </div>
-      </section>
-
-      <section class="slide" id="results">
-        <span class="slide-number">06 / 09</span>
-        <div class="slide-inner">
-          <div class="eyebrow">Main results</div>
-          <h2>Original은 4 → 6.5 → 8.<br>Random chars는 0 → 0 → 1.</h2>
-
-          <div class="solve-chart" aria-label="버전별 solve rate bar chart">
-            <div class="solve-col">
-              <h3>v1</h3>
-              <div class="solve-pair">
-                <div class="solve-bar" style="--v:4">4</div>
-                <div class="solve-bar random" style="--v:0"></div>
-              </div>
-              <div class="solve-labels"><span>Original</span><span>Random chars</span></div>
-            </div>
-            <div class="solve-col">
-              <h3>v2</h3>
-              <div class="solve-pair">
-                <div class="solve-bar" style="--v:6.5">6.5</div>
-                <div class="solve-bar random" style="--v:0"></div>
-              </div>
-              <div class="solve-labels"><span>Original</span><span>Random chars</span></div>
-            </div>
-            <div class="solve-col">
-              <h3>v3</h3>
-              <div class="solve-pair">
-                <div class="solve-bar" style="--v:8">8</div>
-                <div class="solve-bar random" style="--v:1">1</div>
-              </div>
-              <div class="solve-labels"><span>Original</span><span>Random chars</span></div>
-            </div>
-          </div>
-
-          <h3>Seed × level 상세</h3>
-          <table aria-label="선택 run별 level 결과">
-            <thead>
-              <tr><th>Run</th><th class="num">L0</th><th class="num">L1</th><th class="num">L2</th><th class="num">L3</th><th class="num">L4</th><th class="num">L5</th><th class="num">L6</th><th class="num">L7</th><th class="num">Solved</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>v1 · original · 42</td><td class="num check">✓</td><td class="num cross">·</td><td class="num cross">·</td><td class="num cross">·</td><td class="num cross">·</td><td class="num cross">·</td><td class="num cross">·</td><td class="num cross">·</td><td class="num">1/8</td></tr>
-              <tr><td>v1 · original · 43</td><td class="num check">✓</td><td class="num check">✓</td><td class="num check">✓</td><td class="num check">✓</td><td class="num check">✓</td><td class="num check">✓</td><td class="num cross">·</td><td class="num check">✓</td><td class="num">7/8</td></tr>
-              <tr class="highlight"><td>v1 · random_chars · 42</td><td class="num cross">·</td><td class="num cross">·</td><td class="num cross">·</td><td class="num cross">·</td><td class="num cross">·</td><td class="num cross">·</td><td class="num cross">·</td><td class="num cross">·</td><td class="num">0/8</td></tr>
-              <tr><td>v2 · original · 42</td><td class="num check">✓</td><td class="num check">✓</td><td class="num check">✓</td><td class="num check">✓</td><td class="num check">✓</td><td class="num check">✓</td><td class="num check">✓</td><td class="num check">✓</td><td class="num">8/8</td></tr>
-              <tr><td>v2 · original · 43</td><td class="num check">✓</td><td class="num check">✓</td><td class="num check">✓</td><td class="num check">✓</td><td class="num cross">·</td><td class="num check">✓</td><td class="num cross">·</td><td class="num cross">·</td><td class="num">5/8</td></tr>
-              <tr class="highlight"><td>v2 · random_chars · 43</td><td class="num cross">·</td><td class="num cross">·</td><td class="num cross">·</td><td class="num cross">·</td><td class="num cross">·</td><td class="num cross">·</td><td class="num cross">·</td><td class="num cross">·</td><td class="num">0/8</td></tr>
-              <tr><td>v3 · original · 42</td><td class="num check">✓</td><td class="num check">✓</td><td class="num check">✓</td><td class="num check">✓</td><td class="num check">✓</td><td class="num check">✓</td><td class="num check">✓</td><td class="num check">✓</td><td class="num">8/8</td></tr>
-              <tr><td>v3 · original · 43</td><td class="num check">✓</td><td class="num check">✓</td><td class="num check">✓</td><td class="num check">✓</td><td class="num check">✓</td><td class="num check">✓</td><td class="num check">✓</td><td class="num check">✓</td><td class="num">8/8</td></tr>
-              <tr class="highlight"><td>v3 · random_chars · 43</td><td class="num check">✓</td><td class="num cross">·</td><td class="num cross">·</td><td class="num cross">·</td><td class="num cross">·</td><td class="num cross">·</td><td class="num cross">·</td><td class="num cross">·</td><td class="num">1/8</td></tr>
-            </tbody>
-          </table>
-
-          <h3 style="margin-top:46px">v3 exploration coverage</h3>
-          <div class="coverage-grid">
-            <div class="metric-box">
-              <h3>Unique state <span class="small">/ 100 candidate</span></h3>
-              <div class="bars">
-                <div class="bar-row"><span>Random</span><div class="bar-track"><div class="bar-fill random" style="--w:81.1%"></div></div><span class="bar-value">13.52</span></div>
-                <div class="bar-row"><span>Beam</span><div class="bar-track"><div class="bar-fill" style="--w:100%"></div></div><span class="bar-value">16.67</span></div>
-              </div>
-            </div>
-            <div class="metric-box">
-              <h3>Distinct achievement <span class="small">/ 1,000 candidate</span></h3>
-              <div class="bars">
-                <div class="bar-row"><span>Random</span><div class="bar-track"><div class="bar-fill random" style="--w:43%"></div></div><span class="bar-value">3.00</span></div>
-                <div class="bar-row"><span>Beam</span><div class="bar-track"><div class="bar-fill" style="--w:100%"></div></div><span class="bar-value">6.97</span></div>
-              </div>
-            </div>
-          </div>
-          <div class="card warn">
-            <div class="kicker">Interpretation boundary</div>
-            <p><strong>Original naming · seed 42의 candidate-phase 두 arm</strong>이며 공통 warmup과 beam replay를 제외했다. unique state는 level별 distinct state를 합산하고, distinct achievement는 positive delta가 발견된 <code>(level, ach_* key)</code> 쌍이다. total environment action 기준으로는 replay 비용 때문에 beam 효율이 더 낮다. matched-budget end-to-end random arm도 없으므로 “beam이 random보다 인과적으로 우수하다”고 결론내리지는 않는다. <a href="artifacts/coverage/exploration_efficiency_c2000.json" target="_blank">집계 원문 ↗</a></p>
-          </div>
+        <div>
+          <h3>Generated PDDL</h3>
+          <pre>(:action make_stone_pickaxe
+  :precondition
+    (and (>= (inv_wood) 1)
+         (>= (inv_stone) 1)
+         (>= (ach_place_table) 1))
+  :effect
+    (and (decrease (inv_wood) 1)
+         (decrease (inv_stone) 1)
+         (increase (inv_stone_pickaxe) 1))
+)</pre>
         </div>
-      </section>
+      </div>
+      <p class="caption">결과: level 6 solved.</p>
+    </section>
 
-      <section class="slide" id="random-chars">
-        <span class="slide-number">07 / 09</span>
-        <div class="slide-inner">
-          <div class="eyebrow">Why random_chars fails</div>
-          <h2>이름이 주던 causal theory를<br>transition에서 재구성하지 못했다.</h2>
-          <p class="lede">Random chars에서는 <code>tree → wood → table → pickaxe</code>라는 의미적 연결이 사라진다. 더 많은 state를 보는 것만으로는 prerequisite 관계가 생기지 않는다.</p>
+    <section class="panel" id="random-chars">
+      <h1>random_chars 실패</h1>
 
-          <div class="causal-chain" aria-label="random chars causal chain">
-            <span>xcvkpr</span><b>→</b><span>tpkhxk</span><b>→</b><span>zezroc</span><b>→</b><span>tpkhxk_bcwrvm</span>
-          </div>
+      <div class="diagram">
+        <pre class="mermaid">
+flowchart LR
+    A["xcvkpr"] --> B["tpkhxk"]
+    B --> C["zezroc"]
+    C --> D["tpkhxk_bcwrvm"]
+        </pre>
+      </div>
+      <p class="caption">tree → wood → table → pickaxe의 이름 기반 causal theory가 opaque token에서는 사라진다.</p>
 
-          <div class="contradiction">
-            <article class="module">
-              <h3>SCORER</h3>
-              <strong>“탐색 가치 없음”</strong>
-              <p>opaque resource를 소비하는 prerequisite action을 손실로 평가해 beam에서 제거한다.</p>
-            </article>
-            <article class="module">
-              <h3>PDDL</h3>
-              <strong>“가능”</strong>
-              <p>delta에서 effect는 보지만 prefix와 unchanged context가 없어 station·도구 precondition을 놓친다.</p>
-            </article>
-            <article class="module">
-              <h3>WORLD MODEL</h3>
-              <strong>“실행 불가능”</strong>
-              <p>초기 warmup만 보므로 beam이 발견한 make effect를 모른 채 no-op으로 예측한다.</p>
-            </article>
-          </div>
+      <h2>Exploration volume</h2>
+      <table aria-label="v3 beam exploration volume">
+        <thead><tr><th>naming</th><th class="num">candidate</th><th class="num">unique state</th><th class="num">achievement discovery</th></tr></thead>
+        <tbody>
+          <tr><td>original</td><td class="num">1,578</td><td class="num">263</td><td class="num">11</td></tr>
+          <tr><td>random_chars</td><td class="num em">13,299</td><td class="num em">2,245</td><td class="num em">30</td></tr>
+        </tbody>
+      </table>
+      <p class="caption">seed 42 · candidate-phase 집계. 별도 end-to-end run 결과: original 8/8, random_chars 0/8. Candidate 수나 방문 state 수만 늘려서는 prerequisite 관계가 복원되지 않았다.</p>
 
-          <div class="evidence">
-            <div class="evidence-panel">
-              <div class="label">PREREQUISITE PRUNED · v3 random_chars 43 · lv2</div>
-              <pre>Action: place_zezroc
-Real delta:
-  inv_tpkhxk:      2 → 0
-  ach_place_zezroc: 0 → 1
+      <h2>세 모듈의 불일치</h2>
+      <table aria-label="random chars failure causes">
+        <thead><tr><th>Module</th><th>받는 정보</th><th>실패</th></tr></thead>
+        <tbody>
+          <tr><td>Scorer</td><td>현재 transition의 score</td><td>prerequisite를 모르므로 자원 소비 행동을 낮게 평가·prune</td></tr>
+          <tr><td>PDDL</td><td>action + changed delta</td><td>prefix와 unchanged context가 없어 station·tool precondition 누락</td></tr>
+          <tr><td>WM</td><td>초기 15-step warmup</td><td>beam이 발견한 make effect를 받지 못해 unknown action을 no-op 예측</td></tr>
+        </tbody>
+      </table>
 
-Scorer:
-  resource loss     -40
-  achievement gain   +6
-  novelty            +2
-  ---------------------
-  score             <mark>-32</mark>
-
+      <h3>Scorer · prerequisite prune</h3>
+      <pre># v3 · random_chars · seed 43 · level 2
+action: place_zezroc
+inv_tpkhxk:       2 → 0     resource loss  -40
+ach_place_zezroc: 0 → 1     achievement     +6
+                              novelty        +2
+                              score         -32
 selected: false</pre>
-            </div>
-            <div class="evidence-panel">
-              <div class="label">WM KNOWLEDGE GAP · SAME SELECTED RUN</div>
-              <pre># v3-random_chars-43/worldmodel.py
 
-# Crafting recipes and their required
-# stations/materials were not revealed
-# by the observations.
+      <h3>PDDL · context loss</h3>
+      <pre># v3 · random_chars · seed 42 · level 2
+(:action make_tpkhxk_bcwrvm
+  :precondition (>= (inv_tpkhxk) 3)
+  :effect
+    (and (decrease (inv_tpkhxk) 3)
+         (increase (inv_tpkhxk_bcwrvm) 1))
+)
+# station precondition 없음</pre>
 
+      <h3>WM · unknown action fallback</h3>
+      <pre># v3 · random_chars · seed 43
+# Crafting recipes and stations/materials were not revealed.
 if action != "sleep":
     new_state["player_sleeping"] = False
-return new_state  # unknown action fallback
+return new_state  # make_* state unchanged</pre>
 
-PDDL may contain a make effect,
-but make_* reaches this unchanged-state fallback.</pre>
-            </div>
-          </div>
-
-          <div class="diagram">
-            <pre class="mermaid">
+      <div class="diagram">
+        <pre class="mermaid">
 flowchart LR
-  E["Beam evidence<br/>prefix + before + action + after"] -->|"delta only"| P["PDDL"]
-  E -.-x W["WM<br/>warmup only"]
-  E -.-x S["Next scorer<br/>shared theory 없음"]
-  P --> C{"same action"}
-  W --> C
-  S --> C
-  C --> F["Scorer: prune<br/>PDDL: possible<br/>WM: no-op"]
-            </pre>
-          </div>
+    E["Beam transition<br/>prefix + before + action + after"]
+    E -->|"delta only"| P["PDDL<br/>가능"]
+    E -. "공유 안 됨" .-> W["WM<br/>실행 불가능"]
+    E -. "prerequisite 없음" .-> S["Scorer<br/>탐색 가치 없음"]
+        </pre>
+      </div>
 
-          <h3>Leakage seed를 왜 제외했나</h3>
-          <table aria-label="random chars seed별 결과">
-            <thead><tr><th>Version</th><th class="num">seed 42</th><th class="num">seed 43</th><th>발표 평가 seed</th></tr></thead>
-            <tbody>
-              <tr><td>v1</td><td class="num">0/8</td><td class="num"><span class="pill warn">8/8 leakage</span></td><td>42</td></tr>
-              <tr><td>v2</td><td class="num"><span class="pill warn">8/8 leakage</span></td><td class="num">0/8</td><td>43</td></tr>
-              <tr><td>v3</td><td class="num">0/8</td><td class="num">1/8</td><td>43</td></tr>
-            </tbody>
-          </table>
-          <div class="grid-2">
-            <div class="card warn">
-              <div class="kicker">Direct leakage evidence · v2 seed 42</div>
-              <h3>관측에 <code>do</code>가 한 번도 없었다.</h3>
-              <p>초기 warmup은 move/noop/실패한 place·make·sleep뿐이었다. 그런데 생성 WM은 곧바로 <code>xcvkpr</code>를 tree로 식별하고, 채집 tool tier·station cost·전체 recipe를 복원했다. <a href="artifacts/leakage/v2-random_chars-42-initial-prompt.txt" target="_blank">prompt ↗</a> · <a href="artifacts/leakage/v2-random_chars-42-initial-response.txt" target="_blank">response ↗</a></p>
-            </div>
-            <div class="card bad">
-              <div class="kicker">Scientific treatment</div>
-              <h3>성공이 곧 학습은 아니다.</h3>
-              <p>이 두 8/8은 transition evidence로 설명할 수 없는 pretrained/domain-schema inference다. 따라서 solve-rate headline과 artifact catalog에서 제외했다.</p>
-            </div>
-          </div>
-
-          <h3 style="margin-top:44px">필요한 것은 shared causal theory</h3>
-          <div class="formula">zezroc present + inv_tpkhxk ≥ 1 → make_tpkhxk_bcwrvm → inv_tpkhxk_bcwrvm + 1</div>
-          <p class="caption">Textual theory는 scorer·WM·PDDL prompt가 함께 사용하기 쉬운 구현 선택일 뿐, 반드시 text여야 하는 것은 아니다. 핵심은 동일한 원인–조건–결과 관계를 공유하는 것이다.</p>
-        </div>
-      </section>
-
-      <section class="slide" id="conclusion">
-        <span class="slide-number">08 / 09</span>
-        <div class="slide-inner">
-          <div class="eyebrow">Conclusions</div>
-          <h2>Grounding, revision, exploration.<br>각 단계는 맞았지만 충분하지 않았다.</h2>
-
-          <table aria-label="버전별 가설과 결론">
-            <thead><tr><th>Version</th><th>검증한 가설</th><th>판정</th><th>드러난 ceiling</th></tr></thead>
-            <tbody>
-              <tr><td><strong>v1</strong></td><td>실제 delta가 initial PDDL을 접지한다</td><td><span class="pill ok">부분 지지</span></td><td>local/goal effect만 남고 이후 실패를 고치지 못함</td></tr>
-              <tr><td><strong>v2</strong></td><td>실패 evidence가 abstraction을 개선한다</td><td><span class="pill ok">지지 · original</span></td><td>opaque prerequisite의 올바른 원인을 식별하지 못함</td></tr>
-              <tr><td><strong>v3</strong></td><td>LLM scorer가 유용 mechanics를 찾는다</td><td><span class="pill ok">feasibility 지지</span></td><td>discovery는 name-invariant해도 end-to-end grounding은 아님</td></tr>
-            </tbody>
-          </table>
-
-          <div class="conclusion-line">
-            Interaction은 outcome을 발견하기에는 충분했지만, scorer·WM·PDDL이 합의한 실행 가능한 high-level abstraction을 만들기에는 충분하지 않았다.
-          </div>
-
-          <h3>다음 실험의 최소 우선순위</h3>
-          <ol class="next-list">
-            <li><div><strong>Prefix와 unchanged context를 보존한다.</strong><br><span class="small">delta-only evidence에서 사라진 station·tool prerequisite를 추출한다.</span></div></li>
-            <li><div><strong>하나의 causal theory를 공유한다.</strong><br><span class="small">같은 theory에서 scorer·WM·PDDL을 생성하거나 갱신한다.</span></div></li>
-            <li><div><strong>Leakage와 interaction cost를 통제해 재평가한다.</strong><br><span class="small">random_chars 고정 seed와 total environment action이 맞는 random arm을 사용한다.</span></div></li>
-          </ol>
-        </div>
-      </section>
-
-      <section class="slide compact" id="artifacts">
-        <span class="slide-number">09 / 09</span>
-        <div class="slide-inner">
-          <div class="eyebrow">Reproducibility appendix</div>
-          <h2>모든 prompt와<br>보존된 생성 이력.</h2>
-          <p class="lede">Version → benchmark → seed → level → role → init/revise 순으로 탐색한다. 파일을 누르면 페이지 안에서 원문을 확인할 수 있다.</p>
-
-          <div class="artifact-stats">
-            <div class="artifact-stat"><strong id="stat-runs">9</strong><span>selected runs</span></div>
-            <div class="artifact-stat"><strong id="stat-prompts">408</strong><span>canonical prompts</span></div>
-            <div class="artifact-stat"><strong id="stat-files">1,465</strong><span>indexed files</span></div>
-            <div class="artifact-stat"><strong>17 MB</strong><span>static package</span></div>
-          </div>
-
-          <div class="card warn">
-            <div class="kicker">History boundary</div>
-            <p>아래에는 원 run에 <strong>실제로 보존된 전부</strong>를 넣었다. WM은 version snapshot과 init/revise/rollback이 남아 있다. PDDL은 canonical prompt 전부와 보존된 revise response, level entry/current domain을 포함하지만 일부 inner revision output은 실행 중 같은 파일에 덮어써졌으므로 완전한 version history는 아니다. 대용량 raw <code>exploration.json</code>은 candidate/representative 요약본으로 패키징했다.</p>
-          </div>
-
-          <div class="artifact-shell">
-            <div class="artifact-tools">
-              <input id="artifact-search" type="search" placeholder="파일명, stage, run 검색…" aria-label="artifact 검색">
-              <select id="filter-version" aria-label="버전"><option value="">All versions</option></select>
-              <select id="filter-role" aria-label="역할"><option value="">All roles</option></select>
-              <select id="filter-kind" aria-label="종류"><option value="">Prompt + history</option><option value="prompt">Prompts</option><option value="history">Generated / evidence</option></select>
-            </div>
-            <div class="artifact-actions">
-              <button class="btn" id="expand-tree" type="button">모두 펼치기</button>
-              <button class="btn" id="collapse-tree" type="button">모두 접기</button>
-              <span id="artifact-count" aria-live="polite"></span>
-            </div>
-            <div id="artifact-tree"><div class="empty">Manifest loading…</div></div>
-          </div>
-        </div>
-      </section>
-
-      <footer>
-        <div class="footer-inner">
-          <span>TC2 · high-level abstraction recovery · v1/v2/v3</span>
-          <span>Static HTML · Mermaid CDN · packaged artifacts · GitHub Pages ready</span>
-        </div>
-      </footer>
-    </main>
-  </div>
+      <h2>필요한 공유 관계</h2>
+      <pre>zezroc 존재
++ inv_tpkhxk ≥ 1
+→ make_tpkhxk_bcwrvm
+→ pickaxe 획득</pre>
+      <p class="caption">핵심은 scorer·WM·PDDL이 같은 원인–조건–결과를 공유하는 causal theory. Textual theory는 가능한 구현 중 하나.</p>
+    </section>
+  </main>
 
   <div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-labelledby="viewer-title">
     <div class="viewer-backdrop" id="viewer-backdrop"></div>
@@ -1583,17 +686,18 @@ flowchart LR
   <script src="artifact-manifest.js"></script>
   <script>
     (() => {
-      const navLinks = [...document.querySelectorAll(".rail a[href^='#']")];
-      const tabNav = document.querySelector(".rail nav");
-      const sections = navLinks.map(link => document.querySelector(link.hash)).filter(Boolean);
+      const tabNav = document.querySelector(".tabs");
+      const tabLinks = [...document.querySelectorAll(".tabs a")];
+      const panels = tabLinks.map(link => document.querySelector(link.hash));
+
       const activateTab = (hash, updateHistory = false) => {
-        const target = sections.find(section => `#${section.id}` === hash) || sections[0];
-        sections.forEach(section => {
-          const active = section === target;
-          section.classList.toggle("active", active);
-          section.setAttribute("aria-hidden", String(!active));
+        const target = panels.find(panel => `#${panel.id}` === hash) || panels[0];
+        panels.forEach(panel => {
+          const active = panel === target;
+          panel.classList.toggle("active", active);
+          panel.setAttribute("aria-hidden", String(!active));
         });
-        navLinks.forEach(link => {
+        tabLinks.forEach(link => {
           const active = link.hash === `#${target.id}`;
           link.classList.toggle("active", active);
           link.setAttribute("aria-selected", String(active));
@@ -1604,37 +708,38 @@ flowchart LR
         }
         scrollTo({ top: 0, behavior: "auto" });
         requestAnimationFrame(() => {
-          const activeLink = navLinks.find(link => link.hash === `#${target.id}`);
+          const activeLink = tabLinks.find(link => link.hash === `#${target.id}`);
           const linkRect = activeLink.getBoundingClientRect();
           const navRect = tabNav.getBoundingClientRect();
           tabNav.scrollLeft += linkRect.left - navRect.left - (navRect.width - linkRect.width) / 2;
         });
       };
 
-      navLinks.forEach((link, index) => {
-        const target = sections[index];
-        link.id = `tab-${target.id}`;
+      tabLinks.forEach((link, index) => {
+        const panel = panels[index];
+        link.id = `tab-${panel.id}`;
         link.setAttribute("role", "tab");
-        link.setAttribute("aria-controls", target.id);
-        target.setAttribute("role", "tabpanel");
-        target.setAttribute("aria-labelledby", link.id);
+        link.setAttribute("aria-controls", panel.id);
+        panel.setAttribute("role", "tabpanel");
+        panel.setAttribute("aria-labelledby", link.id);
         link.addEventListener("click", event => {
           event.preventDefault();
           activateTab(link.hash, true);
         });
         link.addEventListener("keydown", event => {
-          const keys = { ArrowLeft: -1, ArrowRight: 1 };
-          if (!(event.key in keys) && event.key !== "Home" && event.key !== "End") return;
+          const delta = { ArrowLeft: -1, ArrowRight: 1 }[event.key];
+          if (delta === undefined && event.key !== "Home" && event.key !== "End") return;
           event.preventDefault();
           const next = event.key === "Home" ? 0
-            : event.key === "End" ? navLinks.length - 1
-            : (index + keys[event.key] + navLinks.length) % navLinks.length;
-          navLinks[next].focus();
-          activateTab(navLinks[next].hash, true);
+            : event.key === "End" ? tabLinks.length - 1
+            : (index + delta + tabLinks.length) % tabLinks.length;
+          tabLinks[next].focus();
+          activateTab(tabLinks[next].hash, true);
         });
       });
-      activateTab(location.hash || "#intro");
-      addEventListener("popstate", () => activateTab(location.hash || "#intro"));
+      activateTab(location.hash || "#versions");
+      addEventListener("load", () => scrollTo({ top: 0, behavior: "auto" }), { once: true });
+      addEventListener("popstate", () => activateTab(location.hash || "#versions"));
 
       const manifest = window.TC2_ARTIFACT_MANIFEST;
       if (!manifest) return;
@@ -1650,9 +755,9 @@ flowchart LR
       const viewerRaw = document.getElementById("viewer-raw");
       let viewedText = "";
 
-      const unique = (key) => [...new Set(manifest.items.map(item => item[key]))].sort();
-      for (const version of unique("version")) versionFilter.add(new Option(version, version));
-      for (const role of unique("role")) roleFilter.add(new Option(role, role));
+      const unique = key => [...new Set(manifest.items.map(item => item[key]))].sort();
+      unique("version").forEach(value => versionFilter.add(new Option(value, value)));
+      unique("role").forEach(value => roleFilter.add(new Option(value, value)));
       document.getElementById("stat-runs").textContent = manifest.runs.length.toLocaleString();
       document.getElementById("stat-prompts").textContent = manifest.items
         .filter(item => item.source.startsWith("llm_prompts/")).length.toLocaleString();
@@ -1674,6 +779,10 @@ flowchart LR
         return a.localeCompare(b, undefined, { numeric: true });
       });
 
+      const closeViewer = () => {
+        viewer.classList.remove("open");
+        document.body.style.overflow = "";
+      };
       const openViewer = async item => {
         viewer.classList.add("open");
         document.body.style.overflow = "hidden";
@@ -1688,22 +797,16 @@ flowchart LR
           viewerContent.textContent = viewedText;
         } catch (error) {
           viewedText = "";
-          viewerContent.textContent =
-            `파일을 불러오지 못했습니다: ${error.message}\n\n로컬에서는 이 폴더를 HTTP server로 열어 주세요. GitHub Pages에서는 바로 동작합니다.`;
+          viewerContent.textContent = `파일을 불러오지 못했습니다: ${error.message}`;
         }
-      };
-      const closeViewer = () => {
-        viewer.classList.remove("open");
-        document.body.style.overflow = "";
       };
       document.getElementById("viewer-close").addEventListener("click", closeViewer);
       document.getElementById("viewer-backdrop").addEventListener("click", closeViewer);
       document.getElementById("viewer-copy").addEventListener("click", async event => {
         if (!viewedText) return;
         await navigator.clipboard.writeText(viewedText);
-        const button = event.currentTarget;
-        button.textContent = "copied";
-        setTimeout(() => button.textContent = "copy", 900);
+        event.currentTarget.textContent = "copied";
+        setTimeout(() => event.currentTarget.textContent = "copy", 900);
       });
       addEventListener("keydown", event => {
         if (event.key === "Escape") closeViewer();
@@ -1738,7 +841,7 @@ flowchart LR
         if (!filtered.length) {
           const empty = document.createElement("div");
           empty.className = "empty";
-          empty.textContent = "조건에 맞는 artifact가 없습니다.";
+          empty.textContent = "조건에 맞는 파일이 없습니다.";
           tree.append(empty);
           return;
         }
@@ -1768,15 +871,15 @@ flowchart LR
           }
           const key = hierarchy[depth];
           const grouped = group(items, key);
-          for (const value of order(key, Object.keys(grouped))) {
+          order(key, Object.keys(grouped)).forEach(value => {
             const details = makeDetails(
               key === "seed" ? `seed ${value}` : value,
               grouped[value],
-              depth < 1
+              depth === 0
             );
             appendLevel(details, grouped[value], depth + 1);
             parent.append(details);
-          }
+          });
         };
         appendLevel(tree, filtered, 0);
       };
@@ -1800,17 +903,18 @@ flowchart LR
       theme: "base",
       securityLevel: "loose",
       deterministicIds: true,
-      deterministicIDSeed: "tc2-260724",
-      flowchart: { curve: "basis", htmlLabels: true },
+      deterministicIDSeed: "tc2-260724-minimal",
+      flowchart: { curve: "linear", htmlLabels: true },
       themeVariables: {
         background: "#ffffff",
-        primaryColor: "#eaf0ff",
-        primaryTextColor: "#171817",
-        primaryBorderColor: "#2867f0",
-        lineColor: "#777b78",
-        secondaryColor: "#f0f1ef",
-        tertiaryColor: "#fff4eb",
-        fontFamily: "Inter, Helvetica Neue, Pretendard, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif"
+        primaryColor: "#f6f6f4",
+        primaryTextColor: "#202124",
+        primaryBorderColor: "#9da1a6",
+        lineColor: "#73777c",
+        secondaryColor: "#eaf0ff",
+        tertiaryColor: "#ffffff",
+        fontFamily: "Inter, Helvetica Neue, Pretendard, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
+        fontSize: "13px"
       }
     });
     await mermaid.run({ querySelector: ".mermaid" });

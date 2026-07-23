@@ -1,0 +1,24 @@
+```pddl
+(define (domain tpkhxk_crafting)
+  (:requirements :strips :typing :numeric-fluents)
+  (:functions (inv_tpkhxk) (inv_tpkhxk_bcwrvm) (ach_collect_tpkhxk) (ach_place_zezroc) (ach_make_tpkhxk_bcwrvm))
+
+  (:action collect_tpkhxk
+    :parameters ()
+    :precondition (and)
+    :effect (and (increase (inv_tpkhxk) 1) (increase (ach_collect_tpkhxk) 1))
+  )
+
+  (:action place_zezroc
+    :parameters ()
+    :precondition (>= (inv_tpkhxk) 2)
+    :effect (and (decrease (inv_tpkhxk) 2) (increase (ach_place_zezroc) 1))
+  )
+
+  (:action make_tpkhxk_bcwrvm
+    :parameters ()
+    :precondition (and (>= (inv_tpkhxk) 1) (>= (ach_place_zezroc) 1))
+    :effect (and (decrease (inv_tpkhxk) 1) (increase (inv_tpkhxk_bcwrvm) 1) (increase (ach_make_tpkhxk_bcwrvm) 1))
+  )
+)
+```

@@ -1,0 +1,35 @@
+{
+  "domain_name": "minicrafter_oo",
+  "level_id": 5,
+  "seed": 42,
+  "effective_seed": 5042,
+  "area": [
+    9,
+    7
+  ],
+  "view": [
+    9,
+    9
+  ],
+  "mission": "place sgqeje",
+  "solved": true,
+  "actions": [
+    "move_right",
+    "do",
+    "move_right",
+    "move_up",
+    "do",
+    "move_down",
+    "do",
+    "place_zezroc",
+    "move_left",
+    "make_tpkhxk_bcwrvm",
+    "move_left",
+    "do",
+    "move_down",
+    "move_left",
+    "do",
+    "move_down",
+    "place_sgqeje"
+  ]
+}

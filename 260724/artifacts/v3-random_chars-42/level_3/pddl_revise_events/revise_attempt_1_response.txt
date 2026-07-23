@@ -1,0 +1,28 @@
+```pddl
+(define (domain make_tpkhxk_wqiqzh)
+  (:requirements :strips :typing :numeric-fluents)
+  (:types actor material product)
+  (:predicates
+    (zezroc_placed)
+  )
+  (:functions
+    (amount_material ?item - material)
+    (amount_product ?item - product)
+  )
+  (:action collect_tpkhxk
+    :parameters (?who - actor ?item - material)
+    :precondition (and)
+    :effect (increase (amount_material ?item) 1)
+  )
+  (:action place_zezroc
+    :parameters (?who - actor ?item - material)
+    :precondition (>= (amount_material ?item) 2)
+    :effect (and (decrease (amount_material ?item) 2) (zezroc_placed))
+  )
+  (:action make_tpkhxk_wqiqzh
+    :parameters (?who - actor ?item - material ?result - product)
+    :precondition (and (zezroc_placed) (>= (amount_material ?item) 1))
+    :effect (and (decrease (amount_material ?item) 1) (increase (amount_product ?result) 1))
+  )
+)
+```

@@ -1,0 +1,15 @@
+(define (domain sgqeje_crafting)
+  (:requirements :strips :numeric-fluents)
+  (:predicates (ach_make_sgqeje_bcwrvm))
+  (:functions (inv_sgqeje) (inv_sgqeje_bcwrvm))
+  (:action collect_sgqeje
+    :parameters ()
+    :precondition (and)
+    :effect (increase (inv_sgqeje) 1)
+  )
+  (:action make_sgqeje_bcwrvm
+    :parameters ()
+    :precondition (>= (inv_sgqeje) 3)
+    :effect (and (decrease (inv_sgqeje) 3) (increase (inv_sgqeje_bcwrvm) 1) (ach_make_sgqeje_bcwrvm))
+  )
+)

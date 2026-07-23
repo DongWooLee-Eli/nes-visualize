@@ -1,0 +1,38 @@
+{
+  "domain_name": "minicrafter_oo",
+  "level_id": 6,
+  "seed": 43,
+  "effective_seed": 6043,
+  "area": [
+    9,
+    7
+  ],
+  "view": [
+    9,
+    9
+  ],
+  "mission": "make sgqeje bcwrvm",
+  "solved": true,
+  "actions": [
+    "move_up",
+    "do",
+    "move_up",
+    "move_left",
+    "move_left",
+    "move_down",
+    "move_left",
+    "do",
+    "move_up",
+    "do",
+    "move_right",
+    "place_zezroc",
+    "make_tpkhxk_bcwrvm",
+    "move_down",
+    "do",
+    "move_up",
+    "move_left",
+    "do",
+    "move_right",
+    "make_sgqeje_bcwrvm"
+  ]
+}

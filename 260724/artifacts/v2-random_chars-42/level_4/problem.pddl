@@ -1,0 +1,6 @@
+(define (problem collect_sgqeje_problem)
+  (:domain collect_place_make_domain)
+  (:objects)
+  (:init)
+  (:goal (ach_collect_sgqeje))
+)

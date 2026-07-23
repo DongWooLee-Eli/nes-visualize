@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Package the selected TC2 runs for the static presentation."""
+"""Package all TC2 runs for the static presentation."""
 
 import json
 import re
@@ -8,14 +8,13 @@ from pathlib import Path
 
 
 HERE = Path(__file__).resolve().parent
-ROOT = HERE.parents[2]
+ROOT = HERE.parents[1] / "PyNES6"
 RUNS = ROOT / "projects/tc/runs/exploration"
 OUT = HERE / "artifacts"
 
 SELECTED = {
-    "v1": {"original": (42, 43), "random_chars": (42,)},
-    "v2": {"original": (42, 43), "random_chars": (43,)},
-    "v3": {"original": (42, 43), "random_chars": (43,)},
+    version: {"original": (42, 43), "random_chars": (42, 43)}
+    for version in ("v1", "v2", "v3")
 }
 SUPPORTING = {
     "coverage/exploration_efficiency_c2000.json":

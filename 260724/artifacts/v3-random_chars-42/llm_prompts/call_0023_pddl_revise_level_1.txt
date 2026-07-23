@@ -1,0 +1,67 @@
+You previously synthesized the following PDDL DOMAIN for a 2D grid game.
+The agent has now moved to a new level with a different mission. Your job is
+to adapt the existing domain so it can express (and plan toward) the new
+mission. You MAY add, modify, or remove operators and predicates - whatever
+produces the cleanest domain that solves both the old and new missions.
+
+Constraints that still apply:
+- Give every action parameter a declared type. Keep each `:parameters`,
+  `:precondition`, and `:effect` expression on one physical line.
+- Predicate names are lowercase and contain no hyphens. Underscores are allowed (e.g. `linked_to`, `is_ready`).
+- Use `and` and `not`, but not `or`; the executor checks extracted conditions
+  conjunctively. If using negative preconditions, declare the corresponding
+  PDDL requirement.
+- Every predicate and operator effect must describe a condition that can be
+  checked or reached in the supplied raw state. Keep operators high-level so
+  the learned world model and search can execute them.
+- Use Boolean predicates only for genuinely binary facts. Represent quantities
+  and thresholds with a planner-compatible, state-grounded encoding.
+- A literal object in an action schema must be a typed parameter or a domain
+  constant. Do not invent aliases for raw-state object keys.
+
+If the existing domain already covers the new mission, return it unchanged.
+
+CURRENT DOMAIN:
+
+```pddl
+(define (domain place_zezroc_domain)
+  (:requirements :strips :typing :numeric-fluents)
+  (:functions (ach_place_zezroc))
+
+  (:action place_zezroc
+    :parameters ()
+    :precondition (and)
+    :effect (increase (ach_place_zezroc) 1)
+  )
+)
+```
+
+NEW MISSION (the agent's next goal):
+
+place zezroc
+
+CURRENT RAW STATE (first observation on the new level):
+
+{'player': [[4, 3]], 'player_facing': [0, 1], 'player_health': 9, 'player_hunger': 0.0, 'player_thirst': 0.0, 'player_fatigue': 0.0, 'player_sleeping': False, 'daylight': 1.0, 'step_count': 0, 'inv_health': 9, 'inv_food': 9, 'inv_drink': 9, 'inv_energy': 9, 'inv_wcgshh': 0, 'inv_tpkhxk': 0, 'inv_sgqeje': 0, 'inv_grpoqi': 0, 'inv_bzracx': 0, 'inv_mwzvua': 0, 'inv_tpkhxk_bcwrvm': 0, 'inv_sgqeje_bcwrvm': 0, 'inv_bzracx_bcwrvm': 0, 'inv_tpkhxk_wqiqzh': 0, 'inv_sgqeje_wqiqzh': 0, 'inv_bzracx_wqiqzh': 0, 'mynbiq': [[6, 5], [6, 6], [7, 6]], 'pmzjpl': [[0, 0], [1, 0], [2, 0], [2, 1], [2, 5], [3, 0], [3, 1], [3, 3], [3, 5], [3, 6], [4, 1], [4, 2], [4, 3], [4, 4], [5, 0], [5, 1], [5, 2], [5, 3], [5, 4], [5, 5], [5, 6], [6, 0], [6, 1], [6, 3], [6, 4], [7, 0], [7, 1], [7, 2], [7, 3], [7, 4], [8, 0], [8, 1], [8, 3]], 'sgqeje': [[0, 3], [0, 4], [0, 5], [1, 1], [1, 3], [1, 5], [2, 2], [2, 3], [2, 4]], 'wztejd': [[7, 5], [8, 4], [8, 5], [8, 6]], 'xcvkpr': [[1, 6], [2, 6], [3, 2], [3, 4], [4, 0], [4, 5], [4, 6], [6, 2], [8, 2]], 'grpoqi': [[0, 1], [0, 2]], 'bzracx': [[0, 6], [1, 2]], 'mwzvua': [[1, 4]], 'ach_collect_grpoqi': 0, 'ach_collect_mwzvua': 0, 'ach_collect_bzracx': 0, 'ach_collect_sgqeje': 0, 'ach_collect_tpkhxk': 0, 'ach_make_bzracx_bcwrvm': 0, 'ach_make_bzracx_wqiqzh': 0, 'ach_make_sgqeje_bcwrvm': 0, 'ach_make_sgqeje_wqiqzh': 0, 'ach_make_tpkhxk_bcwrvm': 0, 'ach_make_tpkhxk_wqiqzh': 0, 'ach_place_ckqpdj': 0, 'ach_place_sgqeje': 0, 'ach_place_zezroc': 0}
+
+
+Action Space (what actions can be taken):
+
+['noop', 'move_left', 'move_right', 'move_up', 'move_down', 'do', 'sleep', 'place_sgqeje', 'place_zezroc', 'place_ckqpdj', 'place_rjwdrk', 'make_tpkhxk_bcwrvm', 'make_sgqeje_bcwrvm', 'make_bzracx_bcwrvm', 'make_tpkhxk_wqiqzh', 'make_sgqeje_wqiqzh', 'make_bzracx_wqiqzh']
+
+
+
+---
+FAILURE SIGNALS (latest):
+
+PLANNER FAILED with the cached domain+problem. Either no plan
+exists from the initial state to the goal under the current
+operator definitions, or the planner returned an empty plan.
+Revise the domain so a plan can be found - typically by relaxing
+over-restrictive preconditions, adding missing operators, or
+removing effects that contradict the achievable goal.
+Planner output:
+Real exploratory execution matched the world model but neither the main plan nor other applicable operators reached the goal
+
+Return EXACTLY ONE `pddl` code block containing the updated (or unchanged)
+domain definition. Do NOT include a problem file - only the domain.

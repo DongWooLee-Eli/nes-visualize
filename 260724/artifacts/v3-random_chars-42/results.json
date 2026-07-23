@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "completed_at": "2026-07-23T06:38:36.949183+00:00",
+  "duration_sec": 1523.4049550616182,
+  "mode": "tc2",
+  "domain": "minicrafter_oo",
+  "planner": "enhsp",
+  "seed": 42,
+  "levels": [
+    {
+      "level_id": 0,
+      "solved": false,
+      "status": "FAILED",
+      "artifacts_dir": "level_0",
+      "scale_diagnostics": "level_0/scale_diagnostics.json",
+      "trajectory": "level_0/trajectory.json",
+      "plan_log": "level_0/plan_log.jsonl"
+    },
+    {
+      "level_id": 1,
+      "solved": false,
+      "status": "FAILED",
+      "artifacts_dir": "level_1",
+      "scale_diagnostics": "level_1/scale_diagnostics.json",
+      "trajectory": "level_1/trajectory.json",
+      "plan_log": "level_1/plan_log.jsonl"
+    },
+    {
+      "level_id": 2,
+      "solved": false,
+      "status": "FAILED",
+      "artifacts_dir": "level_2",
+      "scale_diagnostics": "level_2/scale_diagnostics.json",
+      "trajectory": "level_2/trajectory.json",
+      "plan_log": "level_2/plan_log.jsonl"
+    },
+    {
+      "level_id": 3,
+      "solved": false,
+      "status": "FAILED",
+      "artifacts_dir": "level_3",
+      "scale_diagnostics": "level_3/scale_diagnostics.json",
+      "trajectory": "level_3/trajectory.json",
+      "plan_log": "level_3/plan_log.jsonl"
+    },
+    {
+      "level_id": 4,
+      "solved": false,
+      "status": "FAILED",
+      "artifacts_dir": "level_4",
+      "scale_diagnostics": "level_4/scale_diagnostics.json",
+      "trajectory": "level_4/trajectory.json",
+      "plan_log": "level_4/plan_log.jsonl"
+    },
+    {
+      "level_id": 5,
+      "solved": false,
+      "status": "FAILED",
+      "artifacts_dir": "level_5",
+      "scale_diagnostics": "level_5/scale_diagnostics.json",
+      "trajectory": "level_5/trajectory.json",
+      "plan_log": "level_5/plan_log.jsonl"
+    },
+    {
+      "level_id": 6,
+      "solved": false,
+      "status": "FAILED",
+      "artifacts_dir": "level_6",
+      "scale_diagnostics": "level_6/scale_diagnostics.json",
+      "trajectory": "level_6/trajectory.json",
+      "plan_log": "level_6/plan_log.jsonl"
+    },
+    {
+      "level_id": 7,
+      "solved": false,
+      "status": "FAILED",
+      "artifacts_dir": "level_7",
+      "scale_diagnostics": "level_7/scale_diagnostics.json",
+      "trajectory": "level_7/trajectory.json",
+      "plan_log": "level_7/plan_log.jsonl"
+    }
+  ],
+  "totals": {
+    "solved": 0,
+    "total": 8,
+    "failed": 8,
+    "llm_calls": 90
+  },
+  "llm": {
+    "backend": "openrouter",
+    "model": "openai/gpt-5.6-sol",
+    "reasoning_effort": "low"
+  },
+  "artifacts": {
+    "run_config": "run_config.json",
+    "run_log": "run.log",
+    "llm_calls": "llm_calls.jsonl",
+    "worldmodel": "worldmodel.py",
+    "validated_wm": "validated_wm.py",
+    "minicrafter_variant": "minicrafter_variant.json"
+  }
+}

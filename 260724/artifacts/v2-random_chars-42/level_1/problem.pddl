@@ -1,0 +1,6 @@
+(define (problem collect_and_place_problem)
+  (:domain collect_and_place_domain)
+  (:objects)
+  (:init)
+  (:goal (ach_place_zezroc))
+)

@@ -1,0 +1,12 @@
+```pddl
+(define (domain collect_tpkhxk_domain)
+  (:requirements :strips :typing)
+  (:types status)
+  (:predicates (is_set ?flag - status))
+  (:action collect_tpkhxk
+    :parameters (?flag - status)
+    :precondition (and)
+    :effect (and (is_set ?flag))
+  )
+)
+```

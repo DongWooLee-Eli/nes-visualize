@@ -1,0 +1,29 @@
+```pddl
+(define (domain sgqeje_domain)
+  (:requirements :strips :typing :numeric_fluents)
+  (:types item)
+  (:predicates
+    (placed_sgqeje)
+  )
+  (:functions
+    (inv_sgqeje)
+    (player_row)
+    (player_col)
+  )
+  (:action move_left
+    :parameters ()
+    :precondition (> (player_col) 0)
+    :effect (decrease (player_col) 1)
+  )
+  (:action do
+    :parameters ()
+    :precondition (and (= (player_row) 4) (= (player_col) 1))
+    :effect (increase (inv_sgqeje) 1)
+  )
+  (:action place_sgqeje
+    :parameters ()
+    :precondition (>= (inv_sgqeje) 1)
+    :effect (and (decrease (inv_sgqeje) 1) (placed_sgqeje))
+  )
+)
+```

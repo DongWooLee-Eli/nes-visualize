@@ -1,0 +1,24 @@
+```pddl
+(define (domain place_zezroc_domain)
+  (:requirements :strips :typing :numeric-fluents)
+  (:functions (inv_tpkhxk) (inv_sgqeje) (ach_collect_tpkhxk) (ach_collect_sgqeje) (ach_place_zezroc))
+
+  (:action collect_tpkhxk
+    :parameters ()
+    :precondition (and)
+    :effect (and (increase (inv_tpkhxk) 1) (increase (ach_collect_tpkhxk) 1))
+  )
+
+  (:action collect_sgqeje
+    :parameters ()
+    :precondition (and)
+    :effect (and (increase (inv_sgqeje) 1) (increase (ach_collect_sgqeje) 1))
+  )
+
+  (:action place_zezroc
+    :parameters ()
+    :precondition (and (>= (inv_tpkhxk) 2) (>= (inv_sgqeje) 4))
+    :effect (increase (ach_place_zezroc) 1)
+  )
+)
+```

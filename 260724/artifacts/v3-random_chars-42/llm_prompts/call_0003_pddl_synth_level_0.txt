@@ -1,0 +1,1110 @@
+You are an agent playing a 2D grid game, whose raw state is shown below.
+
+Can you give me a minimal PDDL domain and problem file for this setup that will allow the agent to win the game? Think in terms of the most minimal abstract files you can.
+
+Each object in your PDDL problem file is named using ONLY the keys of the raw state dictionary.
+
+PDDL GUIDANCE
+
+- Ground the abstraction only in the supplied raw state, mission, action
+  space, and observed transitions.
+- Object-valued arguments that denote observed entities or fields must use
+  their exact raw-state keys. Predicate, action, type, and variable names do
+  not need to be state keys.
+- Give every action parameter a declared type. Keep each action's
+  `:parameters`, `:precondition`, and `:effect` expression on one physical
+  line because the downstream parser is line-based.
+- Use lowercase Python-safe predicate, action, function, and type names
+  without hyphens; underscores are allowed. Use `and` and `not`, but not `or`,
+  because the executor treats extracted conditions conjunctively. If an action
+  uses a negative precondition, declare the corresponding PDDL requirement.
+- Every predicate and operator effect must describe a condition that can be
+  checked or reached in the supplied raw state. Do not add symbolic
+  bookkeeping with no state-grounded evaluator or transition.
+- Keep PDDL operators high-level. The learned world model and search execute
+  low-level action sequences. Use relation predicates only when their truth
+  is computable from state and required by an observed transition.
+- Use Boolean predicates only for genuinely binary facts. Do not replace a
+  quantity or threshold with a Boolean fact; use a representation supported
+  by the current planner and grounded in the raw state.
+- A literal object in an action schema must be a typed parameter or a domain
+  constant. Never repeat a domain constant in the problem's `:objects`.
+- Make `:init` match the current raw state and omit false Boolean facts under
+  closed-world semantics. Return exactly one `:goal` expression; use
+  `(and ...)` only when all listed facts must hold in the final state.
+
+EXAMPLES:
+
+- `:parameters (?obj - object)` is typed; `?obj` may be grounded with a raw
+  key such as `object_a`.
+- A grounded relation may be named `(linked_to ?source ?target)` and a
+  grounded binary condition `(is_ready ?obj)`; their evaluators must derive
+  both results from the supplied state.
+- Use `(:goal (processed object_a))` for one terminal fact, or
+  `(:goal (and (processed object_a) (notified object_b)))` only when both are
+  required terminal facts.
+
+
+
+MISSION (the agent's goal):
+collect tpkhxk
+
+In your PDDL problem file do not represent configuration attributes when writing objects for example for unopened_black_jar you can represent it as black_jar. See example 2 and example 3!!!!!!!
+
+Feel free to propose multiple operators, and predicates at once. Also you may have two goals in the problem file.
+
+The raw state dictionary keys are considered traversable.
+
+Return your code blocks with
+```pddl ```
+markup tags so I can easily extract it.
+
+Do NOT use symbols like "-" for the predicate names. For example, the predicate "avatar-at" should NOT be proposed since it has a "-".
+Please use all LOWERCASE for the operator names as well!!!!!!!!!!
+
+Do not name your PDDL DOMAIN FILE DO NOT name predicates:
+if, else, in, def, or any other typical python name
+
+predicate names may contain underscores (e.g. `linked_to`, `is_ready`).
+
+Raw state of game (generate the files for this):
+
+{'player': [[4, 3]], 'player_facing': [0, 1], 'player_health': 9, 'player_hunger': 0.0, 'player_thirst': 0.0, 'player_fatigue': 0.0, 'player_sleeping': False, 'daylight': 1.0, 'step_count': 0, 'inv_health': 9, 'inv_food': 9, 'inv_drink': 9, 'inv_energy': 9, 'inv_wcgshh': 0, 'inv_tpkhxk': 0, 'inv_sgqeje': 0, 'inv_grpoqi': 0, 'inv_bzracx': 0, 'inv_mwzvua': 0, 'inv_tpkhxk_bcwrvm': 0, 'inv_sgqeje_bcwrvm': 0, 'inv_bzracx_bcwrvm': 0, 'inv_tpkhxk_wqiqzh': 0, 'inv_sgqeje_wqiqzh': 0, 'inv_bzracx_wqiqzh': 0, 'mynbiq': [[6, 0], [6, 1], [6, 2], [7, 0], [7, 1]], 'pmzjpl': [[0, 3], [0, 4], [0, 5], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [3, 0], [3, 1], [3, 2], [3, 5], [3, 6], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 6]], 'sgqeje': [[5, 3], [5, 4], [5, 5], [6, 3], [6, 4], [6, 6], [7, 2], [7, 3], [7, 5], [8, 1], [8, 2], [8, 3], [8, 4], [8, 5]], 'wztejd': [[4, 0], [5, 0], [5, 1]], 'xcvkpr': [[0, 0], [0, 1], [0, 2], [0, 6], [1, 0], [2, 6], [3, 3], [3, 4]], 'grpoqi': [[7, 4], [8, 6]], 'bzracx': [[6, 5], [7, 6]], 'mwzvua': [[8, 0]], 'ach_collect_grpoqi': 0, 'ach_collect_mwzvua': 0, 'ach_collect_bzracx': 0, 'ach_collect_sgqeje': 0, 'ach_collect_tpkhxk': 0, 'ach_make_bzracx_bcwrvm': 0, 'ach_make_bzracx_wqiqzh': 0, 'ach_make_sgqeje_bcwrvm': 0, 'ach_make_sgqeje_wqiqzh': 0, 'ach_make_tpkhxk_bcwrvm': 0, 'ach_make_tpkhxk_wqiqzh': 0, 'ach_place_ckqpdj': 0, 'ach_place_sgqeje': 0, 'ach_place_zezroc': 0}
+
+Action Space (what actions can be taken):
+['noop', 'move_left', 'move_right', 'move_up', 'move_down', 'do', 'sleep', 'place_sgqeje', 'place_zezroc', 'place_ckqpdj', 'place_rjwdrk', 'make_tpkhxk_bcwrvm', 'make_sgqeje_bcwrvm', 'make_bzracx_bcwrvm', 'make_tpkhxk_wqiqzh', 'make_sgqeje_wqiqzh', 'make_bzracx_wqiqzh']
+
+
+OBSERVED INTERACTION EVIDENCE:
+
+Ground operator preconditions and effects in these real transitions. Do not infer an effect from an action whose observed delta does not show it.
+
+Action: move_left
+Observed delta:
+  player_facing: before=[0, 1], after=[-1, 0]
+
+Action: move_right
+Observed delta:
+  player_facing: before=[0, 1], after=[1, 0]
+
+Action: move_down
+Observed delta:
+  player: before=[[4, 3]], after=[[4, 4]]
+
+Action: move_right
+Observed delta:
+  player_facing: before=[-1, 0], after=[1, 0]
+
+Action: move_up
+Observed delta:
+  player: before=[[4, 3]], after=[[4, 2]]
+  player_facing: before=[-1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[4, 3]], after=[[4, 4]]
+  player_facing: before=[-1, 0], after=[0, 1]
+
+Action: do
+Observed delta:
+  ach_collect_tpkhxk: before=0, after=1
+  inv_tpkhxk: before=0, after=1
+  pmzjpl: before=[[0, 3], [0, 4], [0, 5], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [3, 0], [3, 1], [3, 2], [3, 5], [3, 6], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 6]], after=[[0, 3], [0, 4], [0, 5], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [3, 0], [3, 1], [3, 2], [3, 3], [3, 5], [3, 6], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 6]]
+  xcvkpr: before=[[0, 0], [0, 1], [0, 2], [0, 6], [1, 0], [2, 6], [3, 3], [3, 4]], after=[[0, 0], [0, 1], [0, 2], [0, 6], [1, 0], [2, 6], [3, 4]]
+
+Action: move_left
+Observed delta:
+  player_facing: before=[1, 0], after=[-1, 0]
+
+Action: move_up
+Observed delta:
+  player: before=[[4, 3]], after=[[4, 2]]
+  player_facing: before=[1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[4, 3]], after=[[4, 4]]
+  player_facing: before=[1, 0], after=[0, 1]
+
+Action: move_up
+Observed delta:
+  player: before=[[4, 4]], after=[[4, 3]]
+  player_facing: before=[0, 1], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[4, 4]], after=[[4, 5]]
+
+Action: move_left
+Observed delta:
+  player: before=[[4, 3]], after=[[3, 3]]
+
+Action: move_left
+Observed delta:
+  player_facing: before=[0, -1], after=[-1, 0]
+
+Action: move_right
+Observed delta:
+  player_facing: before=[0, -1], after=[1, 0]
+
+Action: move_up
+Observed delta:
+  player: before=[[4, 3]], after=[[4, 2]]
+
+Action: move_down
+Observed delta:
+  player: before=[[4, 3]], after=[[4, 4]]
+  player_facing: before=[0, -1], after=[0, 1]
+
+Action: move_left
+Observed delta:
+  player: before=[[4, 5]], after=[[3, 5]]
+  player_facing: before=[0, 1], after=[-1, 0]
+
+Action: move_up
+Observed delta:
+  player: before=[[4, 5]], after=[[4, 4]]
+  player_facing: before=[0, 1], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[4, 5]], after=[[4, 6]]
+
+Action: move_left
+Observed delta:
+  player: before=[[3, 3]], after=[[2, 3]]
+
+Action: move_right
+Observed delta:
+  player: before=[[3, 3]], after=[[4, 3]]
+  player_facing: before=[-1, 0], after=[1, 0]
+
+Action: move_up
+Observed delta:
+  player: before=[[3, 3]], after=[[3, 2]]
+  player_facing: before=[-1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player_facing: before=[-1, 0], after=[0, 1]
+
+Action: move_left
+Observed delta:
+  player: before=[[3, 5]], after=[[2, 5]]
+
+Action: move_right
+Observed delta:
+  player: before=[[3, 5]], after=[[4, 5]]
+  player_facing: before=[-1, 0], after=[1, 0]
+
+Action: move_up
+Observed delta:
+  player_facing: before=[-1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[3, 5]], after=[[3, 6]]
+  player_facing: before=[-1, 0], after=[0, 1]
+
+Action: move_up
+Observed delta:
+  player: before=[[4, 4]], after=[[4, 3]]
+
+Action: move_down
+Observed delta:
+  player: before=[[4, 4]], after=[[4, 5]]
+  player_facing: before=[0, -1], after=[0, 1]
+
+Action: move_left
+Observed delta:
+  player: before=[[2, 3]], after=[[1, 3]]
+
+Action: move_right
+Observed delta:
+  player: before=[[2, 3]], after=[[3, 3]]
+  player_facing: before=[-1, 0], after=[1, 0]
+
+Action: move_up
+Observed delta:
+  player: before=[[2, 3]], after=[[2, 2]]
+  player_facing: before=[-1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[2, 3]], after=[[2, 4]]
+  player_facing: before=[-1, 0], after=[0, 1]
+
+Action: move_left
+Observed delta:
+  player: before=[[2, 5]], after=[[1, 5]]
+
+Action: move_right
+Observed delta:
+  player: before=[[2, 5]], after=[[3, 5]]
+  player_facing: before=[-1, 0], after=[1, 0]
+
+Action: move_up
+Observed delta:
+  player: before=[[2, 5]], after=[[2, 4]]
+  player_facing: before=[-1, 0], after=[0, -1]
+
+Action: move_left
+Observed delta:
+  player: before=[[3, 2]], after=[[2, 2]]
+  player_facing: before=[0, -1], after=[-1, 0]
+
+Action: move_right
+Observed delta:
+  player: before=[[3, 2]], after=[[4, 2]]
+  player_facing: before=[0, -1], after=[1, 0]
+
+Action: move_up
+Observed delta:
+  player: before=[[3, 2]], after=[[3, 1]]
+
+Action: move_down
+Observed delta:
+  player: before=[[3, 2]], after=[[3, 3]]
+  player_facing: before=[0, -1], after=[0, 1]
+
+Action: move_left
+Observed delta:
+  player: before=[[1, 3]], after=[[0, 3]]
+
+Action: move_right
+Observed delta:
+  player: before=[[1, 3]], after=[[2, 3]]
+  player_facing: before=[-1, 0], after=[1, 0]
+
+Action: move_up
+Observed delta:
+  player: before=[[1, 3]], after=[[1, 2]]
+  player_facing: before=[-1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[1, 3]], after=[[1, 4]]
+  player_facing: before=[-1, 0], after=[0, 1]
+
+Action: move_left
+Observed delta:
+  player: before=[[1, 5]], after=[[0, 5]]
+
+Action: move_right
+Observed delta:
+  player: before=[[1, 5]], after=[[2, 5]]
+  player_facing: before=[-1, 0], after=[1, 0]
+
+Action: move_up
+Observed delta:
+  player: before=[[1, 5]], after=[[1, 4]]
+  player_facing: before=[-1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[1, 5]], after=[[1, 6]]
+  player_facing: before=[-1, 0], after=[0, 1]
+
+Action: move_left
+Observed delta:
+  player: before=[[2, 2]], after=[[1, 2]]
+
+Action: move_right
+Observed delta:
+  player: before=[[2, 2]], after=[[3, 2]]
+  player_facing: before=[-1, 0], after=[1, 0]
+
+Action: move_up
+Observed delta:
+  player: before=[[2, 2]], after=[[2, 1]]
+  player_facing: before=[-1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[2, 2]], after=[[2, 3]]
+  player_facing: before=[-1, 0], after=[0, 1]
+
+Action: move_right
+Observed delta:
+  player: before=[[0, 3]], after=[[1, 3]]
+  player_facing: before=[-1, 0], after=[1, 0]
+
+Action: move_down
+Observed delta:
+  player: before=[[0, 3]], after=[[0, 4]]
+  player_facing: before=[-1, 0], after=[0, 1]
+
+Action: move_right
+Observed delta:
+  player: before=[[0, 5]], after=[[1, 5]]
+  player_facing: before=[-1, 0], after=[1, 0]
+
+Action: move_up
+Observed delta:
+  player: before=[[0, 5]], after=[[0, 4]]
+  player_facing: before=[-1, 0], after=[0, -1]
+
+Action: move_right
+Observed delta:
+  player: before=[[1, 2]], after=[[2, 2]]
+  player_facing: before=[-1, 0], after=[1, 0]
+
+Action: move_up
+Observed delta:
+  player: before=[[1, 2]], after=[[1, 1]]
+  player_facing: before=[-1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[1, 2]], after=[[1, 3]]
+  player_facing: before=[-1, 0], after=[0, 1]
+
+Action: do
+Observed delta:
+  ach_collect_tpkhxk: before=1, after=2
+  inv_tpkhxk: before=1, after=2
+  pmzjpl: before=[[0, 3], [0, 4], [0, 5], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [3, 0], [3, 1], [3, 2], [3, 3], [3, 5], [3, 6], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 6]], after=[[0, 2], [0, 3], [0, 4], [0, 5], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [3, 0], [3, 1], [3, 2], [3, 3], [3, 5], [3, 6], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 6]]
+  xcvkpr: before=[[0, 0], [0, 1], [0, 2], [0, 6], [1, 0], [2, 6], [3, 4]], after=[[0, 0], [0, 1], [0, 6], [1, 0], [2, 6], [3, 4]]
+
+Action: move_left
+Observed delta:
+  player: before=[[1, 2]], after=[[0, 2]]
+
+Action: move_left
+Observed delta:
+  player: before=[[1, 3]], after=[[0, 3]]
+  player_facing: before=[1, 0], after=[-1, 0]
+
+Action: move_right
+Observed delta:
+  player: before=[[1, 3]], after=[[2, 3]]
+
+Action: move_up
+Observed delta:
+  player: before=[[1, 3]], after=[[1, 2]]
+  player_facing: before=[1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[1, 3]], after=[[1, 4]]
+  player_facing: before=[1, 0], after=[0, 1]
+
+Action: move_left
+Observed delta:
+  player: before=[[1, 5]], after=[[0, 5]]
+  player_facing: before=[1, 0], after=[-1, 0]
+
+Action: move_right
+Observed delta:
+  player: before=[[1, 5]], after=[[2, 5]]
+
+Action: move_up
+Observed delta:
+  player: before=[[1, 5]], after=[[1, 4]]
+  player_facing: before=[1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[1, 5]], after=[[1, 6]]
+  player_facing: before=[1, 0], after=[0, 1]
+
+Action: move_right
+Observed delta:
+  player: before=[[0, 2]], after=[[1, 2]]
+  player_facing: before=[-1, 0], after=[1, 0]
+
+Action: move_down
+Observed delta:
+  player: before=[[0, 2]], after=[[0, 3]]
+  player_facing: before=[-1, 0], after=[0, 1]
+
+Action: move_left
+Observed delta:
+  player: before=[[1, 2]], after=[[0, 2]]
+  player_facing: before=[1, 0], after=[-1, 0]
+
+Action: move_right
+Observed delta:
+  player: before=[[1, 2]], after=[[2, 2]]
+
+Action: move_up
+Observed delta:
+  player: before=[[1, 2]], after=[[1, 1]]
+  player_facing: before=[1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[1, 2]], after=[[1, 3]]
+  player_facing: before=[1, 0], after=[0, 1]
+
+Action: move_right
+Observed delta:
+  player: before=[[0, 3]], after=[[1, 3]]
+  player_facing: before=[0, 1], after=[1, 0]
+
+Action: move_up
+Observed delta:
+  player: before=[[0, 3]], after=[[0, 2]]
+  player_facing: before=[0, 1], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[0, 3]], after=[[0, 4]]
+
+Action: move_right
+Observed delta:
+  player: before=[[0, 2]], after=[[1, 2]]
+  player_facing: before=[0, -1], after=[1, 0]
+
+Action: move_down
+Observed delta:
+  player: before=[[0, 2]], after=[[0, 3]]
+  player_facing: before=[0, -1], after=[0, 1]
+
+Action: do
+Observed delta:
+  ach_collect_tpkhxk: before=2, after=3
+  inv_tpkhxk: before=2, after=3
+  pmzjpl: before=[[0, 2], [0, 3], [0, 4], [0, 5], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [3, 0], [3, 1], [3, 2], [3, 3], [3, 5], [3, 6], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 6]], after=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [3, 0], [3, 1], [3, 2], [3, 3], [3, 5], [3, 6], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 6]]
+  xcvkpr: before=[[0, 0], [0, 1], [0, 6], [1, 0], [2, 6], [3, 4]], after=[[0, 0], [0, 6], [1, 0], [2, 6], [3, 4]]
+
+Action: move_up
+Observed delta:
+  player: before=[[0, 2]], after=[[0, 1]]
+
+Action: move_right
+Observed delta:
+  player: before=[[0, 4]], after=[[1, 4]]
+  player_facing: before=[0, 1], after=[1, 0]
+
+Action: move_up
+Observed delta:
+  player: before=[[0, 4]], after=[[0, 3]]
+  player_facing: before=[0, 1], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[0, 4]], after=[[0, 5]]
+
+Action: move_left
+Observed delta:
+  player: before=[[1, 4]], after=[[0, 4]]
+  player_facing: before=[1, 0], after=[-1, 0]
+
+Action: move_right
+Observed delta:
+  player: before=[[1, 4]], after=[[2, 4]]
+
+Action: move_up
+Observed delta:
+  player: before=[[1, 4]], after=[[1, 3]]
+  player_facing: before=[1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[1, 4]], after=[[1, 5]]
+  player_facing: before=[1, 0], after=[0, 1]
+
+Action: move_right
+Observed delta:
+  player: before=[[0, 1]], after=[[1, 1]]
+  player_facing: before=[0, -1], after=[1, 0]
+
+Action: move_down
+Observed delta:
+  player: before=[[0, 1]], after=[[0, 2]]
+  player_facing: before=[0, -1], after=[0, 1]
+
+Action: do
+Observed delta:
+  ach_collect_tpkhxk: before=3, after=4
+  inv_tpkhxk: before=3, after=4
+  pmzjpl: before=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [3, 0], [3, 1], [3, 2], [3, 3], [3, 5], [3, 6], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 6]], after=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [3, 0], [3, 1], [3, 2], [3, 3], [3, 5], [3, 6], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 6]]
+  xcvkpr: before=[[0, 0], [0, 6], [1, 0], [2, 6], [3, 4]], after=[[0, 6], [1, 0], [2, 6], [3, 4]]
+
+Action: move_right
+Observed delta:
+  player: before=[[0, 3]], after=[[1, 3]]
+  player_facing: before=[0, -1], after=[1, 0]
+
+Action: move_up
+Observed delta:
+  player: before=[[0, 3]], after=[[0, 2]]
+
+Action: move_down
+Observed delta:
+  player: before=[[0, 3]], after=[[0, 4]]
+  player_facing: before=[0, -1], after=[0, 1]
+
+Action: move_up
+Observed delta:
+  player: before=[[0, 1]], after=[[0, 0]]
+
+Action: move_left
+Observed delta:
+  player: before=[[2, 4]], after=[[1, 4]]
+  player_facing: before=[1, 0], after=[-1, 0]
+
+Action: move_up
+Observed delta:
+  player: before=[[2, 4]], after=[[2, 3]]
+  player_facing: before=[1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[2, 4]], after=[[2, 5]]
+  player_facing: before=[1, 0], after=[0, 1]
+
+Action: do
+Observed delta:
+  ach_collect_tpkhxk: before=2, after=3
+  inv_tpkhxk: before=2, after=3
+  pmzjpl: before=[[0, 2], [0, 3], [0, 4], [0, 5], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [3, 0], [3, 1], [3, 2], [3, 3], [3, 5], [3, 6], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 6]], after=[[0, 2], [0, 3], [0, 4], [0, 5], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [3, 0], [3, 1], [3, 2], [3, 3], [3, 4], [3, 5], [3, 6], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 6]]
+  xcvkpr: before=[[0, 0], [0, 1], [0, 6], [1, 0], [2, 6], [3, 4]], after=[[0, 0], [0, 1], [0, 6], [1, 0], [2, 6]]
+
+Action: move_left
+Observed delta:
+  player: before=[[1, 1]], after=[[0, 1]]
+  player_facing: before=[1, 0], after=[-1, 0]
+
+Action: move_right
+Observed delta:
+  player: before=[[1, 1]], after=[[2, 1]]
+
+Action: move_up
+Observed delta:
+  player_facing: before=[1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[1, 1]], after=[[1, 2]]
+  player_facing: before=[1, 0], after=[0, 1]
+
+Action: move_right
+Observed delta:
+  player: before=[[2, 4]], after=[[3, 4]]
+
+Action: move_left
+Observed delta:
+  player: before=[[1, 4]], after=[[0, 4]]
+
+Action: move_right
+Observed delta:
+  player: before=[[1, 4]], after=[[2, 4]]
+  player_facing: before=[-1, 0], after=[1, 0]
+
+Action: move_up
+Observed delta:
+  player: before=[[1, 4]], after=[[1, 3]]
+  player_facing: before=[-1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[1, 4]], after=[[1, 5]]
+  player_facing: before=[-1, 0], after=[0, 1]
+
+Action: move_left
+Observed delta:
+  player: before=[[2, 1]], after=[[1, 1]]
+  player_facing: before=[1, 0], after=[-1, 0]
+
+Action: move_right
+Observed delta:
+  player: before=[[2, 1]], after=[[3, 1]]
+
+Action: move_up
+Observed delta:
+  player: before=[[2, 1]], after=[[2, 0]]
+  player_facing: before=[1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[2, 1]], after=[[2, 2]]
+  player_facing: before=[1, 0], after=[0, 1]
+
+Action: move_left
+Observed delta:
+  player: before=[[1, 1]], after=[[0, 1]]
+
+Action: move_right
+Observed delta:
+  player: before=[[1, 1]], after=[[2, 1]]
+  player_facing: before=[-1, 0], after=[1, 0]
+
+Action: move_down
+Observed delta:
+  player: before=[[1, 1]], after=[[1, 2]]
+  player_facing: before=[-1, 0], after=[0, 1]
+
+Action: move_left
+Observed delta:
+  player: before=[[3, 4]], after=[[2, 4]]
+  player_facing: before=[1, 0], after=[-1, 0]
+
+Action: move_right
+Observed delta:
+  player: before=[[3, 4]], after=[[4, 4]]
+
+Action: move_up
+Observed delta:
+  player: before=[[3, 4]], after=[[3, 3]]
+  player_facing: before=[1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[3, 4]], after=[[3, 5]]
+  player_facing: before=[1, 0], after=[0, 1]
+
+Action: move_left
+Observed delta:
+  player: before=[[3, 1]], after=[[2, 1]]
+  player_facing: before=[1, 0], after=[-1, 0]
+
+Action: move_right
+Observed delta:
+  player: before=[[3, 1]], after=[[4, 1]]
+
+Action: move_up
+Observed delta:
+  player: before=[[3, 1]], after=[[3, 0]]
+  player_facing: before=[1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[3, 1]], after=[[3, 2]]
+  player_facing: before=[1, 0], after=[0, 1]
+
+Action: move_left
+Observed delta:
+  player: before=[[2, 4]], after=[[1, 4]]
+
+Action: move_right
+Observed delta:
+  player: before=[[2, 4]], after=[[3, 4]]
+  player_facing: before=[-1, 0], after=[1, 0]
+
+Action: move_up
+Observed delta:
+  player: before=[[2, 4]], after=[[2, 3]]
+  player_facing: before=[-1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[2, 4]], after=[[2, 5]]
+  player_facing: before=[-1, 0], after=[0, 1]
+
+Action: move_left
+Observed delta:
+  player: before=[[2, 1]], after=[[1, 1]]
+
+Action: move_right
+Observed delta:
+  player: before=[[2, 1]], after=[[3, 1]]
+  player_facing: before=[-1, 0], after=[1, 0]
+
+Action: move_up
+Observed delta:
+  player: before=[[2, 1]], after=[[2, 0]]
+  player_facing: before=[-1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[2, 1]], after=[[2, 2]]
+  player_facing: before=[-1, 0], after=[0, 1]
+
+Action: move_left
+Observed delta:
+  player: before=[[4, 4]], after=[[3, 4]]
+  player_facing: before=[1, 0], after=[-1, 0]
+
+Action: move_up
+Observed delta:
+  player: before=[[4, 4]], after=[[4, 3]]
+  player_facing: before=[1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[4, 4]], after=[[4, 5]]
+  player_facing: before=[1, 0], after=[0, 1]
+
+Action: move_left
+Observed delta:
+  player: before=[[3, 4]], after=[[2, 4]]
+
+Action: move_right
+Observed delta:
+  player: before=[[3, 4]], after=[[4, 4]]
+  player_facing: before=[-1, 0], after=[1, 0]
+
+Action: move_up
+Observed delta:
+  player: before=[[3, 4]], after=[[3, 3]]
+  player_facing: before=[-1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[3, 4]], after=[[3, 5]]
+  player_facing: before=[-1, 0], after=[0, 1]
+
+Action: move_left
+Observed delta:
+  player: before=[[4, 3]], after=[[3, 3]]
+  player_facing: before=[0, -1], after=[-1, 0]
+
+Action: move_down
+Observed delta:
+  player: before=[[3, 3]], after=[[3, 4]]
+  player_facing: before=[-1, 0], after=[0, 1]
+
+Action: move_up
+Observed delta:
+  player: before=[[3, 5]], after=[[3, 4]]
+  player_facing: before=[-1, 0], after=[0, -1]
+
+Action: move_left
+Observed delta:
+  player: before=[[3, 4]], after=[[2, 4]]
+  player_facing: before=[0, -1], after=[-1, 0]
+
+Action: move_right
+Observed delta:
+  player: before=[[3, 4]], after=[[4, 4]]
+  player_facing: before=[0, -1], after=[1, 0]
+
+Action: move_up
+Observed delta:
+  player: before=[[3, 4]], after=[[3, 3]]
+
+Action: move_down
+Observed delta:
+  player: before=[[3, 4]], after=[[3, 5]]
+  player_facing: before=[0, -1], after=[0, 1]
+
+Action: move_left
+Observed delta:
+  player: before=[[3, 4]], after=[[2, 4]]
+  player_facing: before=[0, 1], after=[-1, 0]
+
+Action: move_right
+Observed delta:
+  player: before=[[3, 4]], after=[[4, 4]]
+  player_facing: before=[0, 1], after=[1, 0]
+
+Action: move_up
+Observed delta:
+  player: before=[[3, 4]], after=[[3, 3]]
+  player_facing: before=[0, 1], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[3, 4]], after=[[3, 5]]
+
+Action: move_up
+Observed delta:
+  player: before=[[0, 3]], after=[[0, 2]]
+  player_facing: before=[-1, 0], after=[0, -1]
+
+Action: move_left
+Observed delta:
+  player: before=[[2, 3]], after=[[1, 3]]
+  player_facing: before=[1, 0], after=[-1, 0]
+
+Action: move_right
+Observed delta:
+  player: before=[[2, 3]], after=[[3, 3]]
+
+Action: move_left
+Observed delta:
+  player: before=[[1, 2]], after=[[0, 2]]
+  player_facing: before=[0, -1], after=[-1, 0]
+
+Action: move_right
+Observed delta:
+  player: before=[[1, 2]], after=[[2, 2]]
+  player_facing: before=[0, -1], after=[1, 0]
+
+Action: move_up
+Observed delta:
+  player: before=[[1, 2]], after=[[1, 1]]
+
+Action: move_down
+Observed delta:
+  player: before=[[1, 2]], after=[[1, 3]]
+  player_facing: before=[0, -1], after=[0, 1]
+
+Action: move_left
+Observed delta:
+  player: before=[[2, 2]], after=[[1, 2]]
+  player_facing: before=[1, 0], after=[-1, 0]
+
+Action: move_right
+Observed delta:
+  player: before=[[2, 2]], after=[[3, 2]]
+
+Action: move_up
+Observed delta:
+  player: before=[[2, 2]], after=[[2, 1]]
+  player_facing: before=[1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[2, 2]], after=[[2, 3]]
+  player_facing: before=[1, 0], after=[0, 1]
+
+Action: do
+Observed delta:
+  ach_collect_tpkhxk: before=3, after=4
+  inv_tpkhxk: before=3, after=4
+  pmzjpl: before=[[0, 2], [0, 3], [0, 4], [0, 5], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [3, 0], [3, 1], [3, 2], [3, 3], [3, 4], [3, 5], [3, 6], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 6]], after=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [3, 0], [3, 1], [3, 2], [3, 3], [3, 4], [3, 5], [3, 6], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 6]]
+  xcvkpr: before=[[0, 0], [0, 1], [0, 6], [1, 0], [2, 6]], after=[[0, 0], [0, 6], [1, 0], [2, 6]]
+
+Action: move_left
+Observed delta:
+  player: before=[[3, 2]], after=[[2, 2]]
+  player_facing: before=[1, 0], after=[-1, 0]
+
+Action: move_right
+Observed delta:
+  player: before=[[3, 2]], after=[[4, 2]]
+
+Action: move_up
+Observed delta:
+  player: before=[[3, 2]], after=[[3, 1]]
+  player_facing: before=[1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[3, 2]], after=[[3, 3]]
+  player_facing: before=[1, 0], after=[0, 1]
+
+Action: move_left
+Observed delta:
+  player: before=[[4, 2]], after=[[3, 2]]
+  player_facing: before=[1, 0], after=[-1, 0]
+
+Action: move_right
+Observed delta:
+  player: before=[[4, 2]], after=[[5, 2]]
+
+Action: move_up
+Observed delta:
+  player: before=[[4, 2]], after=[[4, 1]]
+  player_facing: before=[1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[4, 2]], after=[[4, 3]]
+  player_facing: before=[1, 0], after=[0, 1]
+
+Action: move_left
+Observed delta:
+  player: before=[[3, 1]], after=[[2, 1]]
+  player_facing: before=[0, -1], after=[-1, 0]
+
+Action: move_right
+Observed delta:
+  player: before=[[3, 1]], after=[[4, 1]]
+  player_facing: before=[0, -1], after=[1, 0]
+
+Action: move_up
+Observed delta:
+  player: before=[[3, 1]], after=[[3, 0]]
+
+Action: move_down
+Observed delta:
+  player: before=[[3, 1]], after=[[3, 2]]
+  player_facing: before=[0, -1], after=[0, 1]
+
+Action: move_up
+Observed delta:
+  player: before=[[5, 2]], after=[[5, 1]]
+  player_facing: before=[1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player_facing: before=[1, 0], after=[0, 1]
+
+Action: move_left
+Observed delta:
+  player: before=[[5, 1]], after=[[4, 1]]
+  player_facing: before=[0, -1], after=[-1, 0]
+
+Action: move_up
+Observed delta:
+  player: before=[[5, 1]], after=[[5, 0]]
+
+Action: move_left
+Observed delta:
+  player: before=[[4, 1]], after=[[3, 1]]
+
+Action: move_up
+Observed delta:
+  player: before=[[4, 1]], after=[[4, 0]]
+  player_facing: before=[-1, 0], after=[0, -1]
+
+Action: move_down
+Observed delta:
+  player: before=[[4, 1]], after=[[4, 2]]
+  player_facing: before=[-1, 0], after=[0, 1]
+
+Action: move_left
+Observed delta:
+  player: before=[[5, 0]], after=[[4, 0]]
+  player_facing: before=[0, -1], after=[-1, 0]
+
+Action: move_down
+Observed delta:
+  player: before=[[5, 0]], after=[[5, 1]]
+  player_facing: before=[0, -1], after=[0, 1]
+
+Action: move_left
+Observed delta:
+  player: before=[[4, 0]], after=[[3, 0]]
+
+Action: move_down
+Observed delta:
+  player: before=[[4, 0]], after=[[4, 1]]
+  player_facing: before=[-1, 0], after=[0, 1]
+
+Action: move_left
+Observed delta:
+  player: before=[[3, 0]], after=[[2, 0]]
+
+Action: move_right
+Observed delta:
+  player: before=[[3, 0]], after=[[4, 0]]
+  player_facing: before=[-1, 0], after=[1, 0]
+
+Action: move_down
+Observed delta:
+  player: before=[[3, 0]], after=[[3, 1]]
+  player_facing: before=[-1, 0], after=[0, 1]
+
+Action: move_right
+Observed delta:
+  player: before=[[2, 0]], after=[[3, 0]]
+  player_facing: before=[-1, 0], after=[1, 0]
+
+Action: move_down
+Observed delta:
+  player: before=[[2, 0]], after=[[2, 1]]
+  player_facing: before=[-1, 0], after=[0, 1]
+
+Action: do
+Observed delta:
+  ach_collect_tpkhxk: before=3, after=4
+  inv_tpkhxk: before=3, after=4
+  pmzjpl: before=[[0, 2], [0, 3], [0, 4], [0, 5], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [3, 0], [3, 1], [3, 2], [3, 3], [3, 4], [3, 5], [3, 6], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 6]], after=[[0, 2], [0, 3], [0, 4], [0, 5], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [3, 0], [3, 1], [3, 2], [3, 3], [3, 4], [3, 5], [3, 6], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 6]]
+  xcvkpr: before=[[0, 0], [0, 1], [0, 6], [1, 0], [2, 6]], after=[[0, 0], [0, 1], [0, 6], [2, 6]]
+
+Action: move_left
+Observed delta:
+  player: before=[[2, 0]], after=[[1, 0]]
+
+Action: move_right
+Observed delta:
+  player: before=[[1, 0]], after=[[2, 0]]
+  player_facing: before=[-1, 0], after=[1, 0]
+
+Action: move_down
+Observed delta:
+  player: before=[[1, 0]], after=[[1, 1]]
+  player_facing: before=[-1, 0], after=[0, 1]
+
+Action: do
+Observed delta:
+  ach_collect_tpkhxk: before=4, after=5
+  inv_tpkhxk: before=4, after=5
+  pmzjpl: before=[[0, 2], [0, 3], [0, 4], [0, 5], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [3, 0], [3, 1], [3, 2], [3, 3], [3, 4], [3, 5], [3, 6], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 6]], after=[[0, 0], [0, 2], [0, 3], [0, 4], [0, 5], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [3, 0], [3, 1], [3, 2], [3, 3], [3, 4], [3, 5], [3, 6], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 6]]
+  xcvkpr: before=[[0, 0], [0, 1], [0, 6], [2, 6]], after=[[0, 1], [0, 6], [2, 6]]
+
+Action: move_left
+Observed delta:
+  player: before=[[1, 0]], after=[[0, 0]]
+
+Action: move_right
+Observed delta:
+  player: before=[[0, 0]], after=[[1, 0]]
+  player_facing: before=[-1, 0], after=[1, 0]
+
+Action: move_right
+Observed delta:
+  player: before=[[0, 1]], after=[[1, 1]]
+  player_facing: before=[-1, 0], after=[1, 0]
+
+Action: move_down
+Observed delta:
+  player: before=[[0, 1]], after=[[0, 2]]
+  player_facing: before=[-1, 0], after=[0, 1]
+
+
+Few shot example of what a nice abstraction domain and problem file should look like:
+
+BEGIN EXAMPLE 1
+
+Observed transition:
+- before `action_a`: `{'actor_a': [[0, 0]], 'target_b': [[1, 0]], 'done_c': 0}`
+- after `action_a`: `{'actor_a': [[0, 0]], 'target_b': [[1, 0]], 'done_c': 1}`
+
+Use distinct types for fields with distinct roles. This prevents unrelated raw
+keys from being substituted into every parameter while keeping all objects
+grounded in the observed state.
+
+(define (domain example_typed)
+  (:requirements :strips :typing :negative-preconditions)
+  (:types actor target status)
+  (:predicates (close_to ?who - actor ?what - target) (is_set ?flag - status))
+  (:action complete
+    :parameters (?who - actor ?what - target ?result - status)
+    :precondition (and (close_to ?who ?what) (not (is_set ?result)))
+    :effect (is_set ?result)
+  )
+)
+
+(define (problem example_typed_problem)
+  (:domain example_typed)
+  (:objects actor_a - actor target_b - target done_c - status)
+  (:init (close_to actor_a target_b))
+  (:goal (is_set done_c))
+)
+
+END EXAMPLE 1
+
+BEGIN EXAMPLE 2
+
+Observed transitions:
+- before `action_a`: `{'worker_a': [[0, 0]], 'station_b': [[1, 0]], 'progress_c': 0, 'finished_d': 0}`
+- after `action_a`: `{'worker_a': [[0, 0]], 'station_b': [[1, 0]], 'progress_c': 1, 'finished_d': 0}`
+- after subsequent `action_b`: `{'worker_a': [[0, 0]], 'station_b': [[1, 0]], 'progress_c': 1, 'finished_d': 1}`
+
+When an observed quantity is a prerequisite, model the quantity directly and
+keep the final status as a separate typed fact. The two operators preserve the
+observed ordering instead of collapsing both transitions into one generic
+Boolean action.
+
+(define (domain example_staged)
+  (:requirements :strips :typing :negative-preconditions :numeric-fluents)
+  (:types worker station status)
+  (:predicates (at_station ?who - worker ?where - station) (is_set ?flag - status))
+  (:functions (progress_c))
+  (:action advance
+    :parameters (?who - worker ?where - station)
+    :precondition (at_station ?who ?where)
+    :effect (increase (progress_c) 1)
+  )
+  (:action finish
+    :parameters (?who - worker ?where - station ?result - status)
+    :precondition (and (at_station ?who ?where) (>= (progress_c) 1) (not (is_set ?result)))
+    :effect (is_set ?result)
+  )
+)
+
+(define (problem example_staged_problem)
+  (:domain example_staged)
+  (:objects worker_a - worker station_b - station finished_d - status)
+  (:init (at_station worker_a station_b) (= (progress_c) 0))
+  (:goal (is_set finished_d))
+)
+
+END EXAMPLE 2
+

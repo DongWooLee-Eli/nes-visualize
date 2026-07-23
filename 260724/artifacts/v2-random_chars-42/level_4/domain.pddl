@@ -1,0 +1,29 @@
+(define (domain collect_place_make_domain)
+  (:requirements :strips :typing)
+  (:predicates (ach_collect_tpkhxk) (ach_collect_sgqeje) (ach_place_zezroc) (ach_make_tpkhxk_bcwrvm) (ach_make_tpkhxk_wqiqzh))
+  (:action collect_tpkhxk
+    :parameters ()
+    :precondition (and)
+    :effect (and (ach_collect_tpkhxk))
+  )
+  (:action collect_sgqeje
+    :parameters ()
+    :precondition (and)
+    :effect (and (ach_collect_sgqeje))
+  )
+  (:action place_zezroc
+    :parameters ()
+    :precondition (and)
+    :effect (and (ach_place_zezroc))
+  )
+  (:action make_tpkhxk_bcwrvm
+    :parameters ()
+    :precondition (and)
+    :effect (and (ach_make_tpkhxk_bcwrvm))
+  )
+  (:action make_tpkhxk_wqiqzh
+    :parameters ()
+    :precondition (and)
+    :effect (and (ach_make_tpkhxk_wqiqzh))
+  )
+)

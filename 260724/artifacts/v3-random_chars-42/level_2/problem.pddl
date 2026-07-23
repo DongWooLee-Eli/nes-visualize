@@ -1,0 +1,11 @@
+(define (problem tpkhxk_crafting_problem)
+  (:domain tpkhxk_crafting)
+  (:objects)
+  (:init
+    (= (inv_tpkhxk) 0)
+    (= (inv_tpkhxk_bcwrvm) 0)
+    (= (ach_collect_tpkhxk) 0)
+    (= (ach_make_tpkhxk_bcwrvm) 0)
+  )
+  (:goal (>= (ach_make_tpkhxk_bcwrvm) 1))
+)

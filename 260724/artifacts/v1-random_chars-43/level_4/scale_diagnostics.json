@@ -1,0 +1,261 @@
+{
+  "schema_version": 2,
+  "mode": "tc2",
+  "domain": "minicrafter_oo",
+  "level_id": 4,
+  "planner": "enhsp",
+  "metadata": {
+    "mode": "tc2",
+    "domain": "minicrafter_oo",
+    "level_id": 4,
+    "planner": "enhsp"
+  },
+  "artifacts": {
+    "scale_diagnostics": "scale_diagnostics.json",
+    "plan_log": "plan_log.jsonl",
+    "trajectory": "trajectory.json",
+    "domain_entry": "domain_at_entry.pddl",
+    "domain_current": "domain.pddl",
+    "problem": "problem.pddl",
+    "wm_entry": "wm_at_entry.py",
+    "validated_domain_entry": "validated_domain_at_entry.pddl",
+    "llm_calls": "../llm_calls.jsonl",
+    "llm_prompts_dir": "../llm_prompts",
+    "run_log": "../run.log",
+    "worldmodel_events": "../worldmodel_events",
+    "worldmodel_history": "../worldmodel_history",
+    "run_config": "../run_config.json",
+    "results": "../results.json",
+    "minicrafter_variant": "../minicrafter_variant.json"
+  },
+  "pddl": {
+    "num_operators": 6,
+    "num_predicates": 5,
+    "num_objects": 1,
+    "num_constants": 9,
+    "goal_size": 1,
+    "init_size": 4,
+    "attempts": 1,
+    "ok": true,
+    "source": "revised",
+    "revise_changed_bytes": 275
+  },
+  "random_explore": {
+    "num_actions": 0,
+    "duration_sec": null,
+    "nontrivial_transitions": 0,
+    "achievements_hit": []
+  },
+  "wm_synth": {
+    "version": 0,
+    "duration_sec": null,
+    "ok": false
+  },
+  "predicates": {
+    "names": [
+      "deque",
+      "achieved",
+      "inventory_at_least_one",
+      "placed",
+      "reachable",
+      "ready_to_collect"
+    ],
+    "attempts": 1,
+    "ok": true
+  },
+  "fd": {
+    "translator_facts": null,
+    "translator_operators": null,
+    "walltime": 0.2503615119494498,
+    "returncode": 0,
+    "plan_len": 2,
+    "ok": true,
+    "error": null
+  },
+  "bfs": [
+    {
+      "subplan": "approach player sgqeje",
+      "index": 0,
+      "phase": "main_plan",
+      "attempt": 1,
+      "revision": 1,
+      "plan_log_line": 1,
+      "iters": 6,
+      "visited": 8,
+      "success": true,
+      "cutoff_hit": false,
+      "wall_time": 0.0362580050714314,
+      "max_iters": 10000,
+      "num_actions": 3,
+      "actions": [
+        "move_up",
+        "move_right",
+        "move_right"
+      ]
+    },
+    {
+      "subplan": "collect_sgqeje player",
+      "index": 1,
+      "phase": "main_plan",
+      "attempt": 1,
+      "revision": 1,
+      "plan_log_line": 1,
+      "iters": 10001,
+      "visited": 19659,
+      "success": false,
+      "cutoff_hit": true,
+      "wall_time": 51.6428586631082,
+      "max_iters": 10000,
+      "num_actions": 11,
+      "actions": [
+        "move_up",
+        "do",
+        "move_left",
+        "move_right",
+        "place_rjwdrk",
+        "move_left",
+        "move_left",
+        "do",
+        "move_up",
+        "do",
+        "move_down"
+      ]
+    },
+    {
+      "subplan": "approach player sgqeje",
+      "index": 0,
+      "phase": "main_plan",
+      "attempt": 1,
+      "revision": 2,
+      "plan_log_line": 2,
+      "iters": 6,
+      "visited": 8,
+      "success": true,
+      "cutoff_hit": false,
+      "wall_time": 0.023590652970597148,
+      "max_iters": 10000,
+      "num_actions": 3,
+      "actions": [
+        "move_up",
+        "move_right",
+        "move_right"
+      ]
+    },
+    {
+      "subplan": "collect_sgqeje player",
+      "index": 1,
+      "phase": "main_plan",
+      "attempt": 1,
+      "revision": 2,
+      "plan_log_line": 2,
+      "iters": 5687,
+      "visited": 10449,
+      "success": true,
+      "cutoff_hit": false,
+      "wall_time": 27.27199871907942,
+      "max_iters": 10000,
+      "num_actions": 13,
+      "actions": [
+        "move_up",
+        "do",
+        "move_left",
+        "move_left",
+        "do",
+        "move_up",
+        "do",
+        "move_right",
+        "move_right",
+        "place_zezroc",
+        "make_tpkhxk_wqiqzh",
+        "move_down",
+        "do"
+      ]
+    },
+    {
+      "subplan": "approach player sgqeje",
+      "index": 0,
+      "phase": "main_plan",
+      "attempt": 1,
+      "revision": 3,
+      "plan_log_line": 3,
+      "iters": 6,
+      "visited": 8,
+      "success": true,
+      "cutoff_hit": false,
+      "wall_time": 0.02644887613132596,
+      "max_iters": 10000,
+      "num_actions": 3,
+      "actions": [
+        "move_up",
+        "move_right",
+        "move_right"
+      ]
+    },
+    {
+      "subplan": "collect_sgqeje player",
+      "index": 1,
+      "phase": "main_plan",
+      "attempt": 1,
+      "revision": 3,
+      "plan_log_line": 3,
+      "iters": 5684,
+      "visited": 10444,
+      "success": true,
+      "cutoff_hit": false,
+      "wall_time": 28.589523467002437,
+      "max_iters": 10000,
+      "num_actions": 13,
+      "actions": [
+        "move_up",
+        "do",
+        "move_left",
+        "move_left",
+        "do",
+        "move_up",
+        "do",
+        "move_right",
+        "move_right",
+        "place_zezroc",
+        "make_tpkhxk_bcwrvm",
+        "move_down",
+        "do"
+      ]
+    }
+  ],
+  "revisions": [
+    {
+      "version": 2,
+      "kind": "revision",
+      "num_errors": 4,
+      "wm_code_lines": 189
+    },
+    {
+      "version": 3,
+      "kind": "revision",
+      "num_errors": 3,
+      "wm_code_lines": 197
+    }
+  ],
+  "pddl_revise_log": [
+    {
+      "source": "level_transition",
+      "trigger": null,
+      "status": "revised",
+      "attempt_index": 1,
+      "changed_bytes": 275
+    }
+  ],
+  "pddl_revise_counts": {
+    "level_transition": 1
+  },
+  "wm_fidelity": {
+    "overall": null,
+    "by_key_class": {},
+    "hidden_rng_active": false
+  },
+  "totals": {
+    "solved": true,
+    "llm_calls": 5,
+    "wall_time_sec": 183.9888950129971
+  }
+}

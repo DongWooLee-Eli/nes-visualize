@@ -1,0 +1,17 @@
+```pddl
+(define (domain collect_sgqeje)
+  (:requirements :strips :typing :negative-preconditions)
+  (:types actor resource status)
+  (:predicates (close_to ?who - actor ?what - resource) (is_set ?flag - status))
+  (:action approach
+    :parameters (?who - actor ?what - resource)
+    :precondition (and (not (close_to ?who ?what)))
+    :effect (and (close_to ?who ?what))
+  )
+  (:action collect
+    :parameters (?who - actor ?what - resource ?result - status)
+    :precondition (and (close_to ?who ?what) (not (is_set ?result)))
+    :effect (and (is_set ?result))
+  )
+)
+```

@@ -1,0 +1,21 @@
+(define (domain collect_tpkhxk_domain)
+  (:requirements :strips :typing :negative-preconditions)
+  (:types actor resource status)
+  (:predicates
+    (reachable ?who - actor ?target - resource)
+    (ready_to_collect ?who - actor ?target - resource)
+    (achieved ?flag - status)
+  )
+
+  (:action approach
+    :parameters (?who - actor ?target - resource)
+    :precondition (reachable ?who ?target)
+    :effect (ready_to_collect ?who ?target)
+  )
+
+  (:action collect
+    :parameters (?who - actor ?target - resource ?flag - status)
+    :precondition (and (ready_to_collect ?who ?target) (not (achieved ?flag)))
+    :effect (achieved ?flag)
+  )
+)

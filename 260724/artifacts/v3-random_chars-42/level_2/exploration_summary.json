@@ -1,0 +1,4344 @@
+{
+  "schema_version": 1,
+  "strategy": "llm_beam",
+  "seed": 2042,
+  "budget": {
+    "candidate_actions": 1249,
+    "candidate_budget": 2000,
+    "pddl_evidence_actions": 137,
+    "pddl_evidence_budget": 200,
+    "valid": true,
+    "warmup_actions": 15,
+    "warmup_budget": 15
+  },
+  "beam_width": 3,
+  "costs": {
+    "candidate_failures": 0,
+    "replay_actions": 15822,
+    "resets": 1251,
+    "total_actions": 17086
+  },
+  "coverage": {
+    "action_space": 17,
+    "actions": 17,
+    "context_actions": 1263,
+    "contexts": 76
+  },
+  "scorer": {
+    "generation_attempts": 1,
+    "llm_calls": 1,
+    "llm_duration_sec": 16.345654970034957,
+    "repair_attempts": 0,
+    "runtime_fallbacks": 0,
+    "using_generated": true,
+    "validation_failures": 0
+  },
+  "effect_first_seen": [
+    {
+      "index": 3,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[4, 3]], actual=[[4, 4]]"
+      ],
+      "source": "warmup"
+    },
+    {
+      "index": 5,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[4, 4]], actual=[[4, 3]]\n  player_facing: predicted=[0, 1], actual=[0, -1]"
+      ],
+      "source": "warmup"
+    },
+    {
+      "index": 8,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[4, 3]], actual=[[5, 3]]\n  player_facing: predicted=[0, -1], actual=[1, 0]"
+      ],
+      "source": "warmup"
+    },
+    {
+      "index": 1,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[4, 3]], actual=[[3, 3]]\n  player_facing: predicted=[0, 1], actual=[-1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 2,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[4, 3]], actual=[[5, 3]]\n  player_facing: predicted=[0, 1], actual=[1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 3,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[4, 3]], actual=[[4, 2]]\n  player_facing: predicted=[0, 1], actual=[0, -1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 14,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[3, 3]], actual=[[2, 3]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 15,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[3, 3]], actual=[[4, 3]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 16,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[3, 3]], actual=[[3, 2]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 17,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[3, 3]], actual=[[3, 4]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 31,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[4, 2]], actual=[[3, 2]]\n  player_facing: predicted=[0, -1], actual=[-1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 32,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[4, 2]], actual=[[5, 2]]\n  player_facing: predicted=[0, -1], actual=[1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 33,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[4, 2]], actual=[[4, 1]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 34,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[4, 2]], actual=[[4, 3]]\n  player_facing: predicted=[0, -1], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 48,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[5, 3]], actual=[[4, 3]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 49,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[5, 3]], actual=[[6, 3]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 50,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[5, 3]], actual=[[5, 2]]\n  player_facing: predicted=[1, 0], actual=[0, -1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 51,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[5, 3]], actual=[[5, 4]]\n  player_facing: predicted=[1, 0], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 60,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[2, 3]], actual=[[1, 3]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 61,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[2, 3]], actual=[[3, 3]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 62,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[2, 3]], actual=[[2, 2]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 63,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[2, 3]], actual=[[2, 4]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 77,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[3, 2]], actual=[[2, 2]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 78,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[3, 2]], actual=[[4, 2]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 79,
+      "signature": [
+        "move_up",
+        "  player_facing: predicted=[-1, 0], actual=[0, -1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 80,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[3, 2]], actual=[[3, 3]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 94,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[4, 3]], actual=[[3, 3]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 95,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[4, 3]], actual=[[5, 3]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 96,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[4, 3]], actual=[[4, 2]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 97,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[4, 3]], actual=[[4, 4]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 112,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[1, 3]], actual=[[2, 3]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 113,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[1, 3]], actual=[[1, 2]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 114,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[1, 3]], actual=[[1, 4]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 115,
+      "signature": [
+        "do",
+        "  ach_collect_tpkhxk: predicted=0, actual=1\n  inv_tpkhxk: predicted=0, actual=1\n  pmzjpl: predicted=[[0, 2], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  xcvkpr: predicted=[[0, 0], [0, 1], [0, 3], [1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]], actual=[[0, 0], [0, 1], [1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 128,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[2, 2]], actual=[[1, 2]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 129,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[2, 2]], actual=[[3, 2]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 130,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[2, 2]], actual=[[2, 1]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 131,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[2, 2]], actual=[[2, 3]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 145,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[3, 3]], actual=[[2, 3]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 146,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[3, 3]], actual=[[4, 3]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 147,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[3, 3]], actual=[[3, 2]]\n  player_facing: predicted=[1, 0], actual=[0, -1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 148,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[3, 3]], actual=[[3, 4]]\n  player_facing: predicted=[1, 0], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 162,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[1, 3]], actual=[[0, 3]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 179,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[1, 2]], actual=[[0, 2]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 180,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[1, 2]], actual=[[2, 2]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 182,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[1, 2]], actual=[[1, 3]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 196,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[2, 3]], actual=[[1, 3]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 197,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[2, 3]], actual=[[3, 3]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 198,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[2, 3]], actual=[[2, 2]]\n  player_facing: predicted=[1, 0], actual=[0, -1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 199,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[2, 3]], actual=[[2, 4]]\n  player_facing: predicted=[1, 0], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 214,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[0, 3]], actual=[[1, 3]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 215,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[0, 3]], actual=[[0, 2]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 216,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[0, 3]], actual=[[0, 4]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 231,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[0, 2]], actual=[[1, 2]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 233,
+      "signature": [
+        "move_down",
+        "  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 247,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[2, 2]], actual=[[1, 2]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 248,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[2, 2]], actual=[[3, 2]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 249,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[2, 2]], actual=[[2, 1]]\n  player_facing: predicted=[1, 0], actual=[0, -1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 250,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[2, 2]], actual=[[2, 3]]\n  player_facing: predicted=[1, 0], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 264,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[1, 3]], actual=[[0, 3]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 265,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[1, 3]], actual=[[2, 3]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 266,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[1, 3]], actual=[[1, 2]]\n  player_facing: predicted=[1, 0], actual=[0, -1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 267,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[1, 3]], actual=[[1, 4]]\n  player_facing: predicted=[1, 0], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 281,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[1, 2]], actual=[[0, 2]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 282,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[1, 2]], actual=[[2, 2]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 283,
+      "signature": [
+        "move_up",
+        "  player_facing: predicted=[1, 0], actual=[0, -1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 284,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[1, 2]], actual=[[1, 3]]\n  player_facing: predicted=[1, 0], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 298,
+      "signature": [
+        "move_left",
+        "  player_facing: predicted=[0, -1], actual=[-1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 299,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[0, 2]], actual=[[1, 2]]\n  player_facing: predicted=[0, -1], actual=[1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 301,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[0, 2]], actual=[[0, 3]]\n  player_facing: predicted=[0, -1], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 302,
+      "signature": [
+        "do",
+        "  ach_collect_tpkhxk: predicted=1, actual=2\n  inv_tpkhxk: predicted=1, actual=2\n  pmzjpl: predicted=[[0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  xcvkpr: predicted=[[0, 0], [0, 1], [1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]], actual=[[0, 0], [1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 317,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[0, 2]], actual=[[0, 1]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 322,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=2, actual=0\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[0, 1]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 335,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[0, 2]], actual=[[0, 3]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 384,
+      "signature": [
+        "move_right",
+        "  player_facing: predicted=[0, -1], actual=[1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 386,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[0, 1]], actual=[[0, 2]]\n  player_facing: predicted=[0, -1], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 387,
+      "signature": [
+        "do",
+        "  ach_collect_tpkhxk: predicted=2, actual=3\n  inv_tpkhxk: predicted=2, actual=3\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  xcvkpr: predicted=[[0, 0], [1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]], actual=[[1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 402,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[0, 2]], actual=[[0, 1]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 419,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[0, 1]], actual=[[0, 0]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 424,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=3, actual=1\n  pmzjpl: predicted=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[0, 0]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 434,
+      "signature": [
+        "move_left",
+        "  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 437,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[0, 1]], actual=[[0, 2]]\n  player_facing: predicted=[1, 0], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 438,
+      "signature": [
+        "do",
+        "  ach_collect_tpkhxk: predicted=2, actual=3\n  inv_tpkhxk: predicted=2, actual=3\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  xcvkpr: predicted=[[0, 0], [1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]], actual=[[0, 0], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 451,
+      "signature": [
+        "move_left",
+        "  player_facing: predicted=[0, 1], actual=[-1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 452,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[0, 2]], actual=[[1, 2]]\n  player_facing: predicted=[0, 1], actual=[1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 453,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[0, 2]], actual=[[0, 1]]\n  player_facing: predicted=[0, 1], actual=[0, -1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 454,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[0, 2]], actual=[[0, 3]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 458,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=2, actual=0\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[0, 3]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 469,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[0, 1]], actual=[[1, 1]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 475,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=3, actual=1\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[1, 1]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 495,
+      "signature": [
+        "make_tpkhxk_bcwrvm",
+        "  ach_make_tpkhxk_bcwrvm: predicted=0, actual=1\n  inv_tpkhxk: predicted=1, actual=0\n  inv_tpkhxk_bcwrvm: predicted=0, actual=1"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 498,
+      "signature": [
+        "make_tpkhxk_wqiqzh",
+        "  ach_make_tpkhxk_wqiqzh: predicted=0, actual=1\n  inv_tpkhxk: predicted=1, actual=0\n  inv_tpkhxk_wqiqzh: predicted=0, actual=1"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 553,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[1, 1]], actual=[[0, 1]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 554,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[1, 1]], actual=[[2, 1]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 555,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[1, 1]], actual=[[1, 0]]\n  player_facing: predicted=[1, 0], actual=[0, -1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 556,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[1, 1]], actual=[[1, 2]]\n  player_facing: predicted=[1, 0], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 560,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=3, actual=1\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[2, 1]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 604,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[2, 1]], actual=[[1, 1]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 606,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[2, 1]], actual=[[2, 0]]\n  player_facing: predicted=[1, 0], actual=[0, -1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 607,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[2, 1]], actual=[[2, 2]]\n  player_facing: predicted=[1, 0], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 638,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[1, 1]], actual=[[0, 1]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 639,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[1, 1]], actual=[[2, 1]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 640,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[1, 1]], actual=[[1, 0]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 641,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[1, 1]], actual=[[1, 2]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 645,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=3, actual=1\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[0, 1]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 655,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[2, 0]], actual=[[1, 0]]\n  player_facing: predicted=[0, -1], actual=[-1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 658,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[2, 0]], actual=[[2, 1]]\n  player_facing: predicted=[0, -1], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 690,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[1, 0]], actual=[[2, 0]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 692,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[1, 0]], actual=[[1, 1]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 693,
+      "signature": [
+        "do",
+        "  ach_collect_tpkhxk: predicted=3, actual=4\n  inv_tpkhxk: predicted=3, actual=4\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  xcvkpr: predicted=[[0, 0], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]], actual=[[1, 5], [3, 5], [3, 6], [6, 1], [7, 1]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 706,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[2, 1]], actual=[[1, 1]]\n  player_facing: predicted=[0, 1], actual=[-1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 707,
+      "signature": [
+        "move_right",
+        "  player_facing: predicted=[0, 1], actual=[1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 708,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[2, 1]], actual=[[2, 0]]\n  player_facing: predicted=[0, 1], actual=[0, -1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 709,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[2, 1]], actual=[[2, 2]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 713,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=3, actual=1\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[2, 2]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 740,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[1, 0]], actual=[[0, 0]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 747,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=4, actual=2\n  pmzjpl: predicted=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[0, 0]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 801,
+      "signature": [
+        "make_tpkhxk_bcwrvm",
+        "  ach_make_tpkhxk_bcwrvm: predicted=0, actual=1\n  inv_tpkhxk: predicted=2, actual=1\n  inv_tpkhxk_bcwrvm: predicted=0, actual=1"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 804,
+      "signature": [
+        "make_tpkhxk_wqiqzh",
+        "  ach_make_tpkhxk_wqiqzh: predicted=0, actual=1\n  inv_tpkhxk: predicted=2, actual=1\n  inv_tpkhxk_wqiqzh: predicted=0, actual=1"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 809,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[0, 0]], actual=[[1, 0]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 811,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[0, 0]], actual=[[0, 1]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 835,
+      "signature": [
+        "make_tpkhxk_bcwrvm",
+        "  ach_make_tpkhxk_bcwrvm: predicted=1, actual=2\n  inv_tpkhxk: predicted=1, actual=0\n  inv_tpkhxk_bcwrvm: predicted=1, actual=2"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 842,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[1, 0]], actual=[[0, 0]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 843,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[1, 0]], actual=[[2, 0]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 845,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[1, 0]], actual=[[1, 1]]\n  player_facing: predicted=[1, 0], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 849,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=4, actual=2\n  pmzjpl: predicted=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[2, 0]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 860,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[0, 1]], actual=[[1, 1]]\n  player_facing: predicted=[0, 1], actual=[1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 861,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[0, 1]], actual=[[0, 0]]\n  player_facing: predicted=[0, 1], actual=[0, -1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 862,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[0, 1]], actual=[[0, 2]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 866,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=4, actual=2\n  pmzjpl: predicted=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 0], [0, 1], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[0, 2]]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 1047,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[0, 1]], actual=[[1, 1]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 1048,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[0, 1]], actual=[[0, 0]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 1098,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[0, 0]], actual=[[1, 0]]\n  player_facing: predicted=[0, -1], actual=[1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 1100,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[0, 0]], actual=[[0, 1]]\n  player_facing: predicted=[0, -1], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 1165,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[2, 0]], actual=[[1, 0]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 1168,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[2, 0]], actual=[[2, 1]]\n  player_facing: predicted=[1, 0], actual=[0, 1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 1216,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[1, 1]], actual=[[0, 1]]\n  player_facing: predicted=[0, 1], actual=[-1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 1217,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[1, 1]], actual=[[2, 1]]\n  player_facing: predicted=[0, 1], actual=[1, 0]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 1218,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[1, 1]], actual=[[1, 0]]\n  player_facing: predicted=[0, 1], actual=[0, -1]"
+      ],
+      "source": "exploration"
+    },
+    {
+      "index": 1219,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[1, 1]], actual=[[1, 2]]"
+      ],
+      "source": "exploration"
+    }
+  ],
+  "later_plan_execution_revision_evidence_count": 9,
+  "wall_time_sec": 42.832040103152394,
+  "warmup_duration_sec": 0.027678429149091244,
+  "candidate_count": 1249,
+  "unique_state_count": 201,
+  "distinct_achievements": [
+    "ach_collect_tpkhxk",
+    "ach_make_tpkhxk_bcwrvm",
+    "ach_make_tpkhxk_wqiqzh",
+    "ach_place_zezroc"
+  ],
+  "selected_candidates": [
+    {
+      "index": 1,
+      "prefix": [],
+      "action": "move_left",
+      "score": 4.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[4, 3]], actual=[[3, 3]]\n  player_facing: predicted=[0, 1], actual=[-1, 0]"
+      ]
+    },
+    {
+      "index": 2,
+      "prefix": [],
+      "action": "move_right",
+      "score": 2.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[4, 3]], actual=[[5, 3]]\n  player_facing: predicted=[0, 1], actual=[1, 0]"
+      ]
+    },
+    {
+      "index": 3,
+      "prefix": [],
+      "action": "move_up",
+      "score": 4.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[4, 3]], actual=[[4, 2]]\n  player_facing: predicted=[0, 1], actual=[0, -1]"
+      ]
+    },
+    {
+      "index": 14,
+      "prefix": [
+        "move_left"
+      ],
+      "action": "move_left",
+      "score": 4.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[3, 3]], actual=[[2, 3]]"
+      ]
+    },
+    {
+      "index": 31,
+      "prefix": [
+        "move_up"
+      ],
+      "action": "move_left",
+      "score": 4.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[4, 2]], actual=[[3, 2]]\n  player_facing: predicted=[0, -1], actual=[-1, 0]"
+      ]
+    },
+    {
+      "index": 48,
+      "prefix": [
+        "move_right"
+      ],
+      "action": "move_left",
+      "score": 4.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[5, 3]], actual=[[4, 3]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ]
+    },
+    {
+      "index": 60,
+      "prefix": [
+        "move_left",
+        "move_left"
+      ],
+      "action": "move_left",
+      "score": 4.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[2, 3]], actual=[[1, 3]]"
+      ]
+    },
+    {
+      "index": 61,
+      "prefix": [
+        "move_left",
+        "move_left"
+      ],
+      "action": "move_right",
+      "score": 4.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[2, 3]], actual=[[3, 3]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ]
+    },
+    {
+      "index": 77,
+      "prefix": [
+        "move_up",
+        "move_left"
+      ],
+      "action": "move_left",
+      "score": 4.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[3, 2]], actual=[[2, 2]]"
+      ]
+    },
+    {
+      "index": 112,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left"
+      ],
+      "action": "move_right",
+      "score": 4.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[1, 3]], actual=[[2, 3]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ]
+    },
+    {
+      "index": 115,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left"
+      ],
+      "action": "do",
+      "score": 264.0,
+      "signature": [
+        "do",
+        "  ach_collect_tpkhxk: predicted=0, actual=1\n  inv_tpkhxk: predicted=0, actual=1\n  pmzjpl: predicted=[[0, 2], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  xcvkpr: predicted=[[0, 0], [0, 1], [0, 3], [1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]], actual=[[0, 0], [0, 1], [1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]]"
+      ]
+    },
+    {
+      "index": 128,
+      "prefix": [
+        "move_up",
+        "move_left",
+        "move_left"
+      ],
+      "action": "move_left",
+      "score": 4.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[2, 2]], actual=[[1, 2]]"
+      ]
+    },
+    {
+      "index": 162,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do"
+      ],
+      "action": "move_left",
+      "score": 4.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[1, 3]], actual=[[0, 3]]"
+      ]
+    },
+    {
+      "index": 179,
+      "prefix": [
+        "move_up",
+        "move_left",
+        "move_left",
+        "move_left"
+      ],
+      "action": "move_left",
+      "score": 4.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[1, 2]], actual=[[0, 2]]"
+      ]
+    },
+    {
+      "index": 180,
+      "prefix": [
+        "move_up",
+        "move_left",
+        "move_left",
+        "move_left"
+      ],
+      "action": "move_right",
+      "score": 4.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[1, 2]], actual=[[2, 2]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ]
+    },
+    {
+      "index": 214,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left"
+      ],
+      "action": "move_right",
+      "score": 4.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[0, 3]], actual=[[1, 3]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ]
+    },
+    {
+      "index": 215,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left"
+      ],
+      "action": "move_up",
+      "score": 4.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[0, 3]], actual=[[0, 2]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]"
+      ]
+    },
+    {
+      "index": 231,
+      "prefix": [
+        "move_up",
+        "move_left",
+        "move_left",
+        "move_left",
+        "move_left"
+      ],
+      "action": "move_right",
+      "score": 4.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[0, 2]], actual=[[1, 2]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ]
+    },
+    {
+      "index": 298,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up"
+      ],
+      "action": "move_left",
+      "score": 4.0,
+      "signature": [
+        "move_left",
+        "  player_facing: predicted=[0, -1], actual=[-1, 0]"
+      ]
+    },
+    {
+      "index": 299,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up"
+      ],
+      "action": "move_right",
+      "score": 4.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[0, 2]], actual=[[1, 2]]\n  player_facing: predicted=[0, -1], actual=[1, 0]"
+      ]
+    },
+    {
+      "index": 302,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up"
+      ],
+      "action": "do",
+      "score": 264.0,
+      "signature": [
+        "do",
+        "  ach_collect_tpkhxk: predicted=1, actual=2\n  inv_tpkhxk: predicted=1, actual=2\n  pmzjpl: predicted=[[0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  xcvkpr: predicted=[[0, 0], [0, 1], [1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]], actual=[[0, 0], [1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]]"
+      ]
+    },
+    {
+      "index": 315,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do"
+      ],
+      "action": "move_left",
+      "score": 2.0,
+      "signature": [
+        "move_left",
+        "  player_facing: predicted=[0, -1], actual=[-1, 0]"
+      ]
+    },
+    {
+      "index": 317,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do"
+      ],
+      "action": "move_up",
+      "score": 4.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[0, 2]], actual=[[0, 1]]"
+      ]
+    },
+    {
+      "index": 322,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do"
+      ],
+      "action": "place_zezroc",
+      "score": 104.0,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=2, actual=0\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[0, 1]]"
+      ]
+    },
+    {
+      "index": 384,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up"
+      ],
+      "action": "move_right",
+      "score": 4.0,
+      "signature": [
+        "move_right",
+        "  player_facing: predicted=[0, -1], actual=[1, 0]"
+      ]
+    },
+    {
+      "index": 386,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up"
+      ],
+      "action": "move_down",
+      "score": 4.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[0, 1]], actual=[[0, 2]]\n  player_facing: predicted=[0, -1], actual=[0, 1]"
+      ]
+    },
+    {
+      "index": 387,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up"
+      ],
+      "action": "do",
+      "score": 264.0,
+      "signature": [
+        "do",
+        "  ach_collect_tpkhxk: predicted=2, actual=3\n  inv_tpkhxk: predicted=2, actual=3\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  xcvkpr: predicted=[[0, 0], [1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]], actual=[[1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]]"
+      ]
+    },
+    {
+      "index": 424,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "do"
+      ],
+      "action": "place_zezroc",
+      "score": 104.0,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=3, actual=1\n  pmzjpl: predicted=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[0, 0]]"
+      ]
+    },
+    {
+      "index": 438,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right"
+      ],
+      "action": "do",
+      "score": 264.0,
+      "signature": [
+        "do",
+        "  ach_collect_tpkhxk: predicted=2, actual=3\n  inv_tpkhxk: predicted=2, actual=3\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  xcvkpr: predicted=[[0, 0], [1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]], actual=[[0, 0], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]]"
+      ]
+    },
+    {
+      "index": 458,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_down"
+      ],
+      "action": "place_zezroc",
+      "score": 104.0,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=2, actual=0\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[0, 3]]"
+      ]
+    },
+    {
+      "index": 469,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do"
+      ],
+      "action": "move_right",
+      "score": 4.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[0, 1]], actual=[[1, 1]]"
+      ]
+    },
+    {
+      "index": 475,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do"
+      ],
+      "action": "place_zezroc",
+      "score": 104.0,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=3, actual=1\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[1, 1]]"
+      ]
+    },
+    {
+      "index": 495,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "do",
+        "place_zezroc"
+      ],
+      "action": "make_tpkhxk_bcwrvm",
+      "score": 20000.0,
+      "signature": [
+        "make_tpkhxk_bcwrvm",
+        "  ach_make_tpkhxk_bcwrvm: predicted=0, actual=1\n  inv_tpkhxk: predicted=1, actual=0\n  inv_tpkhxk_bcwrvm: predicted=0, actual=1"
+      ]
+    },
+    {
+      "index": 546,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "place_zezroc"
+      ],
+      "action": "make_tpkhxk_bcwrvm",
+      "score": 20000.0,
+      "signature": [
+        "make_tpkhxk_bcwrvm",
+        "  ach_make_tpkhxk_bcwrvm: predicted=0, actual=1\n  inv_tpkhxk: predicted=1, actual=0\n  inv_tpkhxk_bcwrvm: predicted=0, actual=1"
+      ]
+    },
+    {
+      "index": 554,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right"
+      ],
+      "action": "move_right",
+      "score": 4.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[1, 1]], actual=[[2, 1]]"
+      ]
+    },
+    {
+      "index": 560,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right"
+      ],
+      "action": "place_zezroc",
+      "score": 104.0,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=3, actual=1\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[2, 1]]"
+      ]
+    },
+    {
+      "index": 597,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "place_zezroc"
+      ],
+      "action": "make_tpkhxk_bcwrvm",
+      "score": 20000.0,
+      "signature": [
+        "make_tpkhxk_bcwrvm",
+        "  ach_make_tpkhxk_bcwrvm: predicted=0, actual=1\n  inv_tpkhxk: predicted=1, actual=0\n  inv_tpkhxk_bcwrvm: predicted=0, actual=1"
+      ]
+    },
+    {
+      "index": 604,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right"
+      ],
+      "action": "move_left",
+      "score": 4.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[2, 1]], actual=[[1, 1]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ]
+    },
+    {
+      "index": 606,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right"
+      ],
+      "action": "move_up",
+      "score": 4.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[2, 1]], actual=[[2, 0]]\n  player_facing: predicted=[1, 0], actual=[0, -1]"
+      ]
+    },
+    {
+      "index": 645,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_left"
+      ],
+      "action": "place_zezroc",
+      "score": 104.0,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=3, actual=1\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[0, 1]]"
+      ]
+    },
+    {
+      "index": 655,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up"
+      ],
+      "action": "move_left",
+      "score": 4.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[2, 0]], actual=[[1, 0]]\n  player_facing: predicted=[0, -1], actual=[-1, 0]"
+      ]
+    },
+    {
+      "index": 658,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up"
+      ],
+      "action": "move_down",
+      "score": 4.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[2, 0]], actual=[[2, 1]]\n  player_facing: predicted=[0, -1], actual=[0, 1]"
+      ]
+    },
+    {
+      "index": 682,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_left",
+        "place_zezroc"
+      ],
+      "action": "make_tpkhxk_bcwrvm",
+      "score": 20000.0,
+      "signature": [
+        "make_tpkhxk_bcwrvm",
+        "  ach_make_tpkhxk_bcwrvm: predicted=0, actual=1\n  inv_tpkhxk: predicted=1, actual=0\n  inv_tpkhxk_bcwrvm: predicted=0, actual=1"
+      ]
+    },
+    {
+      "index": 693,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left"
+      ],
+      "action": "do",
+      "score": 264.0,
+      "signature": [
+        "do",
+        "  ach_collect_tpkhxk: predicted=3, actual=4\n  inv_tpkhxk: predicted=3, actual=4\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  xcvkpr: predicted=[[0, 0], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]], actual=[[1, 5], [3, 5], [3, 6], [6, 1], [7, 1]]"
+      ]
+    },
+    {
+      "index": 713,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_down"
+      ],
+      "action": "place_zezroc",
+      "score": 104.0,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=3, actual=1\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[2, 2]]"
+      ]
+    },
+    {
+      "index": 740,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do"
+      ],
+      "action": "move_left",
+      "score": 4.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[1, 0]], actual=[[0, 0]]"
+      ]
+    },
+    {
+      "index": 747,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do"
+      ],
+      "action": "place_zezroc",
+      "score": 104.0,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=4, actual=2\n  pmzjpl: predicted=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[0, 0]]"
+      ]
+    },
+    {
+      "index": 767,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_down",
+        "place_zezroc"
+      ],
+      "action": "make_tpkhxk_bcwrvm",
+      "score": 20000.0,
+      "signature": [
+        "make_tpkhxk_bcwrvm",
+        "  ach_make_tpkhxk_bcwrvm: predicted=0, actual=1\n  inv_tpkhxk: predicted=1, actual=0\n  inv_tpkhxk_bcwrvm: predicted=0, actual=1"
+      ]
+    },
+    {
+      "index": 801,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "place_zezroc"
+      ],
+      "action": "make_tpkhxk_bcwrvm",
+      "score": 20000.0,
+      "signature": [
+        "make_tpkhxk_bcwrvm",
+        "  ach_make_tpkhxk_bcwrvm: predicted=0, actual=1\n  inv_tpkhxk: predicted=2, actual=1\n  inv_tpkhxk_bcwrvm: predicted=0, actual=1"
+      ]
+    },
+    {
+      "index": 809,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left"
+      ],
+      "action": "move_right",
+      "score": 4.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[0, 0]], actual=[[1, 0]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ]
+    },
+    {
+      "index": 811,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left"
+      ],
+      "action": "move_down",
+      "score": 4.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[0, 0]], actual=[[0, 1]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ]
+    },
+    {
+      "index": 835,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "place_zezroc",
+        "make_tpkhxk_bcwrvm"
+      ],
+      "action": "make_tpkhxk_bcwrvm",
+      "score": 20000.0,
+      "signature": [
+        "make_tpkhxk_bcwrvm",
+        "  ach_make_tpkhxk_bcwrvm: predicted=1, actual=2\n  inv_tpkhxk: predicted=1, actual=0\n  inv_tpkhxk_bcwrvm: predicted=1, actual=2"
+      ]
+    },
+    {
+      "index": 849,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_right"
+      ],
+      "action": "place_zezroc",
+      "score": 104.0,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=4, actual=2\n  pmzjpl: predicted=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[2, 0]]"
+      ]
+    },
+    {
+      "index": 866,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_down"
+      ],
+      "action": "place_zezroc",
+      "score": 104.0,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=4, actual=2\n  pmzjpl: predicted=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 0], [0, 1], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[0, 2]]"
+      ]
+    },
+    {
+      "index": 893,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_right",
+        "place_zezroc"
+      ],
+      "action": "move_left",
+      "score": 2.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[1, 0]], actual=[[0, 0]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ]
+    },
+    {
+      "index": 903,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_right",
+        "place_zezroc"
+      ],
+      "action": "make_tpkhxk_bcwrvm",
+      "score": 20000.0,
+      "signature": [
+        "make_tpkhxk_bcwrvm",
+        "  ach_make_tpkhxk_bcwrvm: predicted=0, actual=1\n  inv_tpkhxk: predicted=2, actual=1\n  inv_tpkhxk_bcwrvm: predicted=0, actual=1"
+      ]
+    },
+    {
+      "index": 920,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_down",
+        "place_zezroc"
+      ],
+      "action": "make_tpkhxk_bcwrvm",
+      "score": 20000.0,
+      "signature": [
+        "make_tpkhxk_bcwrvm",
+        "  ach_make_tpkhxk_bcwrvm: predicted=0, actual=1\n  inv_tpkhxk: predicted=2, actual=1\n  inv_tpkhxk_bcwrvm: predicted=0, actual=1"
+      ]
+    },
+    {
+      "index": 927,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_right",
+        "place_zezroc",
+        "make_tpkhxk_bcwrvm"
+      ],
+      "action": "move_left",
+      "score": 2.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[1, 0]], actual=[[0, 0]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ]
+    },
+    {
+      "index": 937,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_right",
+        "place_zezroc",
+        "make_tpkhxk_bcwrvm"
+      ],
+      "action": "make_tpkhxk_bcwrvm",
+      "score": 20000.0,
+      "signature": [
+        "make_tpkhxk_bcwrvm",
+        "  ach_make_tpkhxk_bcwrvm: predicted=1, actual=2\n  inv_tpkhxk: predicted=1, actual=0\n  inv_tpkhxk_bcwrvm: predicted=1, actual=2"
+      ]
+    },
+    {
+      "index": 954,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_down",
+        "place_zezroc",
+        "make_tpkhxk_bcwrvm"
+      ],
+      "action": "make_tpkhxk_bcwrvm",
+      "score": 20000.0,
+      "signature": [
+        "make_tpkhxk_bcwrvm",
+        "  ach_make_tpkhxk_bcwrvm: predicted=1, actual=2\n  inv_tpkhxk: predicted=1, actual=0\n  inv_tpkhxk_bcwrvm: predicted=1, actual=2"
+      ]
+    },
+    {
+      "index": 978,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_right",
+        "place_zezroc",
+        "make_tpkhxk_bcwrvm",
+        "make_tpkhxk_bcwrvm"
+      ],
+      "action": "move_left",
+      "score": 2.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[1, 0]], actual=[[0, 0]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ]
+    },
+    {
+      "index": 995,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_down",
+        "place_zezroc",
+        "make_tpkhxk_bcwrvm",
+        "make_tpkhxk_bcwrvm"
+      ],
+      "action": "move_left",
+      "score": 2.0,
+      "signature": [
+        "move_left",
+        "  player_facing: predicted=[0, 1], actual=[-1, 0]"
+      ]
+    },
+    {
+      "index": 996,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_down",
+        "place_zezroc",
+        "make_tpkhxk_bcwrvm",
+        "make_tpkhxk_bcwrvm"
+      ],
+      "action": "move_right",
+      "score": 2.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[0, 1]], actual=[[1, 1]]\n  player_facing: predicted=[0, 1], actual=[1, 0]"
+      ]
+    },
+    {
+      "index": 1031,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_right",
+        "place_zezroc",
+        "make_tpkhxk_bcwrvm",
+        "make_tpkhxk_bcwrvm",
+        "move_left"
+      ],
+      "action": "move_up",
+      "score": 2.0,
+      "signature": [
+        "move_up",
+        "  player_facing: predicted=[-1, 0], actual=[0, -1]"
+      ]
+    },
+    {
+      "index": 1047,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_down",
+        "place_zezroc",
+        "make_tpkhxk_bcwrvm",
+        "make_tpkhxk_bcwrvm",
+        "move_left"
+      ],
+      "action": "move_right",
+      "score": 2.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[0, 1]], actual=[[1, 1]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ]
+    },
+    {
+      "index": 1064,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_down",
+        "place_zezroc",
+        "make_tpkhxk_bcwrvm",
+        "make_tpkhxk_bcwrvm",
+        "move_right"
+      ],
+      "action": "move_right",
+      "score": 2.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[1, 1]], actual=[[2, 1]]"
+      ]
+    },
+    {
+      "index": 1080,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_down",
+        "place_zezroc",
+        "make_tpkhxk_bcwrvm",
+        "make_tpkhxk_bcwrvm",
+        "move_right",
+        "move_right"
+      ],
+      "action": "move_left",
+      "score": 2.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[2, 1]], actual=[[1, 1]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ]
+    },
+    {
+      "index": 1082,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_down",
+        "place_zezroc",
+        "make_tpkhxk_bcwrvm",
+        "make_tpkhxk_bcwrvm",
+        "move_right",
+        "move_right"
+      ],
+      "action": "move_up",
+      "score": 2.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[2, 1]], actual=[[2, 0]]\n  player_facing: predicted=[1, 0], actual=[0, -1]"
+      ]
+    },
+    {
+      "index": 1098,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_right",
+        "place_zezroc",
+        "make_tpkhxk_bcwrvm",
+        "make_tpkhxk_bcwrvm",
+        "move_left",
+        "move_up"
+      ],
+      "action": "move_right",
+      "score": 2.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[0, 0]], actual=[[1, 0]]\n  player_facing: predicted=[0, -1], actual=[1, 0]"
+      ]
+    },
+    {
+      "index": 1131,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_down",
+        "place_zezroc",
+        "make_tpkhxk_bcwrvm",
+        "make_tpkhxk_bcwrvm",
+        "move_right",
+        "move_right",
+        "move_up"
+      ],
+      "action": "move_left",
+      "score": 2.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[2, 0]], actual=[[1, 0]]\n  player_facing: predicted=[0, -1], actual=[-1, 0]"
+      ]
+    },
+    {
+      "index": 1132,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_down",
+        "place_zezroc",
+        "make_tpkhxk_bcwrvm",
+        "make_tpkhxk_bcwrvm",
+        "move_right",
+        "move_right",
+        "move_up"
+      ],
+      "action": "move_right",
+      "score": 2.0,
+      "signature": [
+        "move_right",
+        "  player_facing: predicted=[0, -1], actual=[1, 0]"
+      ]
+    },
+    {
+      "index": 1134,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_down",
+        "place_zezroc",
+        "make_tpkhxk_bcwrvm",
+        "make_tpkhxk_bcwrvm",
+        "move_right",
+        "move_right",
+        "move_up"
+      ],
+      "action": "move_down",
+      "score": 2.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[2, 0]], actual=[[2, 1]]\n  player_facing: predicted=[0, -1], actual=[0, 1]"
+      ]
+    },
+    {
+      "index": 1148,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_down",
+        "place_zezroc",
+        "make_tpkhxk_bcwrvm",
+        "make_tpkhxk_bcwrvm",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left"
+      ],
+      "action": "move_left",
+      "score": 2.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[1, 0]], actual=[[0, 0]]"
+      ]
+    },
+    {
+      "index": 1151,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_down",
+        "place_zezroc",
+        "make_tpkhxk_bcwrvm",
+        "make_tpkhxk_bcwrvm",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left"
+      ],
+      "action": "move_down",
+      "score": 2.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[1, 0]], actual=[[1, 1]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ]
+    },
+    {
+      "index": 1165,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_down",
+        "place_zezroc",
+        "make_tpkhxk_bcwrvm",
+        "make_tpkhxk_bcwrvm",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_right"
+      ],
+      "action": "move_left",
+      "score": 2.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[2, 0]], actual=[[1, 0]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ]
+    },
+    {
+      "index": 1200,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_down",
+        "place_zezroc",
+        "make_tpkhxk_bcwrvm",
+        "make_tpkhxk_bcwrvm",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "move_left"
+      ],
+      "action": "move_right",
+      "score": 2.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[0, 0]], actual=[[1, 0]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ]
+    },
+    {
+      "index": 1216,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_down",
+        "place_zezroc",
+        "make_tpkhxk_bcwrvm",
+        "make_tpkhxk_bcwrvm",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "move_down"
+      ],
+      "action": "move_left",
+      "score": 2.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[1, 1]], actual=[[0, 1]]\n  player_facing: predicted=[0, 1], actual=[-1, 0]"
+      ]
+    },
+    {
+      "index": 1217,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_down",
+        "place_zezroc",
+        "make_tpkhxk_bcwrvm",
+        "make_tpkhxk_bcwrvm",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "move_down"
+      ],
+      "action": "move_right",
+      "score": 2.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[1, 1]], actual=[[2, 1]]\n  player_facing: predicted=[0, 1], actual=[1, 0]"
+      ]
+    },
+    {
+      "index": 1232,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_down",
+        "place_zezroc",
+        "make_tpkhxk_bcwrvm",
+        "make_tpkhxk_bcwrvm",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "move_left",
+        "move_right"
+      ],
+      "action": "noop",
+      "score": 0.0,
+      "signature": null
+    },
+    {
+      "index": 1233,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_down",
+        "place_zezroc",
+        "make_tpkhxk_bcwrvm",
+        "make_tpkhxk_bcwrvm",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "move_left",
+        "move_right"
+      ],
+      "action": "move_left",
+      "score": 0.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[1, 0]], actual=[[0, 0]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ]
+    },
+    {
+      "index": 1234,
+      "prefix": [
+        "move_left",
+        "move_left",
+        "move_left",
+        "do",
+        "move_left",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "do",
+        "move_left",
+        "move_down",
+        "place_zezroc",
+        "make_tpkhxk_bcwrvm",
+        "make_tpkhxk_bcwrvm",
+        "move_right",
+        "move_right",
+        "move_up",
+        "move_left",
+        "move_left",
+        "move_right"
+      ],
+      "action": "move_right",
+      "score": 0.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[1, 0]], actual=[[2, 0]]"
+      ]
+    }
+  ],
+  "representatives": [
+    {
+      "action": "move_left",
+      "delta": "  player: predicted=[[4, 3]], actual=[[3, 3]]\n  player_facing: predicted=[0, 1], actual=[-1, 0]",
+      "score": 4.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[4, 3]], actual=[[3, 3]]\n  player_facing: predicted=[0, 1], actual=[-1, 0]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[4, 3]], actual=[[5, 3]]\n  player_facing: predicted=[0, 1], actual=[1, 0]",
+      "score": 2.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[4, 3]], actual=[[5, 3]]\n  player_facing: predicted=[0, 1], actual=[1, 0]"
+      ]
+    },
+    {
+      "action": "move_up",
+      "delta": "  player: predicted=[[4, 3]], actual=[[4, 2]]\n  player_facing: predicted=[0, 1], actual=[0, -1]",
+      "score": 4.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[4, 3]], actual=[[4, 2]]\n  player_facing: predicted=[0, 1], actual=[0, -1]"
+      ]
+    },
+    {
+      "action": "move_left",
+      "delta": "  player: predicted=[[3, 3]], actual=[[2, 3]]",
+      "score": 4.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[3, 3]], actual=[[2, 3]]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[3, 3]], actual=[[4, 3]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]",
+      "score": 4.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[3, 3]], actual=[[4, 3]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ]
+    },
+    {
+      "action": "move_up",
+      "delta": "  player: predicted=[[3, 3]], actual=[[3, 2]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]",
+      "score": 4.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[3, 3]], actual=[[3, 2]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[3, 3]], actual=[[3, 4]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]",
+      "score": 4.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[3, 3]], actual=[[3, 4]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "move_left",
+      "delta": "  player: predicted=[[4, 2]], actual=[[3, 2]]\n  player_facing: predicted=[0, -1], actual=[-1, 0]",
+      "score": 4.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[4, 2]], actual=[[3, 2]]\n  player_facing: predicted=[0, -1], actual=[-1, 0]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[4, 2]], actual=[[5, 2]]\n  player_facing: predicted=[0, -1], actual=[1, 0]",
+      "score": 4.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[4, 2]], actual=[[5, 2]]\n  player_facing: predicted=[0, -1], actual=[1, 0]"
+      ]
+    },
+    {
+      "action": "move_up",
+      "delta": "  player: predicted=[[4, 2]], actual=[[4, 1]]",
+      "score": 4.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[4, 2]], actual=[[4, 1]]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[4, 2]], actual=[[4, 3]]\n  player_facing: predicted=[0, -1], actual=[0, 1]",
+      "score": 2.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[4, 2]], actual=[[4, 3]]\n  player_facing: predicted=[0, -1], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "move_left",
+      "delta": "  player: predicted=[[5, 3]], actual=[[4, 3]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]",
+      "score": 4.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[5, 3]], actual=[[4, 3]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[5, 3]], actual=[[6, 3]]",
+      "score": 4.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[5, 3]], actual=[[6, 3]]"
+      ]
+    },
+    {
+      "action": "move_up",
+      "delta": "  player: predicted=[[5, 3]], actual=[[5, 2]]\n  player_facing: predicted=[1, 0], actual=[0, -1]",
+      "score": 4.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[5, 3]], actual=[[5, 2]]\n  player_facing: predicted=[1, 0], actual=[0, -1]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[5, 3]], actual=[[5, 4]]\n  player_facing: predicted=[1, 0], actual=[0, 1]",
+      "score": 4.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[5, 3]], actual=[[5, 4]]\n  player_facing: predicted=[1, 0], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "move_left",
+      "delta": "  player: predicted=[[2, 3]], actual=[[1, 3]]",
+      "score": 4.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[2, 3]], actual=[[1, 3]]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[2, 3]], actual=[[3, 3]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]",
+      "score": 4.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[2, 3]], actual=[[3, 3]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ]
+    },
+    {
+      "action": "move_up",
+      "delta": "  player: predicted=[[2, 3]], actual=[[2, 2]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]",
+      "score": 4.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[2, 3]], actual=[[2, 2]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[2, 3]], actual=[[2, 4]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]",
+      "score": 4.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[2, 3]], actual=[[2, 4]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "move_left",
+      "delta": "  player: predicted=[[3, 2]], actual=[[2, 2]]",
+      "score": 4.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[3, 2]], actual=[[2, 2]]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[3, 2]], actual=[[4, 2]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]",
+      "score": 4.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[3, 2]], actual=[[4, 2]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ]
+    },
+    {
+      "action": "move_up",
+      "delta": "  player_facing: predicted=[-1, 0], actual=[0, -1]",
+      "score": 2.0,
+      "signature": [
+        "move_up",
+        "  player_facing: predicted=[-1, 0], actual=[0, -1]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[3, 2]], actual=[[3, 3]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]",
+      "score": 4.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[3, 2]], actual=[[3, 3]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "move_left",
+      "delta": "  player: predicted=[[4, 3]], actual=[[3, 3]]",
+      "score": 2.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[4, 3]], actual=[[3, 3]]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[4, 3]], actual=[[5, 3]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]",
+      "score": 2.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[4, 3]], actual=[[5, 3]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ]
+    },
+    {
+      "action": "move_up",
+      "delta": "  player: predicted=[[4, 3]], actual=[[4, 2]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]",
+      "score": 2.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[4, 3]], actual=[[4, 2]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[4, 3]], actual=[[4, 4]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]",
+      "score": 2.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[4, 3]], actual=[[4, 4]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[1, 3]], actual=[[2, 3]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]",
+      "score": 4.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[1, 3]], actual=[[2, 3]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ]
+    },
+    {
+      "action": "move_up",
+      "delta": "  player: predicted=[[1, 3]], actual=[[1, 2]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]",
+      "score": 4.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[1, 3]], actual=[[1, 2]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[1, 3]], actual=[[1, 4]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]",
+      "score": 4.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[1, 3]], actual=[[1, 4]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "do",
+      "delta": "  ach_collect_tpkhxk: predicted=0, actual=1\n  inv_tpkhxk: predicted=0, actual=1\n  pmzjpl: predicted=[[0, 2], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  xcvkpr: predicted=[[0, 0], [0, 1], [0, 3], [1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]], actual=[[0, 0], [0, 1], [1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]]",
+      "score": 264.0,
+      "signature": [
+        "do",
+        "  ach_collect_tpkhxk: predicted=0, actual=1\n  inv_tpkhxk: predicted=0, actual=1\n  pmzjpl: predicted=[[0, 2], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  xcvkpr: predicted=[[0, 0], [0, 1], [0, 3], [1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]], actual=[[0, 0], [0, 1], [1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]]"
+      ]
+    },
+    {
+      "action": "move_left",
+      "delta": "  player: predicted=[[2, 2]], actual=[[1, 2]]",
+      "score": 4.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[2, 2]], actual=[[1, 2]]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[2, 2]], actual=[[3, 2]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]",
+      "score": 4.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[2, 2]], actual=[[3, 2]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ]
+    },
+    {
+      "action": "move_up",
+      "delta": "  player: predicted=[[2, 2]], actual=[[2, 1]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]",
+      "score": 4.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[2, 2]], actual=[[2, 1]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[2, 2]], actual=[[2, 3]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]",
+      "score": 4.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[2, 2]], actual=[[2, 3]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "move_left",
+      "delta": "  player: predicted=[[3, 3]], actual=[[2, 3]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]",
+      "score": 2.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[3, 3]], actual=[[2, 3]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[3, 3]], actual=[[4, 3]]",
+      "score": 2.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[3, 3]], actual=[[4, 3]]"
+      ]
+    },
+    {
+      "action": "move_up",
+      "delta": "  player: predicted=[[3, 3]], actual=[[3, 2]]\n  player_facing: predicted=[1, 0], actual=[0, -1]",
+      "score": 2.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[3, 3]], actual=[[3, 2]]\n  player_facing: predicted=[1, 0], actual=[0, -1]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[3, 3]], actual=[[3, 4]]\n  player_facing: predicted=[1, 0], actual=[0, 1]",
+      "score": 2.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[3, 3]], actual=[[3, 4]]\n  player_facing: predicted=[1, 0], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "move_left",
+      "delta": "  player: predicted=[[1, 3]], actual=[[0, 3]]",
+      "score": 4.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[1, 3]], actual=[[0, 3]]"
+      ]
+    },
+    {
+      "action": "move_left",
+      "delta": "  player: predicted=[[1, 2]], actual=[[0, 2]]",
+      "score": 4.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[1, 2]], actual=[[0, 2]]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[1, 2]], actual=[[2, 2]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]",
+      "score": 4.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[1, 2]], actual=[[2, 2]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[1, 2]], actual=[[1, 3]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]",
+      "score": 4.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[1, 2]], actual=[[1, 3]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "move_left",
+      "delta": "  player: predicted=[[2, 3]], actual=[[1, 3]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]",
+      "score": 2.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[2, 3]], actual=[[1, 3]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[2, 3]], actual=[[3, 3]]",
+      "score": 2.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[2, 3]], actual=[[3, 3]]"
+      ]
+    },
+    {
+      "action": "move_up",
+      "delta": "  player: predicted=[[2, 3]], actual=[[2, 2]]\n  player_facing: predicted=[1, 0], actual=[0, -1]",
+      "score": 2.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[2, 3]], actual=[[2, 2]]\n  player_facing: predicted=[1, 0], actual=[0, -1]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[2, 3]], actual=[[2, 4]]\n  player_facing: predicted=[1, 0], actual=[0, 1]",
+      "score": 2.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[2, 3]], actual=[[2, 4]]\n  player_facing: predicted=[1, 0], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[0, 3]], actual=[[1, 3]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]",
+      "score": 4.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[0, 3]], actual=[[1, 3]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ]
+    },
+    {
+      "action": "move_up",
+      "delta": "  player: predicted=[[0, 3]], actual=[[0, 2]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]",
+      "score": 4.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[0, 3]], actual=[[0, 2]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[0, 3]], actual=[[0, 4]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]",
+      "score": 4.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[0, 3]], actual=[[0, 4]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[0, 2]], actual=[[1, 2]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]",
+      "score": 4.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[0, 2]], actual=[[1, 2]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player_facing: predicted=[-1, 0], actual=[0, 1]",
+      "score": 4.0,
+      "signature": [
+        "move_down",
+        "  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "move_left",
+      "delta": "  player: predicted=[[2, 2]], actual=[[1, 2]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]",
+      "score": 2.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[2, 2]], actual=[[1, 2]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[2, 2]], actual=[[3, 2]]",
+      "score": 2.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[2, 2]], actual=[[3, 2]]"
+      ]
+    },
+    {
+      "action": "move_up",
+      "delta": "  player: predicted=[[2, 2]], actual=[[2, 1]]\n  player_facing: predicted=[1, 0], actual=[0, -1]",
+      "score": 2.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[2, 2]], actual=[[2, 1]]\n  player_facing: predicted=[1, 0], actual=[0, -1]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[2, 2]], actual=[[2, 3]]\n  player_facing: predicted=[1, 0], actual=[0, 1]",
+      "score": 2.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[2, 2]], actual=[[2, 3]]\n  player_facing: predicted=[1, 0], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "move_left",
+      "delta": "  player: predicted=[[1, 3]], actual=[[0, 3]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]",
+      "score": 2.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[1, 3]], actual=[[0, 3]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[1, 3]], actual=[[2, 3]]",
+      "score": 2.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[1, 3]], actual=[[2, 3]]"
+      ]
+    },
+    {
+      "action": "move_up",
+      "delta": "  player: predicted=[[1, 3]], actual=[[1, 2]]\n  player_facing: predicted=[1, 0], actual=[0, -1]",
+      "score": 2.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[1, 3]], actual=[[1, 2]]\n  player_facing: predicted=[1, 0], actual=[0, -1]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[1, 3]], actual=[[1, 4]]\n  player_facing: predicted=[1, 0], actual=[0, 1]",
+      "score": 2.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[1, 3]], actual=[[1, 4]]\n  player_facing: predicted=[1, 0], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "move_left",
+      "delta": "  player: predicted=[[1, 2]], actual=[[0, 2]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]",
+      "score": 2.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[1, 2]], actual=[[0, 2]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[1, 2]], actual=[[2, 2]]",
+      "score": 2.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[1, 2]], actual=[[2, 2]]"
+      ]
+    },
+    {
+      "action": "move_up",
+      "delta": "  player_facing: predicted=[1, 0], actual=[0, -1]",
+      "score": 2.0,
+      "signature": [
+        "move_up",
+        "  player_facing: predicted=[1, 0], actual=[0, -1]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[1, 2]], actual=[[1, 3]]\n  player_facing: predicted=[1, 0], actual=[0, 1]",
+      "score": 2.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[1, 2]], actual=[[1, 3]]\n  player_facing: predicted=[1, 0], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "move_left",
+      "delta": "  player_facing: predicted=[0, -1], actual=[-1, 0]",
+      "score": 4.0,
+      "signature": [
+        "move_left",
+        "  player_facing: predicted=[0, -1], actual=[-1, 0]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[0, 2]], actual=[[1, 2]]\n  player_facing: predicted=[0, -1], actual=[1, 0]",
+      "score": 4.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[0, 2]], actual=[[1, 2]]\n  player_facing: predicted=[0, -1], actual=[1, 0]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[0, 2]], actual=[[0, 3]]\n  player_facing: predicted=[0, -1], actual=[0, 1]",
+      "score": 4.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[0, 2]], actual=[[0, 3]]\n  player_facing: predicted=[0, -1], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "do",
+      "delta": "  ach_collect_tpkhxk: predicted=1, actual=2\n  inv_tpkhxk: predicted=1, actual=2\n  pmzjpl: predicted=[[0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  xcvkpr: predicted=[[0, 0], [0, 1], [1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]], actual=[[0, 0], [1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]]",
+      "score": 264.0,
+      "signature": [
+        "do",
+        "  ach_collect_tpkhxk: predicted=1, actual=2\n  inv_tpkhxk: predicted=1, actual=2\n  pmzjpl: predicted=[[0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  xcvkpr: predicted=[[0, 0], [0, 1], [1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]], actual=[[0, 0], [1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]]"
+      ]
+    },
+    {
+      "action": "move_up",
+      "delta": "  player: predicted=[[0, 2]], actual=[[0, 1]]",
+      "score": 4.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[0, 2]], actual=[[0, 1]]"
+      ]
+    },
+    {
+      "action": "place_zezroc",
+      "delta": "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=2, actual=0\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[0, 1]]",
+      "score": 104.0,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=2, actual=0\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[0, 1]]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[0, 2]], actual=[[0, 3]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]",
+      "score": 2.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[0, 2]], actual=[[0, 3]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player_facing: predicted=[0, -1], actual=[1, 0]",
+      "score": 4.0,
+      "signature": [
+        "move_right",
+        "  player_facing: predicted=[0, -1], actual=[1, 0]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[0, 1]], actual=[[0, 2]]\n  player_facing: predicted=[0, -1], actual=[0, 1]",
+      "score": 4.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[0, 1]], actual=[[0, 2]]\n  player_facing: predicted=[0, -1], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "do",
+      "delta": "  ach_collect_tpkhxk: predicted=2, actual=3\n  inv_tpkhxk: predicted=2, actual=3\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  xcvkpr: predicted=[[0, 0], [1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]], actual=[[1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]]",
+      "score": 264.0,
+      "signature": [
+        "do",
+        "  ach_collect_tpkhxk: predicted=2, actual=3\n  inv_tpkhxk: predicted=2, actual=3\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  xcvkpr: predicted=[[0, 0], [1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]], actual=[[1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]]"
+      ]
+    },
+    {
+      "action": "move_up",
+      "delta": "  player: predicted=[[0, 2]], actual=[[0, 1]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]",
+      "score": 2.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[0, 2]], actual=[[0, 1]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]"
+      ]
+    },
+    {
+      "action": "move_up",
+      "delta": "  player: predicted=[[0, 1]], actual=[[0, 0]]",
+      "score": 4.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[0, 1]], actual=[[0, 0]]"
+      ]
+    },
+    {
+      "action": "place_zezroc",
+      "delta": "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=3, actual=1\n  pmzjpl: predicted=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[0, 0]]",
+      "score": 104.0,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=3, actual=1\n  pmzjpl: predicted=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[0, 0]]"
+      ]
+    },
+    {
+      "action": "move_left",
+      "delta": "  player_facing: predicted=[1, 0], actual=[-1, 0]",
+      "score": 2.0,
+      "signature": [
+        "move_left",
+        "  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[0, 1]], actual=[[0, 2]]\n  player_facing: predicted=[1, 0], actual=[0, 1]",
+      "score": 2.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[0, 1]], actual=[[0, 2]]\n  player_facing: predicted=[1, 0], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "do",
+      "delta": "  ach_collect_tpkhxk: predicted=2, actual=3\n  inv_tpkhxk: predicted=2, actual=3\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  xcvkpr: predicted=[[0, 0], [1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]], actual=[[0, 0], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]]",
+      "score": 264.0,
+      "signature": [
+        "do",
+        "  ach_collect_tpkhxk: predicted=2, actual=3\n  inv_tpkhxk: predicted=2, actual=3\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  xcvkpr: predicted=[[0, 0], [1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]], actual=[[0, 0], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]]"
+      ]
+    },
+    {
+      "action": "move_left",
+      "delta": "  player_facing: predicted=[0, 1], actual=[-1, 0]",
+      "score": 2.0,
+      "signature": [
+        "move_left",
+        "  player_facing: predicted=[0, 1], actual=[-1, 0]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[0, 2]], actual=[[1, 2]]\n  player_facing: predicted=[0, 1], actual=[1, 0]",
+      "score": 2.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[0, 2]], actual=[[1, 2]]\n  player_facing: predicted=[0, 1], actual=[1, 0]"
+      ]
+    },
+    {
+      "action": "move_up",
+      "delta": "  player: predicted=[[0, 2]], actual=[[0, 1]]\n  player_facing: predicted=[0, 1], actual=[0, -1]",
+      "score": 2.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[0, 2]], actual=[[0, 1]]\n  player_facing: predicted=[0, 1], actual=[0, -1]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[0, 2]], actual=[[0, 3]]",
+      "score": 2.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[0, 2]], actual=[[0, 3]]"
+      ]
+    },
+    {
+      "action": "place_zezroc",
+      "delta": "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=2, actual=0\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[0, 3]]",
+      "score": 104.0,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=2, actual=0\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[0, 3]]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[0, 1]], actual=[[1, 1]]",
+      "score": 4.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[0, 1]], actual=[[1, 1]]"
+      ]
+    },
+    {
+      "action": "place_zezroc",
+      "delta": "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=3, actual=1\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[1, 1]]",
+      "score": 104.0,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=3, actual=1\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[1, 1]]"
+      ]
+    },
+    {
+      "action": "make_tpkhxk_bcwrvm",
+      "delta": "  ach_make_tpkhxk_bcwrvm: predicted=0, actual=1\n  inv_tpkhxk: predicted=1, actual=0\n  inv_tpkhxk_bcwrvm: predicted=0, actual=1",
+      "score": 20000.0,
+      "signature": [
+        "make_tpkhxk_bcwrvm",
+        "  ach_make_tpkhxk_bcwrvm: predicted=0, actual=1\n  inv_tpkhxk: predicted=1, actual=0\n  inv_tpkhxk_bcwrvm: predicted=0, actual=1"
+      ]
+    },
+    {
+      "action": "make_tpkhxk_wqiqzh",
+      "delta": "  ach_make_tpkhxk_wqiqzh: predicted=0, actual=1\n  inv_tpkhxk: predicted=1, actual=0\n  inv_tpkhxk_wqiqzh: predicted=0, actual=1",
+      "score": 4.0,
+      "signature": [
+        "make_tpkhxk_wqiqzh",
+        "  ach_make_tpkhxk_wqiqzh: predicted=0, actual=1\n  inv_tpkhxk: predicted=1, actual=0\n  inv_tpkhxk_wqiqzh: predicted=0, actual=1"
+      ]
+    },
+    {
+      "action": "move_left",
+      "delta": "  player: predicted=[[1, 1]], actual=[[0, 1]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]",
+      "score": 2.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[1, 1]], actual=[[0, 1]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[1, 1]], actual=[[2, 1]]",
+      "score": 4.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[1, 1]], actual=[[2, 1]]"
+      ]
+    },
+    {
+      "action": "move_up",
+      "delta": "  player: predicted=[[1, 1]], actual=[[1, 0]]\n  player_facing: predicted=[1, 0], actual=[0, -1]",
+      "score": 4.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[1, 1]], actual=[[1, 0]]\n  player_facing: predicted=[1, 0], actual=[0, -1]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[1, 1]], actual=[[1, 2]]\n  player_facing: predicted=[1, 0], actual=[0, 1]",
+      "score": 4.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[1, 1]], actual=[[1, 2]]\n  player_facing: predicted=[1, 0], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "place_zezroc",
+      "delta": "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=3, actual=1\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[2, 1]]",
+      "score": 104.0,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=3, actual=1\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[2, 1]]"
+      ]
+    },
+    {
+      "action": "move_left",
+      "delta": "  player: predicted=[[2, 1]], actual=[[1, 1]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]",
+      "score": 4.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[2, 1]], actual=[[1, 1]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ]
+    },
+    {
+      "action": "move_up",
+      "delta": "  player: predicted=[[2, 1]], actual=[[2, 0]]\n  player_facing: predicted=[1, 0], actual=[0, -1]",
+      "score": 4.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[2, 1]], actual=[[2, 0]]\n  player_facing: predicted=[1, 0], actual=[0, -1]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[2, 1]], actual=[[2, 2]]\n  player_facing: predicted=[1, 0], actual=[0, 1]",
+      "score": 4.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[2, 1]], actual=[[2, 2]]\n  player_facing: predicted=[1, 0], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "move_left",
+      "delta": "  player: predicted=[[1, 1]], actual=[[0, 1]]",
+      "score": 2.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[1, 1]], actual=[[0, 1]]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[1, 1]], actual=[[2, 1]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]",
+      "score": 2.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[1, 1]], actual=[[2, 1]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ]
+    },
+    {
+      "action": "move_up",
+      "delta": "  player: predicted=[[1, 1]], actual=[[1, 0]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]",
+      "score": 2.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[1, 1]], actual=[[1, 0]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[1, 1]], actual=[[1, 2]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]",
+      "score": 2.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[1, 1]], actual=[[1, 2]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "place_zezroc",
+      "delta": "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=3, actual=1\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[0, 1]]",
+      "score": 104.0,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=3, actual=1\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[0, 1]]"
+      ]
+    },
+    {
+      "action": "move_left",
+      "delta": "  player: predicted=[[2, 0]], actual=[[1, 0]]\n  player_facing: predicted=[0, -1], actual=[-1, 0]",
+      "score": 4.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[2, 0]], actual=[[1, 0]]\n  player_facing: predicted=[0, -1], actual=[-1, 0]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[2, 0]], actual=[[2, 1]]\n  player_facing: predicted=[0, -1], actual=[0, 1]",
+      "score": 4.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[2, 0]], actual=[[2, 1]]\n  player_facing: predicted=[0, -1], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[1, 0]], actual=[[2, 0]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]",
+      "score": 2.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[1, 0]], actual=[[2, 0]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[1, 0]], actual=[[1, 1]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]",
+      "score": 4.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[1, 0]], actual=[[1, 1]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "do",
+      "delta": "  ach_collect_tpkhxk: predicted=3, actual=4\n  inv_tpkhxk: predicted=3, actual=4\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  xcvkpr: predicted=[[0, 0], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]], actual=[[1, 5], [3, 5], [3, 6], [6, 1], [7, 1]]",
+      "score": 264.0,
+      "signature": [
+        "do",
+        "  ach_collect_tpkhxk: predicted=3, actual=4\n  inv_tpkhxk: predicted=3, actual=4\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  xcvkpr: predicted=[[0, 0], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]], actual=[[1, 5], [3, 5], [3, 6], [6, 1], [7, 1]]"
+      ]
+    },
+    {
+      "action": "move_left",
+      "delta": "  player: predicted=[[2, 1]], actual=[[1, 1]]\n  player_facing: predicted=[0, 1], actual=[-1, 0]",
+      "score": 2.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[2, 1]], actual=[[1, 1]]\n  player_facing: predicted=[0, 1], actual=[-1, 0]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player_facing: predicted=[0, 1], actual=[1, 0]",
+      "score": 2.0,
+      "signature": [
+        "move_right",
+        "  player_facing: predicted=[0, 1], actual=[1, 0]"
+      ]
+    },
+    {
+      "action": "move_up",
+      "delta": "  player: predicted=[[2, 1]], actual=[[2, 0]]\n  player_facing: predicted=[0, 1], actual=[0, -1]",
+      "score": 2.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[2, 1]], actual=[[2, 0]]\n  player_facing: predicted=[0, 1], actual=[0, -1]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[2, 1]], actual=[[2, 2]]",
+      "score": 2.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[2, 1]], actual=[[2, 2]]"
+      ]
+    },
+    {
+      "action": "place_zezroc",
+      "delta": "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=3, actual=1\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[2, 2]]",
+      "score": 104.0,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=3, actual=1\n  pmzjpl: predicted=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[2, 2]]"
+      ]
+    },
+    {
+      "action": "move_left",
+      "delta": "  player: predicted=[[1, 0]], actual=[[0, 0]]",
+      "score": 4.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[1, 0]], actual=[[0, 0]]"
+      ]
+    },
+    {
+      "action": "place_zezroc",
+      "delta": "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=4, actual=2\n  pmzjpl: predicted=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[0, 0]]",
+      "score": 104.0,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=4, actual=2\n  pmzjpl: predicted=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[0, 0]]"
+      ]
+    },
+    {
+      "action": "make_tpkhxk_bcwrvm",
+      "delta": "  ach_make_tpkhxk_bcwrvm: predicted=0, actual=1\n  inv_tpkhxk: predicted=2, actual=1\n  inv_tpkhxk_bcwrvm: predicted=0, actual=1",
+      "score": 20000.0,
+      "signature": [
+        "make_tpkhxk_bcwrvm",
+        "  ach_make_tpkhxk_bcwrvm: predicted=0, actual=1\n  inv_tpkhxk: predicted=2, actual=1\n  inv_tpkhxk_bcwrvm: predicted=0, actual=1"
+      ]
+    },
+    {
+      "action": "make_tpkhxk_wqiqzh",
+      "delta": "  ach_make_tpkhxk_wqiqzh: predicted=0, actual=1\n  inv_tpkhxk: predicted=2, actual=1\n  inv_tpkhxk_wqiqzh: predicted=0, actual=1",
+      "score": 4.0,
+      "signature": [
+        "make_tpkhxk_wqiqzh",
+        "  ach_make_tpkhxk_wqiqzh: predicted=0, actual=1\n  inv_tpkhxk: predicted=2, actual=1\n  inv_tpkhxk_wqiqzh: predicted=0, actual=1"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[0, 0]], actual=[[1, 0]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]",
+      "score": 4.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[0, 0]], actual=[[1, 0]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[0, 0]], actual=[[0, 1]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]",
+      "score": 4.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[0, 0]], actual=[[0, 1]]\n  player_facing: predicted=[-1, 0], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "make_tpkhxk_bcwrvm",
+      "delta": "  ach_make_tpkhxk_bcwrvm: predicted=1, actual=2\n  inv_tpkhxk: predicted=1, actual=0\n  inv_tpkhxk_bcwrvm: predicted=1, actual=2",
+      "score": 20000.0,
+      "signature": [
+        "make_tpkhxk_bcwrvm",
+        "  ach_make_tpkhxk_bcwrvm: predicted=1, actual=2\n  inv_tpkhxk: predicted=1, actual=0\n  inv_tpkhxk_bcwrvm: predicted=1, actual=2"
+      ]
+    },
+    {
+      "action": "move_left",
+      "delta": "  player: predicted=[[1, 0]], actual=[[0, 0]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]",
+      "score": 2.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[1, 0]], actual=[[0, 0]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[1, 0]], actual=[[2, 0]]",
+      "score": 2.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[1, 0]], actual=[[2, 0]]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[1, 0]], actual=[[1, 1]]\n  player_facing: predicted=[1, 0], actual=[0, 1]",
+      "score": 2.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[1, 0]], actual=[[1, 1]]\n  player_facing: predicted=[1, 0], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "place_zezroc",
+      "delta": "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=4, actual=2\n  pmzjpl: predicted=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[2, 0]]",
+      "score": 104.0,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=4, actual=2\n  pmzjpl: predicted=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[2, 0]]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[0, 1]], actual=[[1, 1]]\n  player_facing: predicted=[0, 1], actual=[1, 0]",
+      "score": 4.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[0, 1]], actual=[[1, 1]]\n  player_facing: predicted=[0, 1], actual=[1, 0]"
+      ]
+    },
+    {
+      "action": "move_up",
+      "delta": "  player: predicted=[[0, 1]], actual=[[0, 0]]\n  player_facing: predicted=[0, 1], actual=[0, -1]",
+      "score": 2.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[0, 1]], actual=[[0, 0]]\n  player_facing: predicted=[0, 1], actual=[0, -1]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[0, 1]], actual=[[0, 2]]",
+      "score": 4.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[0, 1]], actual=[[0, 2]]"
+      ]
+    },
+    {
+      "action": "place_zezroc",
+      "delta": "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=4, actual=2\n  pmzjpl: predicted=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 0], [0, 1], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[0, 2]]",
+      "score": 104.0,
+      "signature": [
+        "place_zezroc",
+        "  ach_place_zezroc: predicted=0, actual=1\n  inv_tpkhxk: predicted=4, actual=2\n  pmzjpl: predicted=[[0, 0], [0, 1], [0, 2], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], actual=[[0, 0], [0, 1], [0, 3], [0, 4], [0, 5], [0, 6], [1, 0], [1, 1], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]]\n  zezroc: predicted=None, actual=[[0, 2]]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[0, 1]], actual=[[1, 1]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]",
+      "score": 2.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[0, 1]], actual=[[1, 1]]\n  player_facing: predicted=[-1, 0], actual=[1, 0]"
+      ]
+    },
+    {
+      "action": "move_up",
+      "delta": "  player: predicted=[[0, 1]], actual=[[0, 0]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]",
+      "score": 2.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[0, 1]], actual=[[0, 0]]\n  player_facing: predicted=[-1, 0], actual=[0, -1]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[0, 0]], actual=[[1, 0]]\n  player_facing: predicted=[0, -1], actual=[1, 0]",
+      "score": 2.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[0, 0]], actual=[[1, 0]]\n  player_facing: predicted=[0, -1], actual=[1, 0]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[0, 0]], actual=[[0, 1]]\n  player_facing: predicted=[0, -1], actual=[0, 1]",
+      "score": 2.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[0, 0]], actual=[[0, 1]]\n  player_facing: predicted=[0, -1], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "move_left",
+      "delta": "  player: predicted=[[2, 0]], actual=[[1, 0]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]",
+      "score": 2.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[2, 0]], actual=[[1, 0]]\n  player_facing: predicted=[1, 0], actual=[-1, 0]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[2, 0]], actual=[[2, 1]]\n  player_facing: predicted=[1, 0], actual=[0, 1]",
+      "score": 2.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[2, 0]], actual=[[2, 1]]\n  player_facing: predicted=[1, 0], actual=[0, 1]"
+      ]
+    },
+    {
+      "action": "move_left",
+      "delta": "  player: predicted=[[1, 1]], actual=[[0, 1]]\n  player_facing: predicted=[0, 1], actual=[-1, 0]",
+      "score": 2.0,
+      "signature": [
+        "move_left",
+        "  player: predicted=[[1, 1]], actual=[[0, 1]]\n  player_facing: predicted=[0, 1], actual=[-1, 0]"
+      ]
+    },
+    {
+      "action": "move_right",
+      "delta": "  player: predicted=[[1, 1]], actual=[[2, 1]]\n  player_facing: predicted=[0, 1], actual=[1, 0]",
+      "score": 2.0,
+      "signature": [
+        "move_right",
+        "  player: predicted=[[1, 1]], actual=[[2, 1]]\n  player_facing: predicted=[0, 1], actual=[1, 0]"
+      ]
+    },
+    {
+      "action": "move_up",
+      "delta": "  player: predicted=[[1, 1]], actual=[[1, 0]]\n  player_facing: predicted=[0, 1], actual=[0, -1]",
+      "score": 2.0,
+      "signature": [
+        "move_up",
+        "  player: predicted=[[1, 1]], actual=[[1, 0]]\n  player_facing: predicted=[0, 1], actual=[0, -1]"
+      ]
+    },
+    {
+      "action": "move_down",
+      "delta": "  player: predicted=[[1, 1]], actual=[[1, 2]]",
+      "score": 2.0,
+      "signature": [
+        "move_down",
+        "  player: predicted=[[1, 1]], actual=[[1, 2]]"
+      ]
+    }
+  ]
+}

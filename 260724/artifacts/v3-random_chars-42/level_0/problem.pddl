@@ -1,0 +1,10 @@
+(define (problem collect_tpkhxk_problem)
+  (:domain collect_tpkhxk_domain)
+  (:objects)
+  (:init
+    (= (inv_tpkhxk) 0)
+    (= (ach_collect_tpkhxk) 0)
+    (= (step_count) 0)
+  )
+  (:goal (> (ach_collect_tpkhxk) 0))
+)

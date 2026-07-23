@@ -1,0 +1,7 @@
+{
+  "attempt": 1,
+  "llm_call_idx": 18,
+  "llm_label": "pddl_revise",
+  "prompt_file": "/data/dwlee/PyNES/projects/tc/runs/explore/v1-random_chars-43/llm_prompts/call_0018_pddl_revise_level_5.txt",
+  "duration_sec": 17.14277923409827
+}

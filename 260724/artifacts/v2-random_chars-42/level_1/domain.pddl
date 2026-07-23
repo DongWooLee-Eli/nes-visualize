@@ -1,0 +1,14 @@
+(define (domain collect_and_place_domain)
+  (:requirements :strips :typing)
+  (:predicates (ach_collect_tpkhxk) (ach_place_zezroc))
+  (:action collect_tpkhxk
+    :parameters ()
+    :precondition (and)
+    :effect (and (ach_collect_tpkhxk))
+  )
+  (:action place_zezroc
+    :parameters ()
+    :precondition (and)
+    :effect (and (ach_place_zezroc))
+  )
+)

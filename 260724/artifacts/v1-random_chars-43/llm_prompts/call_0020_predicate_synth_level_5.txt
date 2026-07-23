@@ -1,0 +1,329 @@
+You are a software engineer that must write Python predicate evaluators. These functions implement the PDDL predicates declared in the domain file: each function takes the state and predicate arguments, then returns True or False. You will need to write Python predicates for ALL the predicates you see in the domain file. The problem file and raw state are also given to help guide you.
+
+Return your code blocks with
+```python ```
+markup tags so I can easily extract it.
+
+BEGIN EXAMPLE - note that BOTH predicates are defined (do not omit any):
+
+predicate: key_exists(arg1)
+predicate: same_value(arg1, arg2)
+
+def key_exists(state, arg1):
+    """True when arg1 is an observed raw-state key."""
+    return arg1 in state
+
+def same_value(state, arg1, arg2):
+    """True when two observed raw-state keys have equal values."""
+    return arg1 in state and arg2 in state and state[arg1] == state[arg2]
+
+END EXAMPLE
+
+Rules:
+- ALWAYS include `state` as the first argument.
+- Use the EXACT predicate name from the domain file (case-sensitive).
+- Define every predicate the domain declares - even 0-arity ones.
+- For 0-arity predicates use `def name(state, *args): ...` so callers
+  passing extra args don't break.
+- Return `bool` (or a truthy/falsy value coercible to bool).
+
+MANDATORY - you MUST define ALL of these predicate functions, with EXACTLY these names (one `def <name>(state, ...):` per name). Omitting any one will cause the run to fail:
+  - achieved
+  - inventory_at_least_one
+  - placed
+  - reachable
+  - ready_to_collect
+
+Starter stubs (you must fill in each body - do not delete any):
+```python
+def achieved(state, *args):
+    ...  # implement
+
+def inventory_at_least_one(state, *args):
+    ...  # implement
+
+def placed(state, *args):
+    ...  # implement
+
+def reachable(state, *args):
+    ...  # implement
+
+def ready_to_collect(state, *args):
+    ...  # implement
+```
+
+Domain File:
+
+(define (domain collect_tpkhxk_domain)
+  (:requirements :strips :typing :negative-preconditions)
+  (:types actor resource status)
+  (:constants zezroc tpkhxk sgqeje tpkhxk_bcwrvm tpkhxk_wqiqzh - resource ach_collect_tpkhxk ach_collect_sgqeje ach_make_tpkhxk_bcwrvm ach_make_tpkhxk_wqiqzh ach_place_sgqeje ach_place_zezroc - status)
+  (:predicates
+    (reachable ?who - actor ?target - resource)
+    (ready_to_collect ?who - actor ?target - resource)
+    (inventory_at_least_one ?target - resource)
+    (achieved ?flag - status)
+    (placed ?target - resource)
+  )
+
+  (:action approach
+    :parameters (?who - actor ?target - resource)
+    :precondition (reachable ?who ?target)
+    :effect (ready_to_collect ?who ?target)
+  )
+
+  (:action collect_tpkhxk
+    :parameters (?who - actor)
+    :precondition (and (ready_to_collect ?who tpkhxk) (not (achieved ach_collect_tpkhxk)))
+    :effect (and (inventory_at_least_one tpkhxk) (achieved ach_collect_tpkhxk))
+  )
+
+  (:action collect_sgqeje
+    :parameters (?who - actor)
+    :precondition (and (ready_to_collect ?who sgqeje) (not (achieved ach_collect_sgqeje)))
+    :effect (and (inventory_at_least_one sgqeje) (achieved ach_collect_sgqeje))
+  )
+
+  (:action make_tpkhxk_bcwrvm
+    :parameters ()
+    :precondition (and (inventory_at_least_one tpkhxk) (not (achieved ach_make_tpkhxk_bcwrvm)))
+    :effect (and (not (inventory_at_least_one tpkhxk)) (inventory_at_least_one tpkhxk_bcwrvm) (achieved ach_make_tpkhxk_bcwrvm))
+  )
+
+  (:action make_tpkhxk_wqiqzh
+    :parameters ()
+    :precondition (and (inventory_at_least_one tpkhxk) (not (achieved ach_make_tpkhxk_wqiqzh)))
+    :effect (and (not (inventory_at_least_one tpkhxk)) (inventory_at_least_one tpkhxk_wqiqzh) (achieved ach_make_tpkhxk_wqiqzh))
+  )
+
+  (:action place_sgqeje
+    :parameters ()
+    :precondition (and (inventory_at_least_one sgqeje) (not (achieved ach_place_sgqeje)))
+    :effect (and (not (inventory_at_least_one sgqeje)) (placed sgqeje) (achieved ach_place_sgqeje))
+  )
+
+  (:action place_zezroc
+    :parameters ()
+    :precondition (and (not (placed zezroc)) (not (achieved ach_place_zezroc)))
+    :effect (and (placed zezroc) (achieved ach_place_zezroc))
+  )
+)
+
+Problem File:
+
+(define (problem collect_tpkhxk_problem)
+  (:domain collect_tpkhxk_domain)
+  (:objects
+    player - actor
+  )
+  (:init
+    (reachable player sgqeje)
+    (ready_to_collect player sgqeje)
+  )
+  (:goal (achieved ach_place_sgqeje))
+)
+
+Raw State:
+
+{'player': [[4, 3]], 'player_facing': [0, 1], 'player_health': 9, 'player_hunger': 0.0, 'player_thirst': 0.0, 'player_fatigue': 0.0, 'player_sleeping': False, 'daylight': 1.0, 'step_count': 0, 'inv_health': 9, 'inv_food': 9, 'inv_drink': 9, 'inv_energy': 9, 'inv_wcgshh': 0, 'inv_tpkhxk': 0, 'inv_sgqeje': 0, 'inv_grpoqi': 0, 'inv_bzracx': 0, 'inv_mwzvua': 0, 'inv_tpkhxk_bcwrvm': 0, 'inv_sgqeje_bcwrvm': 0, 'inv_bzracx_bcwrvm': 0, 'inv_tpkhxk_wqiqzh': 0, 'inv_sgqeje_wqiqzh': 0, 'inv_bzracx_wqiqzh': 0, 'mynbiq': [[7, 3], [7, 4], [8, 3], [8, 4]], 'pmzjpl': [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [1, 2], [1, 3], [2, 0], [2, 1], [2, 2], [2, 3], [4, 0], [4, 1], [4, 2], [4, 3], [5, 0], [5, 1], [5, 3], [6, 0], [6, 4], [7, 0], [7, 1], [7, 6], [8, 1], [8, 2], [8, 6]], 'sgqeje': [[0, 5], [0, 6], [1, 4], [1, 5], [2, 4], [2, 5], [3, 3], [3, 4], [3, 6], [4, 4], [4, 5], [5, 4], [5, 5], [5, 6]], 'wztejd': [[5, 2], [6, 1], [6, 2], [6, 3], [7, 2]], 'xcvkpr': [[0, 3], [0, 4], [3, 0], [3, 1], [3, 2], [7, 5], [8, 0], [8, 5]], 'grpoqi': [[2, 6], [3, 5], [6, 5]], 'bzracx': [[4, 6], [6, 6]], 'mwzvua': [[1, 6]], 'ach_collect_grpoqi': 0, 'ach_collect_mwzvua': 0, 'ach_collect_bzracx': 0, 'ach_collect_sgqeje': 0, 'ach_collect_tpkhxk': 0, 'ach_make_bzracx_bcwrvm': 0, 'ach_make_bzracx_wqiqzh': 0, 'ach_make_sgqeje_bcwrvm': 0, 'ach_make_sgqeje_wqiqzh': 0, 'ach_make_tpkhxk_bcwrvm': 0, 'ach_make_tpkhxk_wqiqzh': 0, 'ach_place_ckqpdj': 0, 'ach_place_sgqeje': 0, 'ach_place_zezroc': 0}
+
+Current Python Low Level World Model:
+
+from copy import deepcopy
+
+def transition_model(state, action):
+    new_state = deepcopy(state)
+    new_state["step_count"] = state.get("step_count", 0) + 1
+
+    player = state.get("player", [])
+    if not player:
+        return new_state
+
+    x, y = player[0]
+
+    directions = {
+        "move_left": (-1, 0),
+        "move_right": (1, 0),
+        "move_up": (0, -1),
+        "move_down": (0, 1),
+    }
+
+    def positions(key):
+        return {tuple(p) for p in new_state.get(key, [])}
+
+    def adjacent_to(key):
+        locations = positions(key)
+        return any(
+            (x + dx, y + dy) in locations
+            for dx, dy in directions.values()
+        )
+
+    def remove_at(key, pos):
+        new_state[key] = [
+            p for p in new_state.get(key, [])
+            if tuple(p) != pos
+        ]
+
+    def add_at(key, pos):
+        cells = new_state.setdefault(key, [])
+        if list(pos) not in cells:
+            cells.append(list(pos))
+            cells.sort()
+
+    # Movement: pmzjpl is traversable ground.
+    if action in directions:
+        dx, dy = directions[action]
+        new_state["player_facing"] = [dx, dy]
+        destination = (x + dx, y + dy)
+
+        if destination in positions("pmzjpl"):
+            new_state["player"] = [[destination[0], destination[1]]]
+        return new_state
+
+    facing = state.get("player_facing", [0, 1])
+    if len(facing) != 2:
+        facing = [0, 1]
+    target = (x + facing[0], y + facing[1])
+
+    # Interact with the cell in front of the player.
+    if action == "do":
+        # xcvkpr is directly harvestable and yields tpkhxk.
+        if target in positions("xcvkpr"):
+            remove_at("xcvkpr", target)
+            add_at("pmzjpl", target)
+            new_state["inv_tpkhxk"] = state.get("inv_tpkhxk", 0) + 1
+            new_state["ach_collect_tpkhxk"] = (
+                state.get("ach_collect_tpkhxk", 0) + 1
+            )
+
+        # bcwrvm tools are pickaxes. sgqeje can be mined with any pickaxe.
+        elif (
+            target in positions("sgqeje")
+            and (
+                state.get("inv_tpkhxk_bcwrvm", 0) > 0
+                or state.get("inv_sgqeje_bcwrvm", 0) > 0
+                or state.get("inv_bzracx_bcwrvm", 0) > 0
+            )
+        ):
+            remove_at("sgqeje", target)
+            add_at("pmzjpl", target)
+            new_state["inv_sgqeje"] = state.get("inv_sgqeje", 0) + 1
+            new_state["ach_collect_sgqeje"] = (
+                state.get("ach_collect_sgqeje", 0) + 1
+            )
+
+        # Coal can be mined with any pickaxe.
+        elif (
+            target in positions("grpoqi")
+            and (
+                state.get("inv_tpkhxk_bcwrvm", 0) > 0
+                or state.get("inv_sgqeje_bcwrvm", 0) > 0
+                or state.get("inv_bzracx_bcwrvm", 0) > 0
+            )
+        ):
+            remove_at("grpoqi", target)
+            add_at("pmzjpl", target)
+            new_state["inv_grpoqi"] = state.get("inv_grpoqi", 0) + 1
+
+        # Iron requires at least a stone-tier pickaxe.
+        elif (
+            target in positions("bzracx")
+            and (
+                state.get("inv_sgqeje_bcwrvm", 0) > 0
+                or state.get("inv_bzracx_bcwrvm", 0) > 0
+            )
+        ):
+            remove_at("bzracx", target)
+            add_at("pmzjpl", target)
+            new_state["inv_bzracx"] = state.get("inv_bzracx", 0) + 1
+
+        # The rarest resource requires the highest-tier pickaxe.
+        elif (
+            target in positions("mwzvua")
+            and state.get("inv_bzracx_bcwrvm", 0) > 0
+        ):
+            remove_at("mwzvua", target)
+            add_at("pmzjpl", target)
+            new_state["inv_mwzvua"] = state.get("inv_mwzvua", 0) + 1
+
+        return new_state
+
+    # Place an inventory item into an empty ground cell in front.
+    if action.startswith("place_"):
+        item = action[len("place_"):]
+        inv_key = "inv_" + item
+
+        if target not in positions("pmzjpl"):
+            return new_state
+
+        costs = {
+            "zezroc": ("tpkhxk", 2),  # crafting table
+            "ckqpdj": ("sgqeje", 4),  # furnace
+        }
+
+        if item in costs:
+            material, amount = costs[item]
+            material_key = "inv_" + material
+            if state.get(material_key, 0) < amount:
+                return new_state
+            new_state[material_key] = state.get(material_key, 0) - amount
+        else:
+            if state.get(inv_key, 0) <= 0:
+                return new_state
+            new_state[inv_key] = state.get(inv_key, 0) - 1
+
+        remove_at("pmzjpl", target)
+        add_at(item, target)
+        achievement = "ach_place_" + item
+        new_state[achievement] = state.get(achievement, 0) + 1
+        return new_state
+
+    # Tool crafting. Failed crafts still consume a step.
+    if action.startswith("make_"):
+        product = action[len("make_"):]
+        parts = product.rsplit("_", 1)
+        if len(parts) != 2:
+            return new_state
+
+        material, tool_type = parts
+
+        # Tools require an adjacent crafting table.
+        if not adjacent_to("zezroc"):
+            return new_state
+
+        recipes = {
+            "tpkhxk": {"tpkhxk": 1},
+            "sgqeje": {"tpkhxk": 1, "sgqeje": 1},
+            "bzracx": {"tpkhxk": 1, "grpoqi": 1, "bzracx": 1},
+        }
+        recipe = recipes.get(material)
+        if recipe is None:
+            return new_state
+
+        # Highest-tier tools additionally require an adjacent furnace.
+        if material == "bzracx" and not adjacent_to("ckqpdj"):
+            return new_state
+
+        if all(
+            state.get("inv_" + item, 0) >= amount
+            for item, amount in recipe.items()
+        ):
+            for item, amount in recipe.items():
+                key = "inv_" + item
+                new_state[key] = state.get(key, 0) - amount
+
+            product_key = "inv_" + product
+            new_state[product_key] = state.get(product_key, 0) + 1
+
+            achievement = "ach_make_" + product
+            new_state[achievement] = state.get(achievement, 0) + 1
+
+        return new_state
+
+    if action == "sleep":
+        new_state["player_sleeping"] = True
+        return new_state
+
+    # noop and unsupported/unsuccessful actions only advance step_count.
+    return new_state
+
