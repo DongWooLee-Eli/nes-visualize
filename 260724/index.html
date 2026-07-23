@@ -519,58 +519,98 @@ make_* recipes and tool hierarchy reconstructed</span></pre>
       <h1>버전별 구체적 예시</h1>
 
       <div class="choice-tabs" data-choice="example-versions" role="tablist" aria-label="예시 버전 선택">
-        <button class="active" type="button" data-choice-value="v1">v1</button>
+        <button class="active" type="button" data-choice-value="v0">v0</button>
+        <button type="button" data-choice-value="v1">v1</button>
         <button type="button" data-choice-value="v2">v2</button>
         <button type="button" data-choice-value="v3">v3</button>
       </div>
 
-      <div class="active" data-choice-panel="example-versions" data-choice-value="v1">
+      <div class="active" data-choice-panel="example-versions" data-choice-value="v0">
+        <h2>v0 · observation 없이 initial PDDL</h2>
+        <p class="caption">실패 사례 · v0 ablation · random_chars · Domain desc. OFF · seed 42 · level 0</p>
+        <p>실제 transition이 없자 <code>tpkhxk</code>를 <code>xcvkpr</code>와 연결하지 못하고 inventory token 자체를 수집 대상으로 둬, 실행 가능한 interaction으로 내려가지 못했다.</p>
+        <div class="split">
+          <div>
+            <h3>Generated PDDL</h3>
+            <pre>(:action collect
+  :parameters (?x)
+  :effect (collected ?x))
+
+goal:
+  collected(inv_tpkhxk)</pre>
+          </div>
+          <div>
+            <h3>Planning → execution</h3>
+            <pre>HL: collect inv_tpkhxk
+BFS: 10,003 iterations → failed
+attempts: 3
+trajectory actions: []
+
+result: unsolved</pre>
+          </div>
+        </div>
+      </div>
+
+      <div data-choice-panel="example-versions" data-choice-value="v1">
         <h2>v1 · transition → initial PDDL</h2>
         <div class="choice-tabs" data-choice="examples-v1" role="tablist" aria-label="v1 예시 선택">
-          <button class="active" type="button" data-choice-value="one">예시 1</button>
-          <button type="button" data-choice-value="two">예시 2</button>
+          <button class="active" type="button" data-choice-value="improvement">개선 사례</button>
+          <button type="button" data-choice-value="failure">실패 사례</button>
         </div>
 
-        <div class="active" data-choice-panel="examples-v1" data-choice-value="one">
-          <p class="caption">random_chars · seed 43 · level 0</p>
-          <p>task-relevant <code>do</code> delta를 관측하자 opaque symbol에서도 올바른 source를 사용한 operator가 생성됐다.</p>
+        <div class="active" data-choice-panel="examples-v1" data-choice-value="improvement">
+          <p class="caption">100-action pilot · random_chars · seed 42 · level 0</p>
+          <p>v0이 연결하지 못한 <code>xcvkpr → tpkhxk</code> 관계를 실제 transition으로 복원해 source가 명시된 operator를 만들었다.</p>
           <div class="split">
             <div>
               <h3>Observed transition</h3>
               <pre>Action: do
+front material:         xcvkpr
 ach_collect_tpkhxk: 0 → 1
 inv_tpkhxk:          0 → 1
 xcvkpr:              target removed</pre>
             </div>
             <div>
-              <h3>Generated → execution</h3>
-              <pre>HL:
-approach player xcvkpr
-collect player xcvkpr ach_collect_tpkhxk
+              <h3>Grounded PDDL</h3>
+              <pre>do_collect(
+  player,
+  xcvkpr,
+  ach_collect_tpkhxk
+)
 
-LL: [move_right, do]
-result: solved</pre>
+pre: available(xcvkpr)
+effect: achieved(ach_collect_tpkhxk)
+
+source binding: recovered</pre>
             </div>
           </div>
-          <p class="caption">이 근거는 level 0의 local grounding에 한정된다. 이후 관측하지 않은 recipe까지 채운 전체 run은 leakage-compatible.</p>
+          <p class="caption">PDDL grounding은 개선됐지만 이 run의 low-level executor는 여전히 실패했다.</p>
         </div>
 
-        <div data-choice-panel="examples-v1" data-choice-value="two">
-          <p class="caption">random_chars · seed 42 · level 0</p>
-          <p>같은 200-action 설정에서도 task effect를 하나도 못 보면, transition 수와 무관하게 PDDL을 ground하지 못했다.</p>
+        <div data-choice-panel="examples-v1" data-choice-value="failure">
+          <p class="caption">original · seed 42 · level 1</p>
+          <p>PDDL이 하나뿐인 <code>tree</code>를 첫 채집에서 삭제해 두 번째 wood를 얻을 수 없었고, planner가 세 번 모두 unsolvable로 판정했다.</p>
           <div class="split">
             <div>
-              <h3>Observed coverage</h3>
-              <pre>actions: movement only
-achievements_hit: []
-task-relevant delta: 0</pre>
+              <h3>Wrong PDDL</h3>
+              <pre>objects: tree × 1
+
+collect_wood:
+  + wood_at_least_one
+  - harvestable(tree)
+
+collect_more_wood pre:
+  harvestable(tree)</pre>
             </div>
             <div>
-              <h3>Generated → planning</h3>
-              <pre>domain operators: 0
-planner: failed
-attempts: 3
-result: unsolved</pre>
+              <h3>Dead end</h3>
+              <pre>goal: wood ≥ 2 → place_table
+
+collect #1: tree consumed
+collect #2: impossible
+
+ENHSP: unsolvable × 3
+result: failed</pre>
             </div>
           </div>
         </div>
@@ -579,84 +619,93 @@ result: unsolved</pre>
       <div data-choice-panel="example-versions" data-choice-value="v2">
         <h2>v2 · failure → PDDL revision</h2>
         <div class="choice-tabs" data-choice="examples-v2" role="tablist" aria-label="v2 예시 선택">
-          <button class="active" type="button" data-choice-value="one">예시 1</button>
-          <button type="button" data-choice-value="two">예시 2</button>
+          <button class="active" type="button" data-choice-value="improvement">개선 사례</button>
+          <button type="button" data-choice-value="failure">실패 사례</button>
         </div>
 
-        <div class="active" data-choice-panel="examples-v2" data-choice-value="one">
-          <p class="caption">canonical 200-action · original · seed 42 · level 5</p>
-          <p>0-action failure signal이 잘못된 one-step binding을 resource별 7-step 제작 사슬로 고쳤다.</p>
+        <div class="active" data-choice-panel="examples-v2" data-choice-value="improvement">
+          <p class="caption">original · seed 43 · level 1</p>
+          <p>planner의 unsolvable 신호를 revision prompt로 보내 <code>tree</code>를 소모하는 잘못된 효과를 제거했고, 두 번 채집한 뒤 table을 만들어 해결했다.</p>
           <div class="split">
             <div>
-              <h3>Before</h3>
-              <pre>HL:
-collect_wood player stone ach_place_stone
+              <h3>Failure signal</h3>
+              <pre>collect_wood effect:
+  - tree(target)
+  + inv_wood 1
 
-LL: []
-signal: low-level BFS returned 0 actions</pre>
+place_table pre:
+  inv_wood ≥ 2
+
+planner: unsolvable</pre>
             </div>
             <div>
               <h3>After revision</h3>
-              <pre>collect_wood × 3
-→ place_table
-→ make_wood_pickaxe
-→ collect_stone
-→ place_stone
+              <pre>removed:
+  not(tree(target))
 
-result: solved*</pre>
-            </div>
-          </div>
-          <p class="caption">* high-level 오류는 PDDL revision이 고쳤고, 최종 실행에는 이후 WM revision도 관여.</p>
-        </div>
-
-        <div data-choice-panel="examples-v2" data-choice-value="two">
-          <p class="caption">canonical 200-action · original · seed 42 · level 6</p>
-          <p>실패한 실행에서 얻은 inventory·achievement delta가 revision prompt를 거쳐 실행 가능한 operator로 반영됐다.</p>
-          <div class="split">
-            <div>
-              <h3>Interaction evidence</h3>
-              <pre>do @ tree
-ach_collect_wood: 0 → 1
-inv_wood:          0 → 1
-
-place_table
-ach_place_table:   0 → 1
-inv_wood:          2 → 0</pre>
-            </div>
-            <div>
-              <h3>Revision</h3>
-              <pre>collect_wood:
-  + inv_wood
-  + ach_collect_wood
-
-place_table:
-  requires inv_wood ≥ 2
-  - inv_wood
-  + ach_place_table
+plan:
+  collect_wood
+  collect_wood
+  place_table
 
 result: solved</pre>
             </div>
           </div>
-          <p class="caption">tree/table delta 반영은 직접 근거지만, 관측하지 않은 stone/pickaxe 확장은 semantic prior에 의존.</p>
+        </div>
+
+        <div data-choice-panel="examples-v2" data-choice-value="failure">
+          <p class="caption">original · seed 43 · level 6</p>
+          <p>level-entry exploration이 0 actions라 후반 mechanic의 성공 근거 없이 8-step chain을 추측했고, WM revision 뒤에도 <code>collect_stone</code> cutoff와 budget 소진으로 target에 도달하지 못했다.</p>
+          <div class="split">
+            <div>
+              <h3>Exploration coverage</h3>
+              <pre>level 0 · 200 actions:
+  ach_collect_wood only
+
+level 6:
+  exploration actions: 0
+  achievements_hit: []
+
+ach_make_stone_pickaxe:
+  successful evidence 없음</pre>
+            </div>
+            <div>
+              <h3>Execution failure</h3>
+              <pre>HL plan: 8 steps
+
+revision 1:
+  make_wood_pickaxe
+  → 10,001 iterations · failed
+
+WM revision
+
+revision 2:
+  collect_stone
+  → 10,001 iterations · failed
+
+target: never reached
+result: budget exhausted · failed</pre>
+            </div>
+          </div>
         </div>
       </div>
 
       <div data-choice-panel="example-versions" data-choice-value="v3">
         <h2>v3 · scored prefix → mechanics</h2>
         <div class="choice-tabs" data-choice="examples-v3" role="tablist" aria-label="v3 예시 선택">
-          <button class="active" type="button" data-choice-value="one">예시 1</button>
-          <button type="button" data-choice-value="two">예시 2</button>
+          <button class="active" type="button" data-choice-value="improvement">개선 사례</button>
+          <button type="button" data-choice-value="failure">실패 사례</button>
         </div>
 
-        <div class="active" data-choice-panel="examples-v3" data-choice-value="one">
+        <div class="active" data-choice-panel="examples-v3" data-choice-value="improvement">
           <p class="caption">original · seed 43 · level 6 · candidate #1708</p>
-          <p>beam이 38-action prefix 끝의 target craft를 최고점 evidence로 보존해 PDDL과 실행까지 연결했다.</p>
+          <p>per-level beam이 v2가 계획 전에 보지 못한 crafting → mining → stone-tool chain을 실제 transition으로 수집했고, 같은 level을 end-to-end로 해결했다.</p>
           <div class="split">
             <div>
-              <h3>Beam discovery</h3>
-              <pre>prefix length: 38
-action: make_stone_pickaxe
-score: 10000
+              <h3>Selected evidence</h3>
+              <pre>#585  make_wood_pickaxe
+#1531 collect_stone
+#1708 make_stone_pickaxe
 
 ach_make_stone_pickaxe: 0 → 1
 inv_stone:              1 → 0
@@ -664,42 +713,40 @@ inv_wood:               1 → 0
 inv_stone_pickaxe:      0 → 1</pre>
             </div>
             <div>
-              <h3>Generated PDDL</h3>
-              <pre>make_stone_pickaxe
-pre:
-  inv_wood ≥ 1
-  inv_stone ≥ 1
-  ach_place_table ≥ 1
-effect:
-  + inv_stone_pickaxe
+              <h3>Execution</h3>
+              <pre>HL plan: 8 steps
+
+make_wood_pickaxe: 2 actions
+collect_stone:     8 actions
+make_stone_pickaxe: 6 actions
 
 result: solved</pre>
             </div>
           </div>
         </div>
 
-        <div data-choice-panel="examples-v3" data-choice-value="two">
-          <p class="caption">random_chars · seed 42 · level 2 · candidate #495</p>
-          <p>target mechanic 발견에는 성공했지만, 생성된 abstraction과 WM이 이를 실행 지식으로 복원하지 못했다.</p>
+        <div data-choice-panel="examples-v3" data-choice-value="failure">
+          <p class="caption">random_chars · seed 43 · level 1 · candidate #479</p>
+          <p>target effect를 찾고 operator도 만들었지만, PDDL이 2-unit prerequisite와 consumption을 버려 WM·PDDL이 같은 causal rule을 공유하지 못했다.</p>
           <div class="split">
             <div>
               <h3>Beam discovery</h3>
-              <pre>prefix length: 10
-action: make_tpkhxk_bcwrvm
-score: 20000
+              <pre>action: place_zezroc
+score: 797 · selected
 
-inv_tpkhxk:          1 → 0
-inv_tpkhxk_bcwrvm:   0 → 1
-achievement:         0 → 1</pre>
+inv_tpkhxk:       2 → 0
+ach_place_zezroc: 0 → 1
+zezroc:           created</pre>
             </div>
             <div>
-              <h3>Downstream failure</h3>
-              <pre>observed cost: 1
-PDDL cost:    3
-station precondition: missing
+              <h3>Generated mismatch</h3>
+              <pre>place_zezroc:
+  precondition: ()
+  effect: ach_place_zezroc
 
-collect_tpkhxk:
-  112 iterations → failed
+missing:
+  inv_tpkhxk ≥ 2
+  inv_tpkhxk -= 2
 
 result: unsolved</pre>
             </div>

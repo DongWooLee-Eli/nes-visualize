@@ -16,6 +16,7 @@ assert (HERE / "index.html").is_file()
 assert 'data-choice="versions"' in html
 assert 'data-choice="leakage"' in html
 assert 'data-choice="example-versions"' in html
+assert 'data-choice-value="v0"' in html and html.count(">개선 사례</button>") == 3 and html.count(">실패 사례</button>") == 3
 assert 'id="log-version"' in html and 'id="log-roles"' in html
 assert html.count('data-log-role=') == 3
 assert "버전별 핵심 차이" in html and "Research Question" in html
