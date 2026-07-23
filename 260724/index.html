@@ -132,6 +132,7 @@
     tbody tr:hover { background: #fafafa; }
     .em { color: var(--blue); font-weight: 700; }
     .leak { color: var(--red); }
+    .leak-highlight { color: #6b4d00; background: #ffe9a8; }
 
     .diagram {
       margin: 14px 0 20px;
@@ -141,7 +142,6 @@
       border-bottom: 1px solid var(--line);
     }
     .diagram .mermaid { min-width: 620px; text-align: center; }
-    .params { width: min(620px, 100%); }
 
     .bar-chart { margin: 16px 0 28px; }
     .bar-group { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 12px; margin: 15px 0; }
@@ -189,16 +189,11 @@
       word-break: break-word;
     }
 
-    .log-stats {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 22px;
-      margin: 0 0 24px;
-      padding-bottom: 18px;
-      border-bottom: 1px solid var(--line);
+    #log {
+      width: min(1500px, calc(100vw - 40px));
+      margin-left: 50%;
+      transform: translateX(-50%);
     }
-    .log-stats span { color: var(--muted); }
-    .log-stats strong { margin-right: 5px; color: var(--ink); font: 650 14px/1 var(--mono); }
     .log-step {
       display: grid;
       grid-template-columns: 92px minmax(0, 1fr);
@@ -210,9 +205,11 @@
     .log-step .choice-tabs { margin: 10px 0; }
     .role-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(360px, 1fr));
       gap: 10px;
       margin-top: 24px;
+      padding-bottom: 8px;
+      overflow-x: auto;
     }
     .role-card {
       display: flex;
@@ -259,7 +256,7 @@
       .tabs ul { gap: 20px; padding-right: 100px; }
       main { width: min(100% - 32px, 1000px); padding-top: 34px; }
       .split, .triple { grid-template-columns: 1fr; gap: 0; }
-      .role-grid { grid-template-columns: 1fr; }
+      .role-grid { grid-template-columns: 1fr; overflow: visible; }
       .role-card { min-height: 360px; }
       .bar-line { grid-template-columns: 82px minmax(0, 1fr) 42px; }
       .metric-chart { grid-template-columns: 150px 1fr 48px; }
@@ -274,6 +271,7 @@
     @media print {
       .topbar { display: none !important; }
       main { width: 100%; padding: 0; }
+      #log { width: 100%; margin-left: 0; transform: none; }
       .panel { display: block !important; break-after: page; }
       [data-choice-panel] { display: block !important; }
     }
@@ -295,27 +293,26 @@
 
   <main>
     <section class="panel active" id="versions">
-      <h1>버전별 가설과 핵심 차이</h1>
+      <h1>버전별 핵심 차이</h1>
 
-      <h2>기존 병목</h2>
-      <p class="question"><strong>domain knowledge가 없음 + online learning setting에서 high-level을 어떻게 복원할까?</strong></p>
+      <p class="question"><strong>Recap: domain knowledge가 없음 + online learning setting에서 high-level을 어떻게 복원할까?</strong></p>
       <table aria-label="TC2 domain description ablation">
         <thead>
           <tr><th>TC2</th><th class="num">Original</th><th class="num">Random Chars</th><th class="num">Random Words</th></tr>
         </thead>
         <tbody>
           <tr><td>Domain desc. ON</td><td class="num">11</td><td class="num">10</td><td class="num">11</td></tr>
-          <tr><td>Domain desc. OFF</td><td class="num">0</td><td class="num">0</td><td class="num">1</td></tr>
+          <tr><td>Domain desc. OFF (v0)</td><td class="num em">0</td><td class="num em">0</td><td class="num em">1</td></tr>
         </tbody>
       </table>
 
-      <h2>검증 가설</h2>
-      <table aria-label="버전별 가설">
-        <thead><tr><th>버전</th><th>가설</th></tr></thead>
+      <h2>Research Question</h2>
+      <table aria-label="버전별 research question">
+        <thead><tr><th>버전</th><th>질문</th></tr></thead>
         <tbody>
-          <tr><td class="mono">v1</td><td>실제 transition을 관측하면 PDDL 생성이 grounded 될 수 있다.</td></tr>
-          <tr><td class="mono">v2</td><td>실행 중 드러난 abstraction failure를 실제 interaction evidence로 수정·개선할 수 있다.</td></tr>
-          <tr><td class="mono">v3</td><td>LLM을 이용해 exploration에서 유용한 mechanics를 찾을 수 있다.</td></tr>
+          <tr><td class="mono">v1</td><td>실제 transition을 관측하면 상태 변화에 근거한 PDDL을 생성할 수 있는가?</td></tr>
+          <tr><td class="mono">v2</td><td>실행 중 드러난 abstraction failure를 실제 interaction evidence로 수정·개선할 수 있는가?</td></tr>
+          <tr><td class="mono">v3</td><td>LLM을 이용해 exploration에서 task-relevant mechanics를 찾을 수 있는가?</td></tr>
         </tbody>
       </table>
 
@@ -349,12 +346,12 @@ graph TD
     D --> E["Replan"]
           </pre>
         </div>
-        <h3>Trigger</h3>
-        <ul>
+        <p class="caption">Trigger</p>
+        <ul class="caption">
           <li>predicate classifier 생성 실패</li>
           <li>high-level planner 실패 또는 empty plan</li>
           <li>high-level subplan의 low-level BFS가 0 actions 반환</li>
-          <li>실행은 됐지만 goal에 도달하지 못하고 대체 grounded operator도 없음</li>
+          <li>실행은 됐지만 goal에 도달하지 못하고 실행 가능한 대체 operator도 없음</li>
           <li>revision loop 종료 시에도 world-model prediction mismatch가 남음</li>
         </ul>
       </div>
@@ -381,16 +378,13 @@ flowchart TB
     D --> E
           </pre>
         </div>
-        <table class="params" aria-label="v3 exploration parameters">
-          <thead><tr><th>Parameter</th><th class="num">Value</th></tr></thead>
-          <tbody>
-            <tr><td>warmup</td><td class="num">15 / level</td></tr>
-            <tr><td>beam width</td><td class="num">3</td></tr>
-            <tr><td>fixed depth cap</td><td class="num">없음</td></tr>
-            <tr><td>candidate budget</td><td class="num">2,000 / level</td></tr>
-            <tr><td>PDDL representatives</td><td class="num">≤ 200</td></tr>
-          </tbody>
-        </table>
+        <ul class="caption">
+          <li>warmup: 15 / level</li>
+          <li>beam width: 3</li>
+          <li>fixed depth cap: 없음</li>
+          <li>candidate budget: 2,000 / level</li>
+          <li>PDDL representatives: ≤ 200</li>
+        </ul>
       </div>
     </section>
 
@@ -433,38 +427,6 @@ flowchart TB
         </div>
       </div>
 
-      <h2>Leakage run</h2>
-      <table aria-label="random chars seed별 solve rate">
-        <thead><tr><th>버전</th><th class="num">seed 42</th><th class="num">seed 43</th></tr></thead>
-        <tbody>
-          <tr><td>v1</td><td class="num">0 / 8</td><td class="num leak">8 / 8*</td></tr>
-          <tr><td>v2</td><td class="num leak">8 / 8*</td><td class="num">0 / 8</td></tr>
-          <tr><td>v3</td><td class="num">0 / 8</td><td class="num">1 / 8</td></tr>
-        </tbody>
-      </table>
-      <pre># v2 · random_chars · seed 42 · initial WM
-observed transitions: do = 0, successful craft/place delta = 0
-
-# generated response
-xcvkpr  → "trees" → tpkhxk
-place_zezroc cost = 2 × tpkhxk
-make_* recipes and tool hierarchy reconstructed</pre>
-      <div class="choice-tabs" data-choice="leakage" role="tablist" aria-label="Leakage run 상세">
-        <button class="active" type="button" data-choice-value="prompt">Initial prompt</button>
-        <button type="button" data-choice-value="wm">Generated WM</button>
-        <button type="button" data-choice-value="result">8/8 result</button>
-      </div>
-      <div class="active" data-choice-panel="leakage" data-choice-value="prompt">
-        <pre class="inline-viewer" data-src="artifacts/leakage/v2-random_chars-42-initial-prompt.txt">Loading…</pre>
-      </div>
-      <div data-choice-panel="leakage" data-choice-value="wm">
-        <pre class="inline-viewer" data-src="artifacts/leakage/v2-random_chars-42-initial-response.txt">Loading…</pre>
-      </div>
-      <div data-choice-panel="leakage" data-choice-value="result">
-        <pre class="inline-viewer" data-src="artifacts/leakage/v2-random_chars-42-results.json">Loading…</pre>
-      </div>
-      <p class="caption">* 관측되지 않은 recipe를 action/state prefix의 structural cue 또는 pretrained prior로 완성한 leakage-compatible run은 headline에서 제외.</p>
-
       <h2>v3 exploration coverage</h2>
       <div class="split">
         <div>
@@ -488,16 +450,44 @@ make_* recipes and tool hierarchy reconstructed</pre>
       </div>
       <p class="caption">Original naming · seed 42 · candidate phase · warmup/replay 제외. Unique state는 level별 distinct state 합, achievement는 positive <code>(level, ach_* key)</code> 발견.</p>
       <div class="source-links"><a href="artifacts/coverage/exploration_efficiency_c2000.json" target="_blank">coverage source</a></div>
+
+      <h2>Leakage run</h2>
+      <table aria-label="random chars seed별 solve rate">
+        <thead><tr><th>버전</th><th class="num">seed 42</th><th class="num">seed 43</th></tr></thead>
+        <tbody>
+          <tr><td>v1</td><td class="num">0 / 8</td><td class="num leak">8 / 8*</td></tr>
+          <tr><td>v2</td><td class="num leak">8 / 8*</td><td class="num">0 / 8</td></tr>
+          <tr><td>v3</td><td class="num">0 / 8</td><td class="num">1 / 8</td></tr>
+        </tbody>
+      </table>
+      <pre># v2 · random_chars · seed 42 · initial WM
+observed transitions: do = 0, successful craft/place delta = 0
+
+# generated response
+<span class="leak-highlight">xcvkpr  → "trees" → tpkhxk
+place_zezroc cost = 2 × tpkhxk
+make_* recipes and tool hierarchy reconstructed</span></pre>
+      <div class="choice-tabs" data-choice="leakage" role="tablist" aria-label="Leakage run 상세">
+        <button class="active" type="button" data-choice-value="prompt">Initial prompt</button>
+        <button type="button" data-choice-value="wm">Generated WM</button>
+        <button type="button" data-choice-value="result">8/8 result</button>
+      </div>
+      <div class="active" data-choice-panel="leakage" data-choice-value="prompt">
+        <pre class="inline-viewer" data-src="artifacts/leakage/v2-random_chars-42-initial-prompt.txt">Loading…</pre>
+      </div>
+      <div data-choice-panel="leakage" data-choice-value="wm">
+        <pre class="inline-viewer"
+          data-src="artifacts/leakage/v2-random_chars-42-initial-response.txt"
+          data-highlight="collected =|required_tool =|costs = {|&quot;zezroc&quot;:|&quot;ckqpdj&quot;:|recipes = {|&quot;tpkhxk&quot;: {|&quot;sgqeje&quot;: {|&quot;bzracx&quot;: {">Loading…</pre>
+      </div>
+      <div data-choice-panel="leakage" data-choice-value="result">
+        <pre class="inline-viewer" data-src="artifacts/leakage/v2-random_chars-42-results.json">Loading…</pre>
+      </div>
+      <p class="caption">* 관측되지 않은 recipe를 action/state prefix의 structural cue 또는 pretrained prior로 완성한 leakage-compatible run은 headline에서 제외.</p>
     </section>
 
     <section class="panel" id="log">
       <h1>Log</h1>
-      <div class="log-stats">
-        <span><strong id="stat-runs">–</strong>runs</span>
-        <span><strong id="stat-prompts">–</strong>prompt files</span>
-        <span><strong id="stat-files">–</strong>indexed files</span>
-      </div>
-      <p class="caption">버전 → 데이터 종류 → 시드 → 레벨을 차례로 선택. Raw exploration trace는 compact summary로 대체했으며, overwrite된 PDDL 중간 output은 복구되지 않는다.</p>
 
       <div id="log-path">
         <div class="log-step" id="log-version-step">
@@ -880,7 +870,19 @@ flowchart LR
           const response = await fetch(path);
           if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
           const text = await response.text();
-          if (element.dataset.loaded === path) element.textContent = text;
+          if (element.dataset.loaded !== path) return;
+          const highlights = (element.dataset.highlight || "").split("|").filter(Boolean);
+          if (!highlights.length) {
+            element.textContent = text;
+          } else {
+            const lines = text.split("\n");
+            element.replaceChildren(...lines.map((line, index) => {
+              const span = document.createElement("span");
+              if (highlights.some(value => line.includes(value))) span.className = "leak-highlight";
+              span.textContent = line + (index < lines.length - 1 ? "\n" : "");
+              return span;
+            }));
+          }
         } catch (error) {
           if (element.dataset.loaded === path) {
             element.textContent = `파일을 불러오지 못했습니다: ${error.message}`;
@@ -915,10 +917,6 @@ flowchart LR
 
       const manifest = window.TC2_ARTIFACT_MANIFEST;
       if (!manifest) return;
-      document.getElementById("stat-runs").textContent = manifest.runs.length.toLocaleString();
-      document.getElementById("stat-prompts").textContent = manifest.items
-        .filter(item => item.kind === "prompt").length.toLocaleString();
-      document.getElementById("stat-files").textContent = manifest.items.length.toLocaleString();
 
       const roles = ["Exploration scorer", "PDDL", "WM"];
       const roleLabels = { "Exploration scorer": "Scorer", PDDL: "PDDL", WM: "WM" };
