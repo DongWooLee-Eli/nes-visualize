@@ -6,14 +6,20 @@ from pathlib import Path
 
 
 HERE = Path(__file__).resolve().parent
+html = (HERE / "index.html").read_text()
 payload = (HERE / "artifact-manifest.js").read_text()
 manifest = json.loads(
     payload.removeprefix("window.TC2_ARTIFACT_MANIFEST=").removesuffix(";\n")
 )
 
 assert (HERE / "index.html").is_file()
+assert 'data-choice="versions"' in html
+assert 'data-choice="leakage"' in html
+assert 'data-choice="example-versions"' in html
+assert 'id="log-version"' in html and 'id="log-roles"' in html
+assert html.count('data-log-role=') == 3
 assert len(manifest["runs"]) == 12
-assert len([item for item in manifest["items"] if item["source"].startswith("llm_prompts/")]) == 563
+assert len([item for item in manifest["items"] if item["kind"] == "prompt"]) == 703
 assert all((HERE / item["path"]).is_file() for item in manifest["items"])
 assert {
     run["run"]: run["solved"] for run in manifest["runs"]

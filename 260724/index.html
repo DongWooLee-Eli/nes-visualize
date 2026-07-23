@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="TC2 high-level abstraction v1, v2, v3 실험 시각화와 로그">
+  <link rel="icon" href="data:,">
   <title>TC2 · High-level Abstraction</title>
   <style>
     :root {
@@ -19,6 +20,7 @@
         "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", Arial, sans-serif;
     }
     * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
     html { scroll-behavior: auto; }
     body {
       margin: 0;
@@ -156,6 +158,37 @@
     .metric-chart .track { height: 14px; }
     .metric-chart strong { text-align: right; font: 650 11px/1 var(--mono); }
 
+    .choice-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin: 12px 0 22px;
+    }
+    .choice-tabs button {
+      padding: 5px 10px;
+      color: #5f6368;
+      background: #fff;
+      border: 1px solid #d7d8d6;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    .choice-tabs button:hover { color: var(--ink); border-color: #aeb1ad; }
+    .choice-tabs button.active {
+      color: #174dab;
+      background: var(--blue-soft);
+      border-color: #9eb6ea;
+    }
+    [data-choice-panel] { display: none; }
+    [data-choice-panel].active { display: block; }
+    .inline-viewer {
+      min-height: 170px;
+      max-height: 520px;
+      overflow: auto;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
     .log-stats {
       display: flex;
       flex-wrap: wrap;
@@ -166,96 +199,56 @@
     }
     .log-stats span { color: var(--muted); }
     .log-stats strong { margin-right: 5px; color: var(--ink); font: 650 14px/1 var(--mono); }
-    .log-tools {
+    .log-step {
       display: grid;
-      grid-template-columns: 2fr repeat(3, 1fr);
-      gap: 8px;
-      margin: 18px 0 10px;
-    }
-    .log-tools input, .log-tools select {
-      min-width: 0;
-      width: 100%;
-      padding: 8px 9px;
-      color: var(--ink);
-      background: #fff;
-      border: 1px solid #d2d3d1;
-      border-radius: 3px;
-    }
-    .log-actions { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
-    .small-button {
-      padding: 5px 8px;
-      color: #55595d;
-      background: #fff;
-      border: 1px solid #d2d3d1;
-      border-radius: 3px;
-      cursor: pointer;
-    }
-    .small-button:hover { color: var(--blue); border-color: #a9bcec; }
-    #artifact-count { margin-left: auto; color: var(--muted); font: 11px/1 var(--mono); }
-    #artifact-tree { padding: 8px 0 20px; border-top: 1px solid var(--line); }
-    .tree-node { margin-left: 17px; }
-    .tree-node > summary {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      padding: 5px 4px;
-      cursor: pointer;
-      list-style: none;
-      font-size: 13px;
-      font-weight: 550;
-    }
-    .tree-node > summary::-webkit-details-marker { display: none; }
-    .tree-node > summary::before { width: 10px; color: #9a9d99; content: "›"; transition: transform .1s; }
-    .tree-node[open] > summary::before { transform: rotate(90deg); }
-    .tree-node .count { margin-left: auto; color: #a0a3a0; font: 10px/1 var(--mono); }
-    .tree-files { margin-left: 22px; border-left: 1px solid var(--line); }
-    .file-button {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-columns: 92px minmax(0, 1fr);
       gap: 12px;
-      width: 100%;
-      padding: 6px 9px;
-      color: #3f4245;
-      text-align: left;
-      background: transparent;
-      border: 0;
-      cursor: pointer;
-    }
-    .file-button:hover { color: var(--blue); background: #f8f8f7; }
-    .file-button .name { overflow: hidden; font: 11px/1.4 var(--mono); text-overflow: ellipsis; white-space: nowrap; }
-    .file-button .size { color: #a0a3a0; font: 10px/1.4 var(--mono); }
-    .empty { padding: 28px 0; color: var(--muted); text-align: center; }
-
-    .viewer {
-      position: fixed;
-      z-index: 200;
-      inset: 0;
-      display: none;
-      grid-template-columns: minmax(0, 1fr) min(860px, 94vw);
-      background: rgba(0, 0, 0, .26);
-    }
-    .viewer.open { display: grid; }
-    .viewer-backdrop { cursor: pointer; }
-    .viewer-panel { display: grid; grid-template-rows: auto 1fr; min-width: 0; height: 100vh; background: #fff; }
-    .viewer-head {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 12px;
-      padding: 12px 15px;
+      align-items: start;
       border-bottom: 1px solid var(--line);
     }
-    .viewer-title { overflow: hidden; font: 11px/1.6 var(--mono); text-overflow: ellipsis; white-space: nowrap; }
-    .viewer-buttons { display: flex; gap: 6px; }
-    .viewer-buttons a, .viewer-buttons button {
-      padding: 3px 7px;
-      color: #55595d;
-      background: #fff;
-      border: 1px solid #d2d3d1;
-      border-radius: 3px;
-      text-decoration: none;
-      cursor: pointer;
+    .log-step > span { padding-top: 17px; color: var(--muted); font-size: 12px; }
+    .log-step .choice-tabs { margin: 10px 0; }
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 24px;
     }
-    #viewer-content { margin: 0; padding: 18px; border-radius: 0; }
+    .role-card {
+      display: flex;
+      min-width: 0;
+      min-height: 430px;
+      flex-direction: column;
+      padding: 14px;
+      background: var(--soft);
+      border-radius: 4px;
+    }
+    .role-card h3 { margin: 0 0 10px; }
+    .role-card .choice-tabs { margin: 0 0 10px; }
+    .role-card select {
+      width: 100%;
+      min-width: 0;
+      margin-bottom: 10px;
+      padding: 6px 7px;
+      color: var(--ink);
+      background: #fff;
+      border: 1px solid #d7d8d6;
+      border-radius: 3px;
+      font-size: 11px;
+    }
+    .role-card pre {
+      min-height: 310px;
+      max-height: 560px;
+      margin: 0;
+      padding: 0;
+      flex: 1;
+      background: transparent;
+      border-radius: 0;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .empty { padding: 28px 0; color: var(--muted); text-align: center; }
     .source-links { display: flex; flex-wrap: wrap; gap: 14px; margin: 8px 0 24px; font-size: 12px; }
 
     @media (max-width: 760px) {
@@ -266,23 +259,23 @@
       .tabs ul { gap: 20px; padding-right: 100px; }
       main { width: min(100% - 32px, 1000px); padding-top: 34px; }
       .split, .triple { grid-template-columns: 1fr; gap: 0; }
-      .log-tools { grid-template-columns: 1fr 1fr; }
+      .role-grid { grid-template-columns: 1fr; }
+      .role-card { min-height: 360px; }
       .bar-line { grid-template-columns: 82px minmax(0, 1fr) 42px; }
       .metric-chart { grid-template-columns: 150px 1fr 48px; }
-      .viewer { grid-template-columns: 1fr; }
-      .viewer-backdrop { display: none; }
     }
     @media (max-width: 480px) {
       .brand { max-width: 76px; overflow: hidden; white-space: nowrap; }
-      .log-tools { grid-template-columns: 1fr; }
+      .log-step { grid-template-columns: 1fr; gap: 0; }
+      .log-step > span { padding-top: 10px; }
       th, td { padding: 8px 6px; font-size: 12px; }
       .metric-chart { grid-template-columns: 120px 1fr 44px; }
     }
     @media print {
-      .topbar, .log-tools, .log-actions, .viewer { display: none !important; }
+      .topbar { display: none !important; }
       main { width: 100%; padding: 0; }
       .panel { display: block !important; break-after: page; }
-      #artifact-tree { max-height: none; }
+      [data-choice-panel] { display: block !important; }
     }
   </style>
 </head>
@@ -326,39 +319,50 @@
         </tbody>
       </table>
 
-      <h2>v1 · Initial PDDL grounding</h2>
-      <div class="diagram">
-        <pre class="mermaid">
+      <div class="choice-tabs" data-choice="versions" role="tablist" aria-label="버전 선택">
+        <button class="active" type="button" data-choice-value="v1">v1</button>
+        <button type="button" data-choice-value="v2">v2</button>
+        <button type="button" data-choice-value="v3">v3</button>
+      </div>
+
+      <div class="active" data-choice-panel="versions" data-choice-value="v1">
+        <h2>v1 · Initial PDDL grounding</h2>
+        <div class="diagram">
+          <pre class="mermaid">
 graph TD
     A["Random transition 수집"]
     A --> B["Initial PDDL prompt에 전달"]
-        </pre>
+          </pre>
+        </div>
+        <p class="caption">초기 WM이 비어 있는 첫 level에서 random action 200개 수집 · PDDL에는 action과 non-empty delta 전달.</p>
       </div>
-      <p class="caption">초기 WM이 비어 있는 첫 level에서 random action 200개 수집 · PDDL에는 action과 non-empty delta 전달.</p>
 
-      <h2>v2 · Failure-driven revision</h2>
-      <div class="diagram">
-        <pre class="mermaid">
+      <div data-choice-panel="versions" data-choice-value="v2">
+        <h2>v2 · Failure-driven revision</h2>
+        <div class="diagram">
+          <pre class="mermaid">
 graph TD
     A["Predicate, planner, execution failure"]
     A --> B["Failure signal과 실제 transition delta 수집"]
     B --> C["현재 PDDL과 함께 revision prompt에 전달"]
     C --> D["LLM PDDL revision"]
     D --> E["Replan"]
-        </pre>
+          </pre>
+        </div>
+        <h3>Trigger</h3>
+        <ul>
+          <li>predicate classifier 생성 실패</li>
+          <li>high-level planner 실패 또는 empty plan</li>
+          <li>high-level subplan의 low-level BFS가 0 actions 반환</li>
+          <li>실행은 됐지만 goal에 도달하지 못하고 대체 grounded operator도 없음</li>
+          <li>revision loop 종료 시에도 world-model prediction mismatch가 남음</li>
+        </ul>
       </div>
-      <h3>Trigger</h3>
-      <ul>
-        <li>predicate classifier 생성 실패</li>
-        <li>high-level planner 실패 또는 empty plan</li>
-        <li>high-level subplan의 low-level BFS가 0 actions 반환</li>
-        <li>실행은 됐지만 goal에 도달하지 못하고 대체 grounded operator도 없음</li>
-        <li>revision loop 종료 시에도 world-model prediction mismatch가 남음</li>
-      </ul>
 
-      <h2>v3 · LLM-guided exploration</h2>
-      <div class="diagram">
-        <pre class="mermaid">
+      <div data-choice-panel="versions" data-choice-value="v3">
+        <h2>v3 · LLM-guided exploration</h2>
+        <div class="diagram">
+          <pre class="mermaid">
 flowchart TB
     A["random transition 수집"]
     B["Python scorer 생성"]
@@ -375,18 +379,19 @@ flowchart TB
     B --> BS
     BS -->|탐색 종료| D
     D --> E
-        </pre>
+          </pre>
+        </div>
+        <table class="params" aria-label="v3 exploration parameters">
+          <thead><tr><th>Parameter</th><th class="num">Value</th></tr></thead>
+          <tbody>
+            <tr><td>warmup</td><td class="num">15 / level</td></tr>
+            <tr><td>beam width</td><td class="num">3</td></tr>
+            <tr><td>fixed depth cap</td><td class="num">없음</td></tr>
+            <tr><td>candidate budget</td><td class="num">2,000 / level</td></tr>
+            <tr><td>PDDL representatives</td><td class="num">≤ 200</td></tr>
+          </tbody>
+        </table>
       </div>
-      <table class="params" aria-label="v3 exploration parameters">
-        <thead><tr><th>Parameter</th><th class="num">Value</th></tr></thead>
-        <tbody>
-          <tr><td>warmup</td><td class="num">15 / level</td></tr>
-          <tr><td>beam width</td><td class="num">3</td></tr>
-          <tr><td>fixed depth cap</td><td class="num">없음</td></tr>
-          <tr><td>candidate budget</td><td class="num">2,000 / level</td></tr>
-          <tr><td>PDDL representatives</td><td class="num">≤ 200</td></tr>
-        </tbody>
-      </table>
     </section>
 
     <section class="panel" id="results">
@@ -444,12 +449,21 @@ observed transitions: do = 0, successful craft/place delta = 0
 xcvkpr  → "trees" → tpkhxk
 place_zezroc cost = 2 × tpkhxk
 make_* recipes and tool hierarchy reconstructed</pre>
-      <div class="source-links">
-        <a href="artifacts/leakage/v2-random_chars-42-initial-prompt.txt" target="_blank">initial prompt</a>
-        <a href="artifacts/leakage/v2-random_chars-42-initial-response.txt" target="_blank">generated WM</a>
-        <a href="artifacts/leakage/v2-random_chars-42-results.json" target="_blank">8/8 result</a>
+      <div class="choice-tabs" data-choice="leakage" role="tablist" aria-label="Leakage run 상세">
+        <button class="active" type="button" data-choice-value="prompt">Initial prompt</button>
+        <button type="button" data-choice-value="wm">Generated WM</button>
+        <button type="button" data-choice-value="result">8/8 result</button>
       </div>
-      <p class="caption">* 이름은 opaque인데 관측되지 않은 Crafter recipe까지 복원한 run은 headline random_chars 결과에서 제외.</p>
+      <div class="active" data-choice-panel="leakage" data-choice-value="prompt">
+        <pre class="inline-viewer" data-src="artifacts/leakage/v2-random_chars-42-initial-prompt.txt">Loading…</pre>
+      </div>
+      <div data-choice-panel="leakage" data-choice-value="wm">
+        <pre class="inline-viewer" data-src="artifacts/leakage/v2-random_chars-42-initial-response.txt">Loading…</pre>
+      </div>
+      <div data-choice-panel="leakage" data-choice-value="result">
+        <pre class="inline-viewer" data-src="artifacts/leakage/v2-random_chars-42-results.json">Loading…</pre>
+      </div>
+      <p class="caption">* 관측되지 않은 recipe를 action/state prefix의 structural cue 또는 pretrained prior로 완성한 leakage-compatible run은 headline에서 제외.</p>
 
       <h2>v3 exploration coverage</h2>
       <div class="split">
@@ -480,91 +494,177 @@ make_* recipes and tool hierarchy reconstructed</pre>
       <h1>Log</h1>
       <div class="log-stats">
         <span><strong id="stat-runs">–</strong>runs</span>
-        <span><strong id="stat-prompts">–</strong>canonical prompts</span>
+        <span><strong id="stat-prompts">–</strong>prompt files</span>
         <span><strong id="stat-files">–</strong>indexed files</span>
       </div>
-      <p class="caption">version → benchmark → seed → level → role → init/revise/history. Raw exploration trace는 level별 compact summary로 대체. 실행 중 overwrite된 PDDL inner output은 복구 불가.</p>
+      <p class="caption">버전 → 데이터 종류 → 시드 → 레벨을 차례로 선택. Raw exploration trace는 compact summary로 대체했으며, overwrite된 PDDL 중간 output은 복구되지 않는다.</p>
 
-      <div class="log-tools">
-        <input id="artifact-search" type="search" placeholder="파일명, run, stage 검색" aria-label="artifact 검색">
-        <select id="filter-version" aria-label="버전"><option value="">All versions</option></select>
-        <select id="filter-role" aria-label="역할"><option value="">All roles</option></select>
-        <select id="filter-kind" aria-label="종류">
-          <option value="">Prompt + generated history</option>
-          <option value="prompt">Prompts</option>
-          <option value="history">Generated history</option>
-        </select>
+      <div id="log-path">
+        <div class="log-step" id="log-version-step">
+          <span>버전</span>
+          <div class="choice-tabs" id="log-version" aria-label="Log 버전 선택"></div>
+        </div>
+        <div class="log-step" id="log-benchmark-step" hidden>
+          <span>데이터 종류</span>
+          <div class="choice-tabs" id="log-benchmark" aria-label="Log 데이터 종류 선택"></div>
+        </div>
+        <div class="log-step" id="log-seed-step" hidden>
+          <span>시드</span>
+          <div class="choice-tabs" id="log-seed" aria-label="Log 시드 선택"></div>
+        </div>
+        <div class="log-step" id="log-level-step" hidden>
+          <span>레벨</span>
+          <div class="choice-tabs" id="log-level" aria-label="Log 레벨 선택"></div>
+        </div>
       </div>
-      <div class="log-actions">
-        <button class="small-button" id="expand-tree" type="button">모두 펼치기</button>
-        <button class="small-button" id="collapse-tree" type="button">모두 접기</button>
-        <span id="artifact-count" aria-live="polite"></span>
+
+      <div class="role-grid" id="log-roles" hidden>
+        <article class="role-card" data-log-role="Exploration scorer"></article>
+        <article class="role-card" data-log-role="PDDL"></article>
+        <article class="role-card" data-log-role="WM"></article>
       </div>
-      <div id="artifact-tree"><div class="empty">Manifest loading…</div></div>
     </section>
 
     <section class="panel" id="examples">
       <h1>버전별 구체적 예시</h1>
 
-      <h2>v1 · transition → initial PDDL</h2>
-      <p class="caption">original · seed 43 · level 0</p>
-      <div class="split">
-        <div>
-          <h3>Observed transition</h3>
-          <pre>Action: do
+      <div class="choice-tabs" data-choice="example-versions" role="tablist" aria-label="예시 버전 선택">
+        <button class="active" type="button" data-choice-value="v1">v1</button>
+        <button type="button" data-choice-value="v2">v2</button>
+        <button type="button" data-choice-value="v3">v3</button>
+      </div>
+
+      <div class="active" data-choice-panel="example-versions" data-choice-value="v1">
+        <h2>v1 · transition → initial PDDL</h2>
+        <div class="choice-tabs" data-choice="examples-v1" role="tablist" aria-label="v1 예시 선택">
+          <button class="active" type="button" data-choice-value="one">예시 1</button>
+          <button type="button" data-choice-value="two">예시 2</button>
+        </div>
+
+        <div class="active" data-choice-panel="examples-v1" data-choice-value="one">
+          <p class="caption">random_chars · seed 43 · level 0</p>
+          <p>task-relevant <code>do</code> delta를 관측하자 opaque symbol에서도 올바른 source를 사용한 operator가 생성됐다.</p>
+          <div class="split">
+            <div>
+              <h3>Observed transition</h3>
+              <pre>Action: do
+ach_collect_tpkhxk: 0 → 1
+inv_tpkhxk:          0 → 1
+xcvkpr:              target removed</pre>
+            </div>
+            <div>
+              <h3>Generated → execution</h3>
+              <pre>HL:
+approach player xcvkpr
+collect player xcvkpr ach_collect_tpkhxk
+
+LL: [move_right, do]
+result: solved</pre>
+            </div>
+          </div>
+          <p class="caption">이 근거는 level 0의 local grounding에 한정된다. 이후 관측하지 않은 recipe까지 채운 전체 run은 leakage-compatible.</p>
+        </div>
+
+        <div data-choice-panel="examples-v1" data-choice-value="two">
+          <p class="caption">random_chars · seed 42 · level 0</p>
+          <p>같은 200-action 설정에서도 task effect를 하나도 못 보면, transition 수와 무관하게 PDDL을 ground하지 못했다.</p>
+          <div class="split">
+            <div>
+              <h3>Observed coverage</h3>
+              <pre>actions: movement only
+achievements_hit: []
+task-relevant delta: 0</pre>
+            </div>
+            <div>
+              <h3>Generated → planning</h3>
+              <pre>domain operators: 0
+planner: failed
+attempts: 3
+result: unsolved</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div data-choice-panel="example-versions" data-choice-value="v2">
+        <h2>v2 · failure → PDDL revision</h2>
+        <div class="choice-tabs" data-choice="examples-v2" role="tablist" aria-label="v2 예시 선택">
+          <button class="active" type="button" data-choice-value="one">예시 1</button>
+          <button type="button" data-choice-value="two">예시 2</button>
+        </div>
+
+        <div class="active" data-choice-panel="examples-v2" data-choice-value="one">
+          <p class="caption">canonical 200-action · original · seed 42 · level 5</p>
+          <p>0-action failure signal이 잘못된 one-step binding을 resource별 7-step 제작 사슬로 고쳤다.</p>
+          <div class="split">
+            <div>
+              <h3>Before</h3>
+              <pre>HL:
+collect_wood player stone ach_place_stone
+
+LL: []
+signal: low-level BFS returned 0 actions</pre>
+            </div>
+            <div>
+              <h3>After revision</h3>
+              <pre>collect_wood × 3
+→ place_table
+→ make_wood_pickaxe
+→ collect_stone
+→ place_stone
+
+result: solved*</pre>
+            </div>
+          </div>
+          <p class="caption">* high-level 오류는 PDDL revision이 고쳤고, 최종 실행에는 이후 WM revision도 관여.</p>
+        </div>
+
+        <div data-choice-panel="examples-v2" data-choice-value="two">
+          <p class="caption">canonical 200-action · original · seed 42 · level 6</p>
+          <p>실패한 실행에서 얻은 inventory·achievement delta가 revision prompt를 거쳐 실행 가능한 operator로 반영됐다.</p>
+          <div class="split">
+            <div>
+              <h3>Interaction evidence</h3>
+              <pre>do @ tree
 ach_collect_wood: 0 → 1
 inv_wood:          0 → 1
-tree:              target removed
-grass:             target added</pre>
-        </div>
-        <div>
-          <h3>Generated abstraction</h3>
-          <pre>(:action collect
-  :parameters (?who ?target ?result)
-  :precondition
-    (and (close_to ?who ?target)
-         (not (is_set ?result)))
-  :effect (is_set ?result)
-)</pre>
-        </div>
-      </div>
-      <p class="caption">결과: level 0 solved.</p>
 
-      <h2>v2 · failure → PDDL revision</h2>
-      <p class="caption">original · seed 42 · level 1</p>
-      <div class="split">
-        <div>
-          <h3>Attempt 1</h3>
-          <pre>HL: collect_wood player tree
-LL: []
-visited: 0
+place_table
+ach_place_table:   0 → 1
+inv_wood:          2 → 0</pre>
+            </div>
+            <div>
+              <h3>Revision</h3>
+              <pre>collect_wood:
+  + inv_wood
+  + ach_collect_wood
 
-signal:
-"Fresh-reset low-level search
- returned no actions"</pre>
-        </div>
-        <div>
-          <h3>Revision → Attempt 2</h3>
-          <pre># before
-collect_wood(?who, ?target)
-pre: close_to(?who, ?target)
+place_table:
+  requires inv_wood ≥ 2
+  - inv_wood
+  + ach_place_table
 
-# after
-collect_wood()
-pre: true
-
-LL: [move_down, do]
-LL: [move_left, do]
-13 actions · level solved</pre>
+result: solved</pre>
+            </div>
+          </div>
+          <p class="caption">tree/table delta 반영은 직접 근거지만, 관측하지 않은 stone/pickaxe 확장은 semantic prior에 의존.</p>
         </div>
       </div>
 
-      <h2>v3 · scored prefix → mechanics</h2>
-      <p class="caption">original · seed 43 · level 6 · candidate #1708</p>
-      <div class="split">
-        <div>
-          <h3>Beam discovery</h3>
-          <pre>prefix length: 38
+      <div data-choice-panel="example-versions" data-choice-value="v3">
+        <h2>v3 · scored prefix → mechanics</h2>
+        <div class="choice-tabs" data-choice="examples-v3" role="tablist" aria-label="v3 예시 선택">
+          <button class="active" type="button" data-choice-value="one">예시 1</button>
+          <button type="button" data-choice-value="two">예시 2</button>
+        </div>
+
+        <div class="active" data-choice-panel="examples-v3" data-choice-value="one">
+          <p class="caption">original · seed 43 · level 6 · candidate #1708</p>
+          <p>beam이 38-action prefix 끝의 target craft를 최고점 evidence로 보존해 PDDL과 실행까지 연결했다.</p>
+          <div class="split">
+            <div>
+              <h3>Beam discovery</h3>
+              <pre>prefix length: 38
 action: make_stone_pickaxe
 score: 10000
 
@@ -572,22 +672,50 @@ ach_make_stone_pickaxe: 0 → 1
 inv_stone:              1 → 0
 inv_wood:               1 → 0
 inv_stone_pickaxe:      0 → 1</pre>
+            </div>
+            <div>
+              <h3>Generated PDDL</h3>
+              <pre>make_stone_pickaxe
+pre:
+  inv_wood ≥ 1
+  inv_stone ≥ 1
+  ach_place_table ≥ 1
+effect:
+  + inv_stone_pickaxe
+
+result: solved</pre>
+            </div>
+          </div>
         </div>
-        <div>
-          <h3>Generated PDDL</h3>
-          <pre>(:action make_stone_pickaxe
-  :precondition
-    (and (>= (inv_wood) 1)
-         (>= (inv_stone) 1)
-         (>= (ach_place_table) 1))
-  :effect
-    (and (decrease (inv_wood) 1)
-         (decrease (inv_stone) 1)
-         (increase (inv_stone_pickaxe) 1))
-)</pre>
+
+        <div data-choice-panel="examples-v3" data-choice-value="two">
+          <p class="caption">random_chars · seed 42 · level 2 · candidate #495</p>
+          <p>target mechanic 발견에는 성공했지만, 생성된 abstraction과 WM이 이를 실행 지식으로 복원하지 못했다.</p>
+          <div class="split">
+            <div>
+              <h3>Beam discovery</h3>
+              <pre>prefix length: 10
+action: make_tpkhxk_bcwrvm
+score: 20000
+
+inv_tpkhxk:          1 → 0
+inv_tpkhxk_bcwrvm:   0 → 1
+achievement:         0 → 1</pre>
+            </div>
+            <div>
+              <h3>Downstream failure</h3>
+              <pre>observed cost: 1
+PDDL cost:    3
+station precondition: missing
+
+collect_tpkhxk:
+  112 iterations → failed
+
+result: unsolved</pre>
+            </div>
+          </div>
         </div>
       </div>
-      <p class="caption">결과: level 6 solved.</p>
     </section>
 
     <section class="panel" id="random-chars">
@@ -603,27 +731,31 @@ flowchart LR
       </div>
       <p class="caption">tree → wood → table → pickaxe의 이름 기반 causal theory가 opaque token에서는 사라진다.</p>
 
-      <h2>Exploration volume</h2>
-      <table aria-label="v3 beam exploration volume">
-        <thead><tr><th>naming</th><th class="num">candidate</th><th class="num">unique state</th><th class="num">achievement discovery</th></tr></thead>
+      <h2>두 단계의 병목</h2>
+      <table aria-label="v3 random chars discovery와 solve 비교">
+        <thead><tr><th>두 seed 합산 / 평균</th><th class="num">original</th><th class="num">random_chars</th></tr></thead>
         <tbody>
-          <tr><td>original</td><td class="num">1,578</td><td class="num">263</td><td class="num">11</td></tr>
-          <tr><td>random_chars</td><td class="num em">13,299</td><td class="num em">2,245</td><td class="num em">30</td></tr>
+          <tr><td>Unique state · 평균</td><td class="num">1,274.5</td><td class="num em">2,039.5</td></tr>
+          <tr><td>Distinct achievement · 평균</td><td class="num">5.5</td><td class="num">5.5</td></tr>
+          <tr><td>Target effect 발견</td><td class="num">6 / 16</td><td class="num">6 / 16</td></tr>
+          <tr><td>Solved</td><td class="num em">16 / 16</td><td class="num">1 / 16</td></tr>
         </tbody>
       </table>
-      <p class="caption">seed 42 · candidate-phase 집계. 별도 end-to-end run 결과: original 8/8, random_chars 0/8. Candidate 수나 방문 state 수만 늘려서는 prerequisite 관계가 복원되지 않았다.</p>
+      <p>전체 탐색량은 부족하지 않았지만, random_chars의 실패 15개 중 10개는 target effect를 못 찾았고 5개는 찾고도 실행하지 못했다.</p>
+      <p class="caption">v3 · seed 42/43. Unique state와 achievement는 candidate phase의 run별 합계 평균. Target effect는 현재 mission의 achievement delta 관측 여부.</p>
 
-      <h2>세 모듈의 불일치</h2>
+      <h2>근본 원인 · causal relation의 복원·공유·유지 실패</h2>
       <table aria-label="random chars failure causes">
-        <thead><tr><th>Module</th><th>받는 정보</th><th>실패</th></tr></thead>
+        <thead><tr><th>단계</th><th>받는 정보</th><th>실패</th></tr></thead>
         <tbody>
-          <tr><td>Scorer</td><td>현재 transition의 score</td><td>prerequisite를 모르므로 자원 소비 행동을 낮게 평가·prune</td></tr>
-          <tr><td>PDDL</td><td>action + changed delta</td><td>prefix와 unchanged context가 없어 station·tool precondition 누락</td></tr>
-          <tr><td>WM</td><td>초기 15-step warmup</td><td>beam이 발견한 make effect를 받지 못해 unknown action을 no-op 예측</td></tr>
+          <tr><td>Discovery / scorer</td><td>현재 action의 즉시 delta</td><td>미래 prerequisite인 자원 소비 행동을 낮게 평가해 target path가 끊길 수 있음</td></tr>
+          <tr><td>Abstraction / PDDL</td><td>action + changed delta</td><td>prefix와 unchanged context가 빠지고, failure revision 뒤 recipe cost·station 조건도 evidence와 불일치</td></tr>
+          <tr><td>Execution / WM</td><td>level 0의 15-step warmup</td><td>beam evidence를 받지 못해 opaque <code>do</code>/<code>make</code>를 no-op으로 예측</td></tr>
+          <tr><td>Persistence</td><td>validated snapshot</td><td>실패 level의 PDDL은 clear/rollback되고, snapshot이 있으면 WM도 rollback되어 지식이 누적되지 않음</td></tr>
         </tbody>
       </table>
 
-      <h3>Scorer · prerequisite prune</h3>
+      <h3>1 · prerequisite가 beam에서 끊김</h3>
       <pre># v3 · random_chars · seed 43 · level 2
 action: place_zezroc
 inv_tpkhxk:       2 → 0     resource loss  -40
@@ -632,8 +764,15 @@ ach_place_zezroc: 0 → 1     achievement     +6
                               score         -32
 selected: false</pre>
 
-      <h3>PDDL · context loss</h3>
+      <h3>2 · target을 찾고도 PDDL이 context를 잃음</h3>
       <pre># v3 · random_chars · seed 42 · level 2
+# observed candidate #495
+prefix: 10 actions → place_zezroc → make_tpkhxk_bcwrvm
+inv_tpkhxk:        1 → 0
+pickaxe:           0 → 1
+score:             20000 · selected
+
+# final PDDL
 (:action make_tpkhxk_bcwrvm
   :precondition (>= (inv_tpkhxk) 3)
   :effect
@@ -642,46 +781,38 @@ selected: false</pre>
 )
 # station precondition 없음</pre>
 
-      <h3>WM · unknown action fallback</h3>
-      <pre># v3 · random_chars · seed 43
-# Crafting recipes and stations/materials were not revealed.
-if action != "sleep":
-    new_state["player_sleeping"] = False
-return new_state  # make_* state unchanged</pre>
+      <h3>3 · WM에는 발견한 effect가 전달되지 않음</h3>
+      <pre># v3 · random_chars · seed 42 · level 0
+Beam / PDDL:
+do @ xcvkpr → inv_tpkhxk + 1
+
+WM:
+# No successful do or make transition was observed.
+return new_state
+
+LL collect_tpkhxk → failed</pre>
 
       <div class="diagram">
         <pre class="mermaid">
 flowchart LR
-    E["Beam transition<br/>prefix + before + action + after"]
-    E -->|"delta only"| P["PDDL<br/>가능"]
-    E -. "공유 안 됨" .-> W["WM<br/>실행 불가능"]
-    E -. "prerequisite 없음" .-> S["Scorer<br/>탐색 가치 없음"]
+    E["Beam evidence<br/>prefix + context + action + result"]
+    E -->|"single-step delta"| P["PDDL<br/>불완전한 조건"]
+    E -. "전달 안 됨" .-> W["WM<br/>no-op 예측"]
+    E -. "future relation 없음" .-> S["Scorer<br/>prerequisite prune"]
+    P --> R["실행 실패 / rollback"]
+    W --> R
         </pre>
       </div>
 
-      <h2>필요한 공유 관계</h2>
-      <pre>zezroc 존재
+      <h2>공유해야 할 최소 관계</h2>
+      <pre>ach_place_zezroc ≥ 1
 + inv_tpkhxk ≥ 1
 → make_tpkhxk_bcwrvm
-→ pickaxe 획득</pre>
-      <p class="caption">핵심은 scorer·WM·PDDL이 같은 원인–조건–결과를 공유하는 causal theory. Textual theory는 가능한 구현 중 하나.</p>
+→ inv_tpkhxk - 1
++ inv_tpkhxk_bcwrvm + 1</pre>
+      <p class="caption">핵심은 더 많은 candidate가 아니라 scorer·WM·PDDL이 같은 prerequisite–action–effect를 공유하고 다음 level까지 유지하는 것. Textual theory는 가능한 구현 중 하나.</p>
     </section>
   </main>
-
-  <div class="viewer" id="viewer" role="dialog" aria-modal="true" aria-labelledby="viewer-title">
-    <div class="viewer-backdrop" id="viewer-backdrop"></div>
-    <section class="viewer-panel">
-      <header class="viewer-head">
-        <div class="viewer-title" id="viewer-title">Artifact</div>
-        <div class="viewer-buttons">
-          <a id="viewer-raw" href="#" target="_blank" rel="noreferrer">raw</a>
-          <button id="viewer-copy" type="button">copy</button>
-          <button id="viewer-close" type="button" aria-label="닫기">×</button>
-        </div>
-      </header>
-      <pre id="viewer-content">Loading…</pre>
-    </section>
-  </div>
 
   <script src="artifact-manifest.js"></script>
   <script>
@@ -741,159 +872,188 @@ flowchart LR
       addEventListener("load", () => scrollTo({ top: 0, behavior: "auto" }), { once: true });
       addEventListener("popstate", () => activateTab(location.hash || "#versions"));
 
+      const loadText = async (element, path) => {
+        if (!path || element.dataset.loaded === path) return;
+        element.dataset.loaded = path;
+        element.textContent = "Loading…";
+        try {
+          const response = await fetch(path);
+          if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
+          const text = await response.text();
+          if (element.dataset.loaded === path) element.textContent = text;
+        } catch (error) {
+          if (element.dataset.loaded === path) {
+            element.textContent = `파일을 불러오지 못했습니다: ${error.message}`;
+          }
+        }
+      };
+
+      document.querySelectorAll("[data-choice]").forEach(bar => {
+        const group = bar.dataset.choice;
+        const buttons = [...bar.querySelectorAll("[data-choice-value]")];
+        const choicePanels = [...document.querySelectorAll(`[data-choice-panel="${group}"]`)];
+        const select = value => {
+          buttons.forEach(button => {
+            const active = button.dataset.choiceValue === value;
+            button.classList.toggle("active", active);
+            button.setAttribute("aria-selected", String(active));
+          });
+          choicePanels.forEach(choicePanel => {
+            choicePanel.classList.toggle("active", choicePanel.dataset.choiceValue === value);
+          });
+          const activePanel = choicePanels.find(choicePanel => choicePanel.dataset.choiceValue === value);
+          activePanel?.querySelectorAll("[data-src]").forEach(element =>
+            loadText(element, element.dataset.src)
+          );
+        };
+        buttons.forEach(button =>
+          button.addEventListener("click", () => select(button.dataset.choiceValue))
+        );
+        select(buttons.find(button => button.classList.contains("active"))?.dataset.choiceValue
+          || buttons[0]?.dataset.choiceValue);
+      });
+
       const manifest = window.TC2_ARTIFACT_MANIFEST;
       if (!manifest) return;
-      const tree = document.getElementById("artifact-tree");
-      const search = document.getElementById("artifact-search");
-      const versionFilter = document.getElementById("filter-version");
-      const roleFilter = document.getElementById("filter-role");
-      const kindFilter = document.getElementById("filter-kind");
-      const count = document.getElementById("artifact-count");
-      const viewer = document.getElementById("viewer");
-      const viewerTitle = document.getElementById("viewer-title");
-      const viewerContent = document.getElementById("viewer-content");
-      const viewerRaw = document.getElementById("viewer-raw");
-      let viewedText = "";
-
-      const unique = key => [...new Set(manifest.items.map(item => item[key]))].sort();
-      unique("version").forEach(value => versionFilter.add(new Option(value, value)));
-      unique("role").forEach(value => roleFilter.add(new Option(value, value)));
       document.getElementById("stat-runs").textContent = manifest.runs.length.toLocaleString();
       document.getElementById("stat-prompts").textContent = manifest.items
-        .filter(item => item.source.startsWith("llm_prompts/")).length.toLocaleString();
+        .filter(item => item.kind === "prompt").length.toLocaleString();
       document.getElementById("stat-files").textContent = manifest.items.length.toLocaleString();
 
-      const fmtBytes = bytes => bytes < 1024 ? `${bytes} B`
-        : bytes < 1024 ** 2 ? `${(bytes / 1024).toFixed(1)} KB`
-        : `${(bytes / 1024 ** 2).toFixed(1)} MB`;
-      const group = (items, key) => items.reduce((map, item) => {
-        const value = key === "level" ? (item.level < 0 ? "run" : `level ${item.level}`) : item[key];
-        (map[value] ||= []).push(item);
-        return map;
-      }, {});
-      const order = (key, values) => values.sort((a, b) => {
-        if (key === "level") {
-          const number = value => value === "run" ? -1 : Number(value.split(" ")[1]);
-          return number(a) - number(b);
-        }
-        return a.localeCompare(b, undefined, { numeric: true });
-      });
+      const roles = ["Exploration scorer", "PDDL", "WM"];
+      const roleLabels = { "Exploration scorer": "Scorer", PDDL: "PDDL", WM: "WM" };
+      const logItems = manifest.items.filter(item => item.level >= 0 && roles.includes(item.role));
+      const state = { version: null, benchmark: null, seed: null, level: null };
+      const selectedKind = {};
+      const selectedFile = {};
+      const unique = values => [...new Set(values)].sort((a, b) =>
+        typeof a === "number" ? a - b : String(a).localeCompare(String(b), undefined, { numeric: true })
+      );
+      const valid = (value, values) => values.includes(value) ? value : values[0];
+      const pathKey = (role, kind) =>
+        [state.version, state.benchmark, state.seed, state.level, role, kind].join("/");
 
-      const closeViewer = () => {
-        viewer.classList.remove("open");
-        document.body.style.overflow = "";
-      };
-      const openViewer = async item => {
-        viewer.classList.add("open");
-        document.body.style.overflow = "hidden";
-        viewerTitle.textContent = `${item.run} / ${item.source}`;
-        viewerRaw.href = item.path;
-        viewerContent.textContent = "Loading…";
-        try {
-          viewedText = await fetch(item.path).then(response => {
-            if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
-            return response.text();
-          });
-          viewerContent.textContent = viewedText;
-        } catch (error) {
-          viewedText = "";
-          viewerContent.textContent = `파일을 불러오지 못했습니다: ${error.message}`;
-        }
-      };
-      document.getElementById("viewer-close").addEventListener("click", closeViewer);
-      document.getElementById("viewer-backdrop").addEventListener("click", closeViewer);
-      document.getElementById("viewer-copy").addEventListener("click", async event => {
-        if (!viewedText) return;
-        await navigator.clipboard.writeText(viewedText);
-        event.currentTarget.textContent = "copied";
-        setTimeout(() => event.currentTarget.textContent = "copy", 900);
-      });
-      addEventListener("keydown", event => {
-        if (event.key === "Escape") closeViewer();
-      });
-
-      const makeDetails = (label, items, open = false) => {
-        const details = document.createElement("details");
-        details.className = "tree-node";
-        details.open = open;
-        const summary = document.createElement("summary");
-        const text = document.createElement("span");
-        text.textContent = label;
-        const total = document.createElement("span");
-        total.className = "count";
-        total.textContent = items.length;
-        summary.append(text, total);
-        details.append(summary);
-        return details;
+      const renderButtons = (id, values, current, label, choose) => {
+        const row = document.getElementById(id);
+        row.replaceChildren();
+        values.forEach(value => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.classList.toggle("active", value === current);
+          button.setAttribute("aria-selected", String(value === current));
+          button.textContent = label(value);
+          button.addEventListener("click", () => choose(value));
+          row.append(button);
+        });
       };
 
-      const render = () => {
-        const query = search.value.trim().toLowerCase();
-        const filtered = manifest.items.filter(item =>
-          (!versionFilter.value || item.version === versionFilter.value) &&
-          (!roleFilter.value || item.role === roleFilter.value) &&
-          (!kindFilter.value || item.kind === kindFilter.value) &&
-          (!query || [item.run, item.name, item.source, item.role, item.stage]
-            .some(value => String(value).toLowerCase().includes(query)))
-        );
-        tree.replaceChildren();
-        count.textContent = `${filtered.length.toLocaleString()} files`;
-        if (!filtered.length) {
-          const empty = document.createElement("div");
-          empty.className = "empty";
-          empty.textContent = "조건에 맞는 파일이 없습니다.";
-          tree.append(empty);
-          return;
-        }
-
-        const hierarchy = ["version", "benchmark", "seed", "level", "role", "stage"];
-        const appendLevel = (parent, items, depth) => {
-          if (depth === hierarchy.length) {
-            const files = document.createElement("div");
-            files.className = "tree-files";
-            items.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }))
-              .forEach(item => {
-                const button = document.createElement("button");
-                button.type = "button";
-                button.className = "file-button";
-                const name = document.createElement("span");
-                name.className = "name";
-                name.textContent = item.name;
-                const size = document.createElement("span");
-                size.className = "size";
-                size.textContent = fmtBytes(item.bytes);
-                button.append(name, size);
-                button.addEventListener("click", () => openViewer(item));
-                files.append(button);
-              });
-            parent.append(files);
+      const renderRoles = () => {
+        document.querySelectorAll("[data-log-role]").forEach(card => {
+          const role = card.dataset.logRole;
+          const items = logItems.filter(item =>
+            item.version === state.version &&
+            item.benchmark === state.benchmark &&
+            item.seed === state.seed &&
+            item.level === state.level &&
+            item.role === role
+          ).sort((a, b) =>
+            `${a.stage}/${a.name}`.localeCompare(`${b.stage}/${b.name}`, undefined, { numeric: true })
+          );
+          const heading = document.createElement("h3");
+          heading.textContent = roleLabels[role];
+          card.replaceChildren(heading);
+          if (!items.length) {
+            const empty = document.createElement("pre");
+            empty.textContent = `${state.version}에는 ${roleLabels[role]} artifact가 없습니다.`;
+            card.append(empty);
             return;
           }
-          const key = hierarchy[depth];
-          const grouped = group(items, key);
-          order(key, Object.keys(grouped)).forEach(value => {
-            const details = makeDetails(
-              key === "seed" ? `seed ${value}` : value,
-              grouped[value],
-              depth === 0
-            );
-            appendLevel(details, grouped[value], depth + 1);
-            parent.append(details);
+
+          const kinds = ["prompt", "history"].filter(kind => items.some(item => item.kind === kind));
+          const kind = selectedKind[role] = valid(selectedKind[role], kinds);
+          const tabs = document.createElement("div");
+          tabs.className = "choice-tabs";
+          kinds.forEach(value => {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.classList.toggle("active", value === kind);
+            button.setAttribute("aria-selected", String(value === kind));
+            button.textContent = value === "prompt" ? "프롬프트" : "결과";
+            button.addEventListener("click", () => {
+              selectedKind[role] = value;
+              renderRoles();
+            });
+            tabs.append(button);
           });
-        };
-        appendLevel(tree, filtered, 0);
+
+          const choices = items.filter(item => item.kind === kind);
+          const key = pathKey(role, kind);
+          const chosenPath = selectedFile[key] = choices.some(item => item.path === selectedFile[key])
+            ? selectedFile[key] : choices[0].path;
+          const select = document.createElement("select");
+          select.setAttribute("aria-label", `${roleLabels[role]} ${kind === "prompt" ? "프롬프트" : "결과"} 파일`);
+          choices.forEach(item => {
+            const option = new Option(`${item.stage} · ${item.name}`, item.path);
+            option.selected = item.path === chosenPath;
+            select.add(option);
+          });
+          const content = document.createElement("pre");
+          const show = path => {
+            selectedFile[key] = path;
+            loadText(content, path);
+          };
+          select.addEventListener("change", () => show(select.value));
+          card.append(tabs, select, content);
+          show(chosenPath);
+        });
       };
 
-      [search, versionFilter, roleFilter, kindFilter].forEach(control =>
-        control.addEventListener(control === search ? "input" : "change", render)
-      );
-      document.getElementById("expand-tree").addEventListener("click", () =>
-        tree.querySelectorAll("details").forEach(details => details.open = true)
-      );
-      document.getElementById("collapse-tree").addEventListener("click", () =>
-        tree.querySelectorAll("details").forEach(details => details.open = false)
-      );
-      render();
+      const renderLog = () => {
+        const versions = unique(logItems.map(item => item.version));
+        renderButtons("log-version", versions, state.version, value => value, value => {
+          state.version = value;
+          state.benchmark = state.seed = state.level = null;
+          renderLog();
+        });
+        const benchmarkStep = document.getElementById("log-benchmark-step");
+        const seedStep = document.getElementById("log-seed-step");
+        const levelStep = document.getElementById("log-level-step");
+        const roleGrid = document.getElementById("log-roles");
+        benchmarkStep.hidden = !state.version;
+        seedStep.hidden = !state.benchmark;
+        levelStep.hidden = !state.seed;
+        roleGrid.hidden = !Number.isInteger(state.level);
+        if (!state.version) return;
+
+        const byVersion = logItems.filter(item => item.version === state.version);
+        const benchmarks = unique(byVersion.map(item => item.benchmark));
+        renderButtons("log-benchmark", benchmarks, state.benchmark,
+          value => value === "original" ? "Original" : value, value => {
+            state.benchmark = value;
+            state.seed = state.level = null;
+            renderLog();
+          });
+        if (!state.benchmark) return;
+
+        const byBenchmark = byVersion.filter(item => item.benchmark === state.benchmark);
+        const seeds = unique(byBenchmark.map(item => item.seed));
+        renderButtons("log-seed", seeds, state.seed, value => `seed ${value}`, value => {
+          state.seed = value;
+          state.level = null;
+          renderLog();
+        });
+        if (!state.seed) return;
+
+        const bySeed = byBenchmark.filter(item => item.seed === state.seed);
+        const levels = unique(bySeed.map(item => item.level));
+        renderButtons("log-level", levels, state.level, value => `level ${value}`, value => {
+          state.level = value;
+          renderLog();
+        });
+        if (!Number.isInteger(state.level)) return;
+        renderRoles();
+      };
+      renderLog();
     })();
   </script>
   <script type="module">
@@ -917,7 +1077,16 @@ flowchart LR
         fontSize: "13px"
       }
     });
+    const hiddenPanels = [...document.querySelectorAll(".panel:not(.active), [data-choice-panel]:not(.active)")];
+    hiddenPanels.forEach(panel => {
+      panel.style.display = "block";
+      panel.style.visibility = "hidden";
+    });
     await mermaid.run({ querySelector: ".mermaid" });
+    hiddenPanels.forEach(panel => {
+      panel.style.removeProperty("display");
+      panel.style.removeProperty("visibility");
+    });
     scrollTo({ top: 0, behavior: "auto" });
   </script>
 </body>
