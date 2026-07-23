@@ -1,0 +1,18 @@
+```pddl
+(define (domain wood_collection)
+  (:requirements :strips :typing :numeric-fluents)
+  (:types actor resource)
+  (:predicates (close_to ?who - actor ?what - resource) (ach_place_table))
+  (:functions (inv_wood))
+  (:action collect_wood
+    :parameters (?who - actor ?what - resource)
+    :precondition (close_to ?who ?what)
+    :effect (increase (inv_wood) 1)
+  )
+  (:action place_table
+    :parameters ()
+    :precondition (>= (inv_wood) 2)
+    :effect (and (decrease (inv_wood) 2) (ach_place_table))
+  )
+)
+```

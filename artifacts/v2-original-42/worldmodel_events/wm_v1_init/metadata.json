@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "kind": "init",
+  "timestamp": "2026-07-23T13:52:58.251449",
+  "llm_call_idx": 2,
+  "llm_label": "wm_synth",
+  "prompt_file": "/data/dwlee/PyNES/projects/tc/runs/explore/v2-original-42/llm_prompts/call_0002_wm_synth_level_0.txt",
+  "duration_sec": 28.043433892074972
+}

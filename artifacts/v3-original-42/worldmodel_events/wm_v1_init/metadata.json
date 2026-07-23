@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "kind": "init",
+  "timestamp": "2026-07-23T15:14:23.030648",
+  "llm_call_idx": 1,
+  "llm_label": "wm_synth",
+  "prompt_file": "/data/dwlee/PyNES6/projects/tc/runs/llm_beamsearch/original_c2000_pddl200/llm_prompts/call_0001_wm_synth_level_0.txt",
+  "duration_sec": 38.593836362008005
+}

@@ -1,0 +1,22 @@
+```pddl
+(define (domain craft_tpkhxk_wqiqzh)
+  (:requirements :strips :negative-preconditions :numeric-fluents)
+  (:predicates (is_placed) (is_made))
+  (:functions (inv_tpkhxk) (inv_tpkhxk_wqiqzh))
+  (:action collect_tpkhxk
+    :parameters ()
+    :precondition (>= (inv_tpkhxk) 0)
+    :effect (increase (inv_tpkhxk) 1)
+  )
+  (:action place_ckqpdj
+    :parameters ()
+    :precondition (and (>= (inv_tpkhxk) 2) (not (is_placed)))
+    :effect (and (decrease (inv_tpkhxk) 2) (is_placed))
+  )
+  (:action make_tpkhxk_wqiqzh
+    :parameters ()
+    :precondition (and (is_placed) (>= (inv_tpkhxk) 1) (not (is_made)))
+    :effect (and (decrease (inv_tpkhxk) 1) (increase (inv_tpkhxk_wqiqzh) 1) (is_made))
+  )
+)
+```

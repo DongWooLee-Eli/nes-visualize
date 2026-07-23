@@ -1,0 +1,24 @@
+{
+  "domain_name": "minicrafter_oo",
+  "level_id": 1,
+  "seed": 43,
+  "effective_seed": 1043,
+  "area": [
+    9,
+    7
+  ],
+  "view": [
+    9,
+    9
+  ],
+  "mission": "place table",
+  "solved": true,
+  "actions": [
+    "do",
+    "move_down",
+    "do",
+    "move_down",
+    "move_left",
+    "place_table"
+  ]
+}

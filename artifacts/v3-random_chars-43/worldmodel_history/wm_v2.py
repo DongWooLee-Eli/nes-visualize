@@ -1,0 +1,134 @@
+from copy import deepcopy
+
+def transition_model(state, action):
+    new_state = deepcopy(state)
+    new_state["step_count"] = state.get("step_count", 0) + 1
+
+    player = state.get("player", [])
+    if not player:
+        return new_state
+
+    x, y = player[0]
+    directions = {
+        "move_left": (-1, 0),
+        "move_right": (1, 0),
+        "move_up": (0, -1),
+        "move_down": (0, 1),
+    }
+
+    def positions(key):
+        value = new_state.get(key, [])
+        if not isinstance(value, list):
+            return set()
+        return {
+            tuple(p) for p in value
+            if isinstance(p, (list, tuple)) and len(p) == 2
+        }
+
+    # Infer the ordinary walkable ground layer as the largest spatial layer
+    # containing the player's current position.
+    current = (x, y)
+    ground_key = None
+    ground_size = -1
+    for key, value in state.items():
+        if key == "player" or key.startswith("inv_"):
+            continue
+        ps = positions(key)
+        if current in ps and len(ps) > ground_size:
+            ground_key = key
+            ground_size = len(ps)
+
+    if action in directions:
+        dx, dy = directions[action]
+        new_state["player_facing"] = [dx, dy]
+        destination = (x + dx, y + dy)
+
+        if ground_key is not None:
+            can_move = destination in positions(ground_key)
+        else:
+            all_cells = set()
+            for key in state:
+                if key != "player" and not key.startswith("inv_"):
+                    all_cells.update(positions(key))
+            can_move = destination in all_cells
+
+        if can_move:
+            new_state["player"] = [[destination[0], destination[1]]]
+
+        new_state["player_sleeping"] = False
+        return new_state
+
+    if action == "do":
+        facing = state.get("player_facing", [0, 1])
+        if not isinstance(facing, (list, tuple)) or len(facing) != 2:
+            facing = [0, 1]
+        target = (x + facing[0], y + facing[1])
+
+        # Placeable terrain/structures are not directly harvested by "do".
+        # Their inventory fields describe placeable items rather than making
+        # every matching world tile directly collectible.
+        placeable_entities = {
+            "sgqeje",
+            "zezroc",
+            "ckqpdj",
+            "rjwdrk",
+        }
+
+        collectible_keys = []
+        for key in state:
+            if key == "player" or key.startswith("inv_"):
+                continue
+            if key in placeable_entities:
+                continue
+            if "inv_" + key in state and target in positions(key):
+                collectible_keys.append(key)
+
+        collectible_keys.sort(key=lambda k: len(positions(k)))
+        if collectible_keys:
+            key = collectible_keys[0]
+            new_state[key] = [
+                p for p in new_state.get(key, [])
+                if tuple(p) != target
+            ]
+            inv_key = "inv_" + key
+            new_state[inv_key] = state.get(inv_key, 0) + 1
+
+            if ground_key is not None and target not in positions(ground_key):
+                new_state.setdefault(ground_key, []).append(list(target))
+
+        new_state["player_sleeping"] = False
+        return new_state
+
+    if action.startswith("place_"):
+        entity = action[len("place_"):]
+        inv_key = "inv_" + entity
+        count = state.get(inv_key, 0)
+
+        if count > 0:
+            facing = state.get("player_facing", [0, 1])
+            if not isinstance(facing, (list, tuple)) or len(facing) != 2:
+                facing = [0, 1]
+            target = (x + facing[0], y + facing[1])
+
+            occupied = target == current
+            for key in state:
+                if key != "player" and not key.startswith("inv_"):
+                    if target in positions(key) and key != ground_key:
+                        occupied = True
+                        break
+
+            if not occupied:
+                new_state[inv_key] = count - 1
+                new_state.setdefault(entity, []).append(list(target))
+
+        new_state["player_sleeping"] = False
+        return new_state
+
+    if action == "sleep":
+        new_state["player_sleeping"] = True
+        return new_state
+
+    if action != "sleep":
+        new_state["player_sleeping"] = False
+
+    return new_state

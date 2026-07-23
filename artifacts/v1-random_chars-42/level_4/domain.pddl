@@ -1,0 +1,10 @@
+(define (domain collect_sgqeje_domain)
+  (:requirements :strips :typing)
+  (:types item status)
+  (:predicates (is_present ?target - item) (is_achieved ?result - status))
+  (:action collect_sgqeje
+    :parameters (?target - item ?result - status)
+    :precondition (is_present ?target)
+    :effect (is_achieved ?result)
+  )
+)

@@ -1,0 +1,1 @@
+# No predicates are declared in collect_wood_domain.

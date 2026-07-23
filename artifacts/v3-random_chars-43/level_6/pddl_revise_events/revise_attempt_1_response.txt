@@ -1,0 +1,24 @@
+```pddl
+(define (domain collect_tpkhxk_domain)
+  (:requirements :strips :typing :numeric-fluents)
+  (:types actor resource)
+  (:constants tpkhxk sgqeje - resource)
+  (:predicates (adjacent_to ?who - actor ?what - resource))
+  (:functions (inv_tpkhxk) (inv_sgqeje) (inv_sgqeje_bcwrvm) (ach_collect_tpkhxk) (ach_collect_sgqeje) (ach_make_sgqeje_bcwrvm))
+  (:action collect_tpkhxk
+    :parameters ()
+    :precondition (and)
+    :effect (and (increase (inv_tpkhxk) 1) (increase (ach_collect_tpkhxk) 1))
+  )
+  (:action collect_sgqeje
+    :parameters ()
+    :precondition (and)
+    :effect (and (increase (inv_sgqeje) 1) (increase (ach_collect_sgqeje) 1))
+  )
+  (:action make_sgqeje_bcwrvm
+    :parameters ()
+    :precondition (and (>= (inv_sgqeje) 2))
+    :effect (and (decrease (inv_sgqeje) 2) (increase (inv_sgqeje_bcwrvm) 1) (increase (ach_make_sgqeje_bcwrvm) 1))
+  )
+)
+```

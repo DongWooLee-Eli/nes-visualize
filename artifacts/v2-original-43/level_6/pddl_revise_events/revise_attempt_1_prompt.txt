@@ -1,0 +1,135 @@
+You previously synthesized the following PDDL DOMAIN for a 2D grid game.
+The agent has now moved to a new level with a different mission. Your job is
+to adapt the existing domain so it can express (and plan toward) the new
+mission. You MAY add, modify, or remove operators and predicates - whatever
+produces the cleanest domain that solves both the old and new missions.
+
+Constraints that still apply:
+- Give every action parameter a declared type. Keep each `:parameters`,
+  `:precondition`, and `:effect` expression on one physical line.
+- Predicate names are lowercase and contain no hyphens. Underscores are allowed (e.g. `linked_to`, `is_ready`).
+- Use `and` and `not`, but not `or`; the executor checks extracted conditions
+  conjunctively. If using negative preconditions, declare the corresponding
+  PDDL requirement.
+- Every predicate and operator effect must describe a condition that can be
+  checked or reached in the supplied raw state. Keep operators high-level so
+  the learned world model and search can execute them.
+- Use Boolean predicates only for genuinely binary facts. Represent quantities
+  and thresholds with a planner-compatible, state-grounded encoding.
+- A literal object in an action schema must be a typed parameter or a domain
+  constant. Do not invent aliases for raw-state object keys.
+
+If the existing domain already covers the new mission, return it unchanged.
+
+CURRENT DOMAIN:
+
+```pddl
+(define (domain collect_wood_domain)
+  (:requirements :strips :typing :fluents)
+  (:types actor resource achievement)
+  (:constants ach_collect_wood ach_collect_stone ach_place_table ach_place_stone ach_make_wood_pickaxe ach_make_stone_pickaxe ach_make_wood_sword - achievement)
+  (:predicates
+    (adjacent_to ?who - actor ?target - resource)
+    (tree ?target - resource)
+    (stone ?target - resource)
+    (achieved ?result - achievement)
+  )
+  (:functions
+    (inv_wood)
+    (inv_stone)
+    (inv_wood_pickaxe)
+    (inv_stone_pickaxe)
+    (inv_wood_sword)
+  )
+  (:action collect_wood
+    :parameters (?who - actor ?target - resource)
+    :precondition (and (tree ?target))
+    :effect (and (not (tree ?target)) (increase (inv_wood) 1) (achieved ach_collect_wood))
+  )
+  (:action place_table
+    :parameters (?who - actor)
+    :precondition (and (>= (inv_wood) 2))
+    :effect (and (decrease (inv_wood) 2) (achieved ach_place_table))
+  )
+  (:action make_wood_pickaxe
+    :parameters (?who - actor)
+    :precondition (and (achieved ach_place_table) (>= (inv_wood) 1))
+    :effect (and (decrease (inv_wood) 1) (increase (inv_wood_pickaxe) 1) (achieved ach_make_wood_pickaxe))
+  )
+  (:action collect_stone
+    :parameters (?who - actor ?target - resource)
+    :precondition (and (stone ?target) (>= (inv_wood_pickaxe) 1))
+    :effect (and (not (stone ?target)) (increase (inv_stone) 1) (achieved ach_collect_stone))
+  )
+  (:action make_stone_pickaxe
+    :parameters (?who - actor)
+    :precondition (and (achieved ach_place_table) (>= (inv_wood) 1) (>= (inv_stone) 1))
+    :effect (and (decrease (inv_wood) 1) (decrease (inv_stone) 1) (increase (inv_stone_pickaxe) 1) (achieved ach_make_stone_pickaxe))
+  )
+  (:action make_wood_sword
+    :parameters (?who - actor)
+    :precondition (and (achieved ach_place_table) (>= (inv_wood) 1))
+    :effect (and (decrease (inv_wood) 1) (increase (inv_wood_sword) 1) (achieved ach_make_wood_sword))
+  )
+  (:action place_stone
+    :parameters (?who - actor)
+    :precondition (and (>= (inv_stone) 1))
+    :effect (and (decrease (inv_stone) 1) (achieved ach_place_stone))
+  )
+)
+```
+
+NEW MISSION (the agent's next goal):
+
+make stone pickaxe
+
+CURRENT RAW STATE (first observation on the new level):
+
+{'player': [[4, 3]], 'player_facing': [0, 1], 'player_health': 9, 'player_hunger': 0.0, 'player_thirst': 0.0, 'player_fatigue': 0.0, 'player_sleeping': False, 'daylight': 1.0, 'step_count': 0, 'inv_health': 9, 'inv_food': 9, 'inv_drink': 9, 'inv_energy': 9, 'inv_sapling': 0, 'inv_wood': 0, 'inv_stone': 0, 'inv_coal': 0, 'inv_iron': 0, 'inv_diamond': 0, 'inv_wood_pickaxe': 0, 'inv_stone_pickaxe': 0, 'inv_iron_pickaxe': 0, 'inv_wood_sword': 0, 'inv_stone_sword': 0, 'inv_iron_sword': 0, 'water': [[5, 4], [5, 5]], 'grass': [[0, 0], [0, 4], [0, 5], [0, 6], [1, 1], [1, 2], [1, 3], [1, 4], [2, 0], [2, 1], [2, 2], [3, 1], [3, 2], [4, 0], [4, 1], [4, 3], [5, 0], [5, 1], [5, 2], [5, 3], [6, 0], [6, 1], [6, 2], [6, 3], [6, 4], [7, 0], [7, 1], [7, 2], [7, 3], [7, 5], [8, 0], [8, 1], [8, 4], [8, 5], [8, 6]], 'stone': [[1, 5], [1, 6], [2, 3], [2, 5], [2, 6], [3, 5], [3, 6], [4, 5], [4, 6]], 'sand': [[6, 5], [6, 6], [7, 6]], 'tree': [[0, 1], [0, 2], [0, 3], [1, 0], [3, 0], [4, 2], [7, 4], [8, 2], [8, 3]], 'coal': [[2, 4], [5, 6]], 'iron': [[3, 3], [3, 4]], 'diamond': [[4, 4]], 'ach_collect_coal': 0, 'ach_collect_diamond': 0, 'ach_collect_iron': 0, 'ach_collect_stone': 0, 'ach_collect_wood': 0, 'ach_make_iron_pickaxe': 0, 'ach_make_iron_sword': 0, 'ach_make_stone_pickaxe': 0, 'ach_make_stone_sword': 0, 'ach_make_wood_pickaxe': 0, 'ach_make_wood_sword': 0, 'ach_place_furnace': 0, 'ach_place_stone': 0, 'ach_place_table': 0}
+
+
+Action Space (what actions can be taken):
+
+['noop', 'move_left', 'move_right', 'move_up', 'move_down', 'do', 'sleep', 'place_stone', 'place_table', 'place_furnace', 'place_plant', 'make_wood_pickaxe', 'make_stone_pickaxe', 'make_iron_pickaxe', 'make_wood_sword', 'make_stone_sword', 'make_iron_sword']
+
+
+
+---
+FAILURE SIGNALS (latest):
+
+PLANNER FAILED with the cached domain+problem. Either no plan
+exists from the initial state to the goal under the current
+operator definitions, or the planner returned an empty plan.
+Revise the domain so a plan can be found - typically by relaxing
+over-restrictive preconditions, adding missing operators, or
+removing effects that contradict the achievable goal.
+Planner output:
+ENHSP-20 reported the problem as unsolvable.
+stdout tail: Domain parsed
+Problem parsed
+Grounding..
+Grounding Time: 9
+Aibr Preprocessing
+|F|:9
+|X|:3
+|A|:7
+|P|:0
+|E|:0
+H1 Setup Time (msec): 5
+Setting horizon to:NaN
+Running Greedy Best First Search
+h(n = s_0)=11.0
+Problem unsolvable
+Metric (Search):0.0
+Planning Time (msec): 188
+Heuristic Time (msec): 0
+Search Time (msec): 0
+Expanded Nodes:1
+States Evaluated:1
+Fixed constraint violations during search (zero-crossing):0
+Number of Dead-Ends detected:1
+Number of Duplicates detected:0
+
+
+Return EXACTLY ONE `pddl` code block containing the updated (or unchanged)
+domain definition. Do NOT include a problem file - only the domain.

@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "kind": "revision",
+  "timestamp": "2026-07-23T13:54:59.061476",
+  "llm_call_idx": 8,
+  "llm_label": "wm_revise",
+  "prompt_file": "/data/dwlee/PyNES/projects/tc/runs/explore/v1-random_chars-42/llm_prompts/call_0008_wm_revise_level_1.txt",
+  "duration_sec": 27.305869195144624,
+  "num_errors": 2
+}

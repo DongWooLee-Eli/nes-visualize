@@ -1,0 +1,40 @@
+{
+  "domain_name": "minicrafter_oo",
+  "level_id": 6,
+  "seed": 42,
+  "effective_seed": 6042,
+  "area": [
+    9,
+    7
+  ],
+  "view": [
+    9,
+    9
+  ],
+  "mission": "make stone pickaxe",
+  "solved": true,
+  "actions": [
+    "move_up",
+    "do",
+    "move_left",
+    "do",
+    "move_right",
+    "do",
+    "place_table",
+    "move_up",
+    "move_right",
+    "do",
+    "move_down",
+    "make_wood_pickaxe",
+    "move_left",
+    "move_left",
+    "move_left",
+    "move_left",
+    "move_down",
+    "do",
+    "move_right",
+    "move_right",
+    "move_right",
+    "make_stone_pickaxe"
+  ]
+}

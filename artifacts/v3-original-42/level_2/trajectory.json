@@ -1,0 +1,27 @@
+{
+  "domain_name": "minicrafter_oo",
+  "level_id": 2,
+  "seed": 42,
+  "effective_seed": 2042,
+  "area": [
+    9,
+    7
+  ],
+  "view": [
+    9,
+    9
+  ],
+  "mission": "make wood pickaxe",
+  "solved": true,
+  "actions": [
+    "move_left",
+    "move_down",
+    "do",
+    "move_down",
+    "do",
+    "move_left",
+    "do",
+    "place_table",
+    "make_wood_pickaxe"
+  ]
+}

@@ -1,0 +1,11 @@
+(define (domain collect_tpkhxk_domain)
+  (:requirements :strips :typing :numeric-fluents)
+  (:types actor resource)
+  (:predicates (adjacent_to ?who - actor ?what - resource))
+  (:functions (inv_tpkhxk))
+  (:action collect_tpkhxk
+    :parameters (?who - actor ?what - resource)
+    :precondition (adjacent_to ?who ?what)
+    :effect (increase (inv_tpkhxk) 1)
+  )
+)

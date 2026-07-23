@@ -1,0 +1,41 @@
+(define (domain collect_tpkhxk_domain)
+  (:requirements :strips :typing :negative-preconditions :numeric-fluents)
+  (:types actor resource cell)
+  (:predicates (adjacent_to ?who - actor ?what - resource) (at ?who - actor ?where - cell) (blocked ?where - cell) (can_move_up ?from - cell ?to - cell) (can_move_down ?from - cell ?to - cell) (can_move_left ?from - cell ?to - cell) (can_move_right ?from - cell ?to - cell))
+  (:functions (inv_tpkhxk) (inv_sgqeje) (inv_sgqeje_wqiqzh))
+  (:action move_up
+    :parameters (?who - actor ?from - cell ?to - cell)
+    :precondition (and (at ?who ?from) (can_move_up ?from ?to) (not (blocked ?to)))
+    :effect (and (not (at ?who ?from)) (at ?who ?to))
+  )
+  (:action move_down
+    :parameters (?who - actor ?from - cell ?to - cell)
+    :precondition (and (at ?who ?from) (can_move_down ?from ?to) (not (blocked ?to)))
+    :effect (and (not (at ?who ?from)) (at ?who ?to))
+  )
+  (:action move_left
+    :parameters (?who - actor ?from - cell ?to - cell)
+    :precondition (and (at ?who ?from) (can_move_left ?from ?to) (not (blocked ?to)))
+    :effect (and (not (at ?who ?from)) (at ?who ?to))
+  )
+  (:action move_right
+    :parameters (?who - actor ?from - cell ?to - cell)
+    :precondition (and (at ?who ?from) (can_move_right ?from ?to) (not (blocked ?to)))
+    :effect (and (not (at ?who ?from)) (at ?who ?to))
+  )
+  (:action collect_tpkhxk
+    :parameters (?who - actor ?what - resource)
+    :precondition (adjacent_to ?who ?what)
+    :effect (increase (inv_tpkhxk) 1)
+  )
+  (:action collect_sgqeje
+    :parameters (?who - actor ?what - resource)
+    :precondition (adjacent_to ?who ?what)
+    :effect (increase (inv_sgqeje) 1)
+  )
+  (:action make_sgqeje_wqiqzh
+    :parameters ()
+    :precondition (>= (inv_sgqeje) 5)
+    :effect (and (decrease (inv_sgqeje) 5) (increase (inv_sgqeje_wqiqzh) 1))
+  )
+)

@@ -1,0 +1,21 @@
+(define (domain make_wood_sword_domain)
+  (:requirements :strips :typing :numeric-fluents)
+  (:types wood_source table_status sword_status)
+  (:predicates (wood_available ?source - wood_source) (table_placed ?result - table_status) (sword_made ?result - sword_status))
+  (:functions (inv_wood))
+  (:action collect_wood
+    :parameters (?source - wood_source)
+    :precondition (wood_available ?source)
+    :effect (increase (inv_wood) 1)
+  )
+  (:action place_table
+    :parameters (?result - table_status)
+    :precondition (>= (inv_wood) 2)
+    :effect (and (decrease (inv_wood) 2) (table_placed ?result))
+  )
+  (:action make_wood_sword
+    :parameters (?table - table_status ?result - sword_status)
+    :precondition (and (table_placed ?table) (>= (inv_wood) 1))
+    :effect (and (decrease (inv_wood) 1) (sword_made ?result))
+  )
+)

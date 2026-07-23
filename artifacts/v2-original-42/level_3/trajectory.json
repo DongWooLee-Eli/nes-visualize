@@ -1,0 +1,28 @@
+{
+  "domain_name": "minicrafter_oo",
+  "level_id": 3,
+  "seed": 42,
+  "effective_seed": 3042,
+  "area": [
+    9,
+    7
+  ],
+  "view": [
+    9,
+    9
+  ],
+  "mission": "make wood sword",
+  "solved": true,
+  "actions": [
+    "move_up",
+    "do",
+    "move_up",
+    "move_left",
+    "do",
+    "move_left",
+    "move_left",
+    "do",
+    "place_table",
+    "make_wood_sword"
+  ]
+}

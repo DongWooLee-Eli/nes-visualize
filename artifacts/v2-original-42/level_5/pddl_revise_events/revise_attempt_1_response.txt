@@ -1,0 +1,36 @@
+```pddl
+(define (domain collect_wood_domain)
+  (:requirements :strips :typing :numeric-fluents)
+  (:functions (inv_wood) (inv_stone) (inv_wood_pickaxe) (inv_wood_sword) (ach_collect_wood) (ach_collect_stone) (ach_place_table) (ach_place_stone) (ach_make_wood_pickaxe) (ach_make_wood_sword))
+  (:action collect_wood
+    :parameters ()
+    :precondition (and)
+    :effect (and (increase (inv_wood) 1) (increase (ach_collect_wood) 1))
+  )
+  (:action place_table
+    :parameters ()
+    :precondition (>= (inv_wood) 2)
+    :effect (and (decrease (inv_wood) 2) (increase (ach_place_table) 1))
+  )
+  (:action make_wood_pickaxe
+    :parameters ()
+    :precondition (and (>= (inv_wood) 1) (>= (ach_place_table) 1))
+    :effect (and (decrease (inv_wood) 1) (increase (inv_wood_pickaxe) 1) (increase (ach_make_wood_pickaxe) 1))
+  )
+  (:action make_wood_sword
+    :parameters ()
+    :precondition (and (>= (inv_wood) 1) (>= (ach_place_table) 1))
+    :effect (and (decrease (inv_wood) 1) (increase (inv_wood_sword) 1) (increase (ach_make_wood_sword) 1))
+  )
+  (:action collect_stone
+    :parameters ()
+    :precondition (>= (inv_wood_pickaxe) 1)
+    :effect (and (increase (inv_stone) 1) (increase (ach_collect_stone) 1))
+  )
+  (:action place_stone
+    :parameters ()
+    :precondition (>= (inv_stone) 1)
+    :effect (and (decrease (inv_stone) 1) (increase (ach_place_stone) 1))
+  )
+)
+```

@@ -1,0 +1,21 @@
+(define (domain craft_tpkhxk_wqiqzh)
+  (:requirements :strips :typing :negative-preconditions :numeric-fluents)
+  (:types actor place_status make_status)
+  (:predicates (is_placed ?flag - place_status) (is_made ?flag - make_status))
+  (:functions (inv_tpkhxk) (inv_tpkhxk_wqiqzh))
+  (:action collect_tpkhxk
+    :parameters (?who - actor)
+    :precondition (>= (inv_tpkhxk) 0)
+    :effect (increase (inv_tpkhxk) 1)
+  )
+  (:action place_ckqpdj
+    :parameters (?who - actor ?result - place_status)
+    :precondition (and (>= (inv_tpkhxk) 2) (not (is_placed ?result)))
+    :effect (and (decrease (inv_tpkhxk) 2) (is_placed ?result))
+  )
+  (:action make_tpkhxk_wqiqzh
+    :parameters (?who - actor ?station - place_status ?result - make_status)
+    :precondition (and (is_placed ?station) (>= (inv_tpkhxk) 1) (not (is_made ?result)))
+    :effect (and (decrease (inv_tpkhxk) 1) (increase (inv_tpkhxk_wqiqzh) 1) (is_made ?result))
+  )
+)

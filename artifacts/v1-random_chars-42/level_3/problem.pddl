@@ -1,0 +1,6 @@
+(define (problem make_tpkhxk_wqiqzh_problem)
+  (:domain make_tpkhxk_wqiqzh_domain)
+  (:objects ach_make_tpkhxk_wqiqzh - achievement)
+  (:init)
+  (:goal (completed ach_make_tpkhxk_wqiqzh))
+)

@@ -1,0 +1,140 @@
+You are a software engineer that must write Python predicate evaluators. These functions implement the PDDL predicates declared in the domain file: each function takes the state and predicate arguments, then returns True or False. You will need to write Python predicates for ALL the predicates you see in the domain file. The problem file and raw state are also given to help guide you.
+
+Return your code blocks with
+```python ```
+markup tags so I can easily extract it.
+
+BEGIN EXAMPLE - note that BOTH predicates are defined (do not omit any):
+
+predicate: key_exists(arg1)
+predicate: same_value(arg1, arg2)
+
+def key_exists(state, arg1):
+    """True when arg1 is an observed raw-state key."""
+    return arg1 in state
+
+def same_value(state, arg1, arg2):
+    """True when two observed raw-state keys have equal values."""
+    return arg1 in state and arg2 in state and state[arg1] == state[arg2]
+
+END EXAMPLE
+
+Rules:
+- ALWAYS include `state` as the first argument.
+- Use the EXACT predicate name from the domain file (case-sensitive).
+- Define every predicate the domain declares - even 0-arity ones.
+- For 0-arity predicates use `def name(state, *args): ...` so callers
+  passing extra args don't break.
+- Return `bool` (or a truthy/falsy value coercible to bool).
+
+MANDATORY - you MUST define ALL of these predicate functions, with EXACTLY these names (one `def <name>(state, ...):` per name). Omitting any one will cause the run to fail:
+  - achievement_set
+  - reachable_resource
+
+Starter stubs (you must fill in each body - do not delete any):
+```python
+def achievement_set(state, *args):
+    ...  # implement
+
+def reachable_resource(state, *args):
+    ...  # implement
+```
+
+Domain File:
+
+(define (domain collect_item)
+  (:requirements :strips :typing :negative-preconditions)
+  (:types actor resource status)
+  (:predicates
+    (reachable_resource ?who - actor ?what - resource)
+    (achievement_set ?flag - status)
+  )
+  (:action collect_tpkhxk
+    :parameters (?who - actor ?what - resource ?flag - status)
+    :precondition (and (not (achievement_set ?flag)))
+    :effect (achievement_set ?flag)
+  )
+)
+
+Problem File:
+
+(define (problem collect_tpkhxk_problem)
+  (:domain collect_item)
+  (:objects
+    player - actor
+    inv_tpkhxk - resource
+    ach_collect_tpkhxk - status
+  )
+  (:init)
+  (:goal (achievement_set ach_collect_tpkhxk))
+)
+
+Raw State:
+
+{'player': [[4, 3]], 'player_facing': [0, 1], 'player_health': 9, 'player_hunger': 0.0, 'player_thirst': 0.0, 'player_fatigue': 0.0, 'player_sleeping': False, 'daylight': 1.0, 'step_count': 0, 'inv_health': 9, 'inv_food': 9, 'inv_drink': 9, 'inv_energy': 9, 'inv_wcgshh': 0, 'inv_tpkhxk': 0, 'inv_sgqeje': 0, 'inv_grpoqi': 0, 'inv_bzracx': 0, 'inv_mwzvua': 0, 'inv_tpkhxk_bcwrvm': 0, 'inv_sgqeje_bcwrvm': 0, 'inv_bzracx_bcwrvm': 0, 'inv_tpkhxk_wqiqzh': 0, 'inv_sgqeje_wqiqzh': 0, 'inv_bzracx_wqiqzh': 0, 'mynbiq': [[0, 1], [0, 2], [0, 3], [1, 2], [2, 2]], 'pmzjpl': [[0, 6], [1, 3], [2, 3], [2, 4], [2, 5], [2, 6], [3, 3], [3, 4], [3, 5], [3, 6], [4, 3], [4, 4], [4, 6], [5, 5], [5, 6], [6, 3], [6, 4], [6, 5], [6, 6], [7, 1], [7, 4], [7, 5], [7, 6], [8, 0], [8, 1], [8, 2], [8, 3], [8, 4], [8, 5], [8, 6]], 'sgqeje': [[0, 0], [1, 1], [2, 1], [3, 0], [3, 1], [4, 2], [5, 0], [5, 1], [5, 2], [6, 0], [6, 1], [7, 0]], 'wztejd': [[0, 4], [0, 5], [1, 4]], 'xcvkpr': [[1, 5], [1, 6], [4, 5], [5, 3], [5, 4], [6, 2], [7, 2], [7, 3]], 'grpoqi': [[2, 0], [4, 0]], 'bzracx': [[3, 2], [4, 1]], 'mwzvua': [[1, 0]], 'ach_collect_grpoqi': 0, 'ach_collect_mwzvua': 0, 'ach_collect_bzracx': 0, 'ach_collect_sgqeje': 0, 'ach_collect_tpkhxk': 0, 'ach_make_bzracx_bcwrvm': 0, 'ach_make_bzracx_wqiqzh': 0, 'ach_make_sgqeje_bcwrvm': 0, 'ach_make_sgqeje_wqiqzh': 0, 'ach_make_tpkhxk_bcwrvm': 0, 'ach_make_tpkhxk_wqiqzh': 0, 'ach_place_ckqpdj': 0, 'ach_place_sgqeje': 0, 'ach_place_zezroc': 0}
+
+Current Python Low Level World Model:
+
+from copy import deepcopy
+
+def transition_model(state, action):
+    new_state = deepcopy(state)
+
+    # Every observed action consumes one step, even when it otherwise fails.
+    new_state["step_count"] = state.get("step_count", 0) + 1
+
+    directions = {
+        "move_left": (-1, 0),
+        "move_right": (1, 0),
+        "move_up": (0, -1),
+        "move_down": (0, 1),
+    }
+
+    if action in directions and state.get("player"):
+        dx, dy = directions[action]
+        new_state["player_facing"] = [dx, dy]
+
+        x, y = state["player"][0]
+        destination = [x + dx, y + dy]
+
+        # Infer the known map from all coordinate-list state entries.
+        known_cells = set()
+        for key, value in state.items():
+            if key in ("player", "player_facing") or not isinstance(value, list):
+                continue
+            for position in value:
+                if (
+                    isinstance(position, (list, tuple))
+                    and len(position) == 2
+                    and all(
+                        isinstance(v, int) and not isinstance(v, bool)
+                        for v in position
+                    )
+                ):
+                    known_cells.add(tuple(position))
+
+        # xcvkpr cells are obstacles and cannot be entered.
+        blocked_cells = {
+            tuple(position)
+            for position in state.get("xcvkpr", [])
+            if (
+                isinstance(position, (list, tuple))
+                and len(position) == 2
+                and all(
+                    isinstance(v, int) and not isinstance(v, bool)
+                    for v in position
+                )
+            )
+        }
+
+        destination_tuple = tuple(destination)
+        if (
+            (not known_cells or destination_tuple in known_cells)
+            and destination_tuple not in blocked_cells
+        ):
+            new_state["player"] = [destination]
+
+    # noop, do, sleep, place_*, and make_* only advance step_count based on
+    # the currently established observations.
+    return new_state
+

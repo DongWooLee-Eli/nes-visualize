@@ -1,0 +1,10 @@
+(define (domain collect_stone_domain)
+  (:requirements :strips :typing)
+  (:types actor resource achievement)
+  (:predicates (resource_available ?item - resource) (achievement_reached ?flag - achievement))
+  (:action collect_stone
+    :parameters (?who - actor ?item - resource ?flag - achievement)
+    :precondition (resource_available ?item)
+    :effect (achievement_reached ?flag)
+  )
+)

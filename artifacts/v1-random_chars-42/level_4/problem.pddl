@@ -1,0 +1,6 @@
+(define (problem collect_sgqeje_problem)
+  (:domain collect_sgqeje_domain)
+  (:objects sgqeje - item ach_collect_sgqeje - status)
+  (:init (is_present sgqeje))
+  (:goal (is_achieved ach_collect_sgqeje))
+)

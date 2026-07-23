@@ -1,0 +1,162 @@
+{
+  "schema_version": 2,
+  "mode": "tc2",
+  "domain": "minicrafter_oo",
+  "level_id": 4,
+  "planner": "enhsp",
+  "metadata": {
+    "mode": "tc2",
+    "domain": "minicrafter_oo",
+    "level_id": 4,
+    "planner": "enhsp"
+  },
+  "artifacts": {
+    "scale_diagnostics": "scale_diagnostics.json",
+    "plan_log": "plan_log.jsonl",
+    "trajectory": "trajectory.json",
+    "domain_entry": "domain_at_entry.pddl",
+    "domain_current": "domain.pddl",
+    "problem": "problem.pddl",
+    "wm_entry": "wm_at_entry.py",
+    "validated_domain_entry": "validated_domain_at_entry.pddl",
+    "llm_calls": "../llm_calls.jsonl",
+    "llm_prompts_dir": "../llm_prompts",
+    "run_log": "../run.log",
+    "worldmodel_events": "../worldmodel_events",
+    "worldmodel_history": "../worldmodel_history",
+    "run_config": "../run_config.json",
+    "results": "../results.json",
+    "minicrafter_variant": "../minicrafter_variant.json"
+  },
+  "pddl": {
+    "num_operators": 1,
+    "num_predicates": 2,
+    "num_objects": 2,
+    "num_constants": 0,
+    "goal_size": 1,
+    "init_size": 4,
+    "attempts": 1,
+    "ok": true,
+    "source": "fresh",
+    "revise_changed_bytes": 0
+  },
+  "random_explore": {
+    "num_actions": 0,
+    "duration_sec": null,
+    "nontrivial_transitions": 0,
+    "achievements_hit": []
+  },
+  "wm_synth": {
+    "version": 0,
+    "duration_sec": null,
+    "ok": false
+  },
+  "predicates": {
+    "names": [
+      "is_achieved",
+      "is_present"
+    ],
+    "attempts": 1,
+    "ok": true
+  },
+  "fd": {
+    "translator_facts": null,
+    "translator_operators": null,
+    "walltime": 0.24496925389394164,
+    "returncode": 0,
+    "plan_len": 1,
+    "ok": true,
+    "error": null
+  },
+  "bfs": [
+    {
+      "subplan": "collect sgqeje ach_collect_sgqeje",
+      "index": 0,
+      "phase": "main_plan",
+      "attempt": 1,
+      "revision": 1,
+      "plan_log_line": 1,
+      "iters": 10001,
+      "visited": 14500,
+      "success": false,
+      "cutoff_hit": true,
+      "wall_time": 53.90994724002667,
+      "max_iters": 10000,
+      "num_actions": 13,
+      "actions": [
+        "do",
+        "move_left",
+        "move_down",
+        "move_down",
+        "do",
+        "move_left",
+        "do",
+        "move_left",
+        "move_left",
+        "move_up",
+        "do",
+        "move_left",
+        "move_up"
+      ]
+    },
+    {
+      "subplan": "collect player sgqeje",
+      "index": 0,
+      "phase": "main_plan",
+      "attempt": 2,
+      "revision": 1,
+      "plan_log_line": 2,
+      "iters": 1,
+      "visited": 1,
+      "success": true,
+      "cutoff_hit": false,
+      "wall_time": 0.0005364599637687206,
+      "max_iters": 10000,
+      "num_actions": 0,
+      "actions": []
+    },
+    {
+      "subplan": "collect_sgqeje sgqeje ach_collect_sgqeje",
+      "index": 0,
+      "phase": "main_plan",
+      "attempt": 3,
+      "revision": 1,
+      "plan_log_line": 3,
+      "iters": 10001,
+      "visited": 14500,
+      "success": false,
+      "cutoff_hit": true,
+      "wall_time": 54.162215403979644,
+      "max_iters": 10000,
+      "num_actions": 13,
+      "actions": [
+        "do",
+        "move_left",
+        "move_down",
+        "move_down",
+        "do",
+        "move_left",
+        "do",
+        "move_left",
+        "move_left",
+        "move_up",
+        "do",
+        "move_left",
+        "move_up"
+      ]
+    }
+  ],
+  "revisions": [],
+  "pddl_revise_log": [],
+  "pddl_revise_counts": {},
+  "wm_fidelity": {
+    "overall": null,
+    "by_key_class": {},
+    "hidden_rng_active": false
+  },
+  "totals": {
+    "solved": false,
+    "llm_calls": 6,
+    "wall_time_sec": 166.19483399903402
+  }
+}

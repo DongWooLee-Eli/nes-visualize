@@ -1,0 +1,18 @@
+```pddl
+(define (domain collect_wood_domain)
+  (:requirements :strips :typing :fluents)
+  (:types actor location)
+  (:predicates (player_at ?who - actor ?where - location) (tree_at ?where - location) (grass_at ?where - location) (table_at ?where - location))
+  (:functions (inv_wood) (ach_collect_wood) (ach_place_table))
+  (:action collect_wood
+    :parameters (?who - actor ?source - location)
+    :precondition (tree_at ?source)
+    :effect (and (not (tree_at ?source)) (grass_at ?source) (increase (inv_wood) 1) (increase (ach_collect_wood) 1))
+  )
+  (:action place_table
+    :parameters (?who - actor ?where - location)
+    :precondition (and (player_at ?who ?where) (grass_at ?where) (>= (inv_wood) 2))
+    :effect (and (decrease (inv_wood) 2) (increase (ach_place_table) 1) (table_at ?where) (not (grass_at ?where)))
+  )
+)
+```

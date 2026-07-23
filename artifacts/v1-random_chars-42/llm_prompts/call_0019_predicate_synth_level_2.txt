@@ -1,0 +1,215 @@
+You are a software engineer that must write Python predicate evaluators. These functions implement the PDDL predicates declared in the domain file: each function takes the state and predicate arguments, then returns True or False. You will need to write Python predicates for ALL the predicates you see in the domain file. The problem file and raw state are also given to help guide you.
+
+Return your code blocks with
+```python ```
+markup tags so I can easily extract it.
+
+BEGIN EXAMPLE - note that BOTH predicates are defined (do not omit any):
+
+predicate: key_exists(arg1)
+predicate: same_value(arg1, arg2)
+
+def key_exists(state, arg1):
+    """True when arg1 is an observed raw-state key."""
+    return arg1 in state
+
+def same_value(state, arg1, arg2):
+    """True when two observed raw-state keys have equal values."""
+    return arg1 in state and arg2 in state and state[arg1] == state[arg2]
+
+END EXAMPLE
+
+Rules:
+- ALWAYS include `state` as the first argument.
+- Use the EXACT predicate name from the domain file (case-sensitive).
+- Define every predicate the domain declares - even 0-arity ones.
+- For 0-arity predicates use `def name(state, *args): ...` so callers
+  passing extra args don't break.
+- Return `bool` (or a truthy/falsy value coercible to bool).
+
+MANDATORY - you MUST define ALL of these predicate functions, with EXACTLY these names (one `def <name>(state, ...):` per name). Omitting any one will cause the run to fail:
+  - achieved
+  - harvestable
+
+Starter stubs (you must fill in each body - do not delete any):
+```python
+def achieved(state, *args):
+    ...  # implement
+
+def harvestable(state, *args):
+    ...  # implement
+```
+
+Domain File:
+
+(define (domain make_tpkhxk_bcwrvm_domain)
+  (:requirements :strips :typing :numeric-fluents)
+  (:types source status)
+  (:predicates (harvestable ?source - source) (achieved ?flag - status))
+  (:functions (inv_tpkhxk))
+  (:action collect_tpkhxk
+    :parameters (?source - source)
+    :precondition (harvestable ?source)
+    :effect (increase (inv_tpkhxk) 1)
+  )
+  (:action make_tpkhxk_bcwrvm
+    :parameters (?result - status)
+    :precondition (>= (inv_tpkhxk) 1)
+    :effect (and (decrease (inv_tpkhxk) 1) (achieved ?result))
+  )
+)
+
+Problem File:
+
+(define (problem make_tpkhxk_bcwrvm_problem)
+  (:domain make_tpkhxk_bcwrvm_domain)
+  (:objects mynbiq - source ach_make_tpkhxk_bcwrvm - status)
+  (:init (harvestable mynbiq) (= (inv_tpkhxk) 0))
+  (:goal (achieved ach_make_tpkhxk_bcwrvm))
+)
+
+Raw State:
+
+{'player': [[4, 3]], 'player_facing': [0, 1], 'player_health': 9, 'player_hunger': 0.0, 'player_thirst': 0.0, 'player_fatigue': 0.0, 'player_sleeping': False, 'daylight': 1.0, 'step_count': 0, 'inv_health': 9, 'inv_food': 9, 'inv_drink': 9, 'inv_energy': 9, 'inv_wcgshh': 0, 'inv_tpkhxk': 0, 'inv_sgqeje': 0, 'inv_grpoqi': 0, 'inv_bzracx': 0, 'inv_mwzvua': 0, 'inv_tpkhxk_bcwrvm': 0, 'inv_sgqeje_bcwrvm': 0, 'inv_bzracx_bcwrvm': 0, 'inv_tpkhxk_wqiqzh': 0, 'inv_sgqeje_wqiqzh': 0, 'inv_bzracx_wqiqzh': 0, 'mynbiq': [[3, 0], [3, 1], [4, 0]], 'pmzjpl': [[0, 2], [0, 4], [0, 5], [0, 6], [1, 0], [1, 2], [1, 3], [1, 4], [1, 6], [2, 0], [2, 1], [2, 2], [2, 3], [2, 4], [2, 5], [2, 6], [3, 2], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6], [5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [7, 0], [7, 2], [8, 0], [8, 1], [8, 2]], 'sgqeje': [[5, 6], [6, 5], [6, 6], [7, 3], [7, 4], [8, 4], [8, 5], [8, 6]], 'wztejd': [[5, 0], [5, 1], [6, 0]], 'xcvkpr': [[0, 0], [0, 1], [0, 3], [1, 1], [1, 5], [3, 5], [3, 6], [6, 1], [7, 1]], 'grpoqi': [[5, 5], [6, 4]], 'bzracx': [[7, 6], [8, 3]], 'mwzvua': [[7, 5]], 'ach_collect_grpoqi': 0, 'ach_collect_mwzvua': 0, 'ach_collect_bzracx': 0, 'ach_collect_sgqeje': 0, 'ach_collect_tpkhxk': 0, 'ach_make_bzracx_bcwrvm': 0, 'ach_make_bzracx_wqiqzh': 0, 'ach_make_sgqeje_bcwrvm': 0, 'ach_make_sgqeje_wqiqzh': 0, 'ach_make_tpkhxk_bcwrvm': 0, 'ach_make_tpkhxk_wqiqzh': 0, 'ach_place_ckqpdj': 0, 'ach_place_sgqeje': 0, 'ach_place_zezroc': 0}
+
+Current Python Low Level World Model:
+
+from copy import deepcopy
+
+def transition_model(state, action):
+    new_state = deepcopy(state)
+
+    # Every observed action advances the environment by one step.
+    new_state["step_count"] = state.get("step_count", 0) + 1
+
+    player = state.get("player", [])
+    if not player:
+        return new_state
+
+    x, y = player[0]
+
+    directions = {
+        "move_left": (-1, 0),
+        "move_right": (1, 0),
+        "move_up": (0, -1),
+        "move_down": (0, 1),
+    }
+
+    harvest_drops = {
+        "xcvkpr": "tpkhxk",
+    }
+
+    def coordinate_layers(s):
+        """Return keys whose values look like lists of [x, y] positions."""
+        layers = {}
+        for key, value in s.items():
+            if key == "player" or not isinstance(value, list):
+                continue
+            if all(
+                isinstance(position, (list, tuple))
+                and len(position) == 2
+                and all(isinstance(v, int) for v in position)
+                for position in value
+            ):
+                layers[key] = value
+        return layers
+
+    layers = coordinate_layers(state)
+
+    # Layers without corresponding inventory items are terrain rather than
+    # placeable entities. Harvestable layers are handled separately.
+    terrain_keys = [
+        key
+        for key in layers
+        if ("inv_" + key) not in state and key not in harvest_drops
+    ]
+
+    # Remember the terrain beneath the player for replacing harvested tiles.
+    local_ground_keys = [
+        key for key in terrain_keys if [x, y] in layers.get(key, [])
+    ]
+
+    all_positions = {
+        tuple(position)
+        for positions in layers.values()
+        for position in positions
+    }
+
+    if all_positions:
+        min_x = min(px for px, _ in all_positions)
+        max_x = max(px for px, _ in all_positions)
+        min_y = min(py for _, py in all_positions)
+        max_y = max(py for _, py in all_positions)
+    else:
+        min_x = min_y = 0
+        max_x = max_y = 0
+
+    def in_bounds(position):
+        px, py = position
+        return min_x <= px <= max_x and min_y <= py <= max_y
+
+    def is_ground(position):
+        """All demonstrated terrain layers are traversable ground types."""
+        p = list(position)
+        return any(p in state.get(key, []) for key in terrain_keys)
+
+    if action in directions:
+        dx, dy = directions[action]
+        new_state["player_facing"] = [dx, dy]
+        target = (x + dx, y + dy)
+
+        # Different terrain layers can represent different traversable ground
+        # types, so movement is allowed onto any demonstrated terrain tile.
+        if in_bounds(target) and (not terrain_keys or is_ground(target)):
+            new_state["player"] = [[target[0], target[1]]]
+
+    elif action == "do":
+        dx, dy = state.get("player_facing", [0, 1])
+        target = [x + dx, y + dy]
+
+        for key, resource in harvest_drops.items():
+            positions = state.get(key, [])
+            if target not in positions:
+                continue
+
+            inventory_key = "inv_" + resource
+            new_state[inventory_key] = state.get(inventory_key, 0) + 1
+            new_state[key].remove(target)
+
+            achievement_key = "ach_collect_" + resource
+            new_state[achievement_key] = state.get(achievement_key, 0) + 1
+
+            # Harvested tiles become the terrain type beneath the player.
+            if local_ground_keys:
+                ground_key = local_ground_keys[0]
+                if target not in new_state.get(ground_key, []):
+                    new_state.setdefault(ground_key, []).append(target)
+                    new_state[ground_key].sort()
+            break
+
+    elif action.startswith("place_"):
+        entity = action[len("place_"):]
+        inventory_key = "inv_" + entity
+        dx, dy = state.get("player_facing", [0, 1])
+        target = [x + dx, y + dy]
+
+        if (
+            state.get(inventory_key, 0) > 0
+            and in_bounds(tuple(target))
+            and is_ground(tuple(target))
+        ):
+            new_state[inventory_key] -= 1
+
+            for ground_key in terrain_keys:
+                if target in new_state.get(ground_key, []):
+                    new_state[ground_key].remove(target)
+                    break
+
+            if target not in new_state.setdefault(entity, []):
+                new_state[entity].append(target)
+                new_state[entity].sort()
+
+    # Crafting, sleeping, noop, and unsupported actions have no demonstrated
+    # effect beyond advancing step_count when their requirements are unmet.
+    return new_state
+

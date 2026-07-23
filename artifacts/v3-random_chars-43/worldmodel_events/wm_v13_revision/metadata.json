@@ -1,0 +1,10 @@
+{
+  "version": 13,
+  "kind": "revision",
+  "timestamp": "2026-07-23T17:30:47.023774",
+  "llm_call_idx": 76,
+  "llm_label": "wm_revise",
+  "prompt_file": "/data/dwlee/PyNES6/projects/tc/runs/llm_beamsearch/random_chars_seed43_c2000_pddl200/llm_prompts/call_0076_wm_revise_level_6.txt",
+  "duration_sec": 23.182061433792114,
+  "num_errors": 4
+}

@@ -1,0 +1,30 @@
+(define (domain stone_sword_domain)
+  (:requirements :strips :numeric-fluents)
+  (:predicates (collected_wood) (collected_stone) (table_placed) (wood_pickaxe_made) (stone_sword_made))
+  (:functions (inv_wood) (inv_stone) (inv_wood_pickaxe))
+  (:action collect_wood
+    :parameters ()
+    :precondition (and)
+    :effect (and (increase (inv_wood) 1) (collected_wood))
+  )
+  (:action place_table
+    :parameters ()
+    :precondition (>= (inv_wood) 2)
+    :effect (and (decrease (inv_wood) 2) (table_placed))
+  )
+  (:action make_wood_pickaxe
+    :parameters ()
+    :precondition (and (table_placed) (>= (inv_wood) 1))
+    :effect (and (decrease (inv_wood) 1) (increase (inv_wood_pickaxe) 1) (wood_pickaxe_made))
+  )
+  (:action collect_stone
+    :parameters ()
+    :precondition (>= (inv_wood_pickaxe) 1)
+    :effect (and (increase (inv_stone) 1) (collected_stone))
+  )
+  (:action make_stone_sword
+    :parameters ()
+    :precondition (and (table_placed) (>= (inv_wood) 1) (>= (inv_stone) 1))
+    :effect (and (decrease (inv_wood) 1) (decrease (inv_stone) 1) (stone_sword_made))
+  )
+)

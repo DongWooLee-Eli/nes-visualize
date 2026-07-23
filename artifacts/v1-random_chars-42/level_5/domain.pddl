@@ -1,0 +1,16 @@
+(define (domain sgqeje_placement)
+  (:requirements :strips :typing :numeric-fluents)
+  (:types resource status)
+  (:predicates (available ?item - resource) (is_set ?flag - status))
+  (:functions (inv_sgqeje))
+  (:action collect_sgqeje
+    :parameters (?item - resource)
+    :precondition (available ?item)
+    :effect (increase (inv_sgqeje) 1)
+  )
+  (:action place_sgqeje
+    :parameters (?item - resource ?result - status)
+    :precondition (and (available ?item) (>= (inv_sgqeje) 1))
+    :effect (and (decrease (inv_sgqeje) 1) (is_set ?result))
+  )
+)

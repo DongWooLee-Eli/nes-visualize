@@ -1,0 +1,31 @@
+```pddl
+(define (domain collect_wood_domain)
+  (:requirements :strips :typing :fluents)
+  (:types actor resource status)
+  (:constants ach_collect_wood ach_collect_stone ach_place_stone - status)
+  (:predicates
+    (adjacent_to ?who - actor ?target - resource)
+    (tree ?target - resource)
+    (stone ?target - resource)
+    (achieved ?flag - status)
+  )
+  (:functions
+    (inv_stone ?who - actor)
+  )
+  (:action collect_wood
+    :parameters (?who - actor ?target - resource)
+    :precondition (and (adjacent_to ?who ?target) (tree ?target))
+    :effect (achieved ach_collect_wood)
+  )
+  (:action collect_stone
+    :parameters (?who - actor ?target - resource)
+    :precondition (and (adjacent_to ?who ?target) (stone ?target))
+    :effect (and (increase (inv_stone ?who) 1) (achieved ach_collect_stone))
+  )
+  (:action place_stone
+    :parameters (?who - actor)
+    :precondition (>= (inv_stone ?who) 1)
+    :effect (and (decrease (inv_stone ?who) 1) (achieved ach_place_stone))
+  )
+)
+```

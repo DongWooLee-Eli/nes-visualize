@@ -1,0 +1,16 @@
+(define (domain collect_tpkhxk_domain)
+  (:requirements :strips :typing :numeric-fluents)
+  (:types actor resource)
+  (:predicates (adjacent_to ?who - actor ?what - resource) (is_tpkhxk ?what - resource) (available ?what - resource))
+  (:functions (inv_tpkhxk) (inv_tpkhxk_wqiqzh) (ach_collect_tpkhxk) (ach_make_tpkhxk_wqiqzh))
+  (:action collect_tpkhxk
+    :parameters (?who - actor ?what - resource)
+    :precondition (and (adjacent_to ?who ?what) (is_tpkhxk ?what) (available ?what))
+    :effect (and (not (available ?what)) (increase (inv_tpkhxk) 1) (increase (ach_collect_tpkhxk) 1))
+  )
+  (:action make_tpkhxk_wqiqzh
+    :parameters ()
+    :precondition (and)
+    :effect (and (increase (inv_tpkhxk_wqiqzh) 1) (increase (ach_make_tpkhxk_wqiqzh) 1))
+  )
+)

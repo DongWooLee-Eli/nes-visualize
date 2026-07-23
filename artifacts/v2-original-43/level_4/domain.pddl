@@ -1,0 +1,41 @@
+(define (domain collect_wood_domain)
+  (:requirements :strips :typing :fluents)
+  (:types actor resource achievement)
+  (:constants ach_collect_wood ach_collect_stone ach_place_table ach_make_wood_pickaxe ach_make_wood_sword - achievement)
+  (:predicates
+    (tree ?target - resource)
+    (stone ?target - resource)
+    (achieved ?result - achievement)
+  )
+  (:functions
+    (inv_wood)
+    (inv_stone)
+    (inv_wood_pickaxe)
+    (inv_wood_sword)
+  )
+  (:action collect_wood
+    :parameters (?who - actor ?target - resource)
+    :precondition (and (tree ?target))
+    :effect (and (increase (inv_wood) 1) (not (tree ?target)) (achieved ach_collect_wood))
+  )
+  (:action collect_stone
+    :parameters (?who - actor ?target - resource)
+    :precondition (and (stone ?target))
+    :effect (and (increase (inv_stone) 1) (not (stone ?target)) (achieved ach_collect_stone))
+  )
+  (:action place_table
+    :parameters (?who - actor)
+    :precondition (and (>= (inv_wood) 2))
+    :effect (and (decrease (inv_wood) 2) (achieved ach_place_table))
+  )
+  (:action make_wood_pickaxe
+    :parameters (?who - actor)
+    :precondition (and (achieved ach_place_table) (>= (inv_wood) 1))
+    :effect (and (decrease (inv_wood) 1) (increase (inv_wood_pickaxe) 1) (achieved ach_make_wood_pickaxe))
+  )
+  (:action make_wood_sword
+    :parameters (?who - actor)
+    :precondition (and (achieved ach_place_table) (>= (inv_wood) 1))
+    :effect (and (decrease (inv_wood) 1) (increase (inv_wood_sword) 1) (achieved ach_make_wood_sword))
+  )
+)

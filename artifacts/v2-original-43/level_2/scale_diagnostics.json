@@ -1,0 +1,191 @@
+{
+  "schema_version": 2,
+  "mode": "tc2",
+  "domain": "minicrafter_oo",
+  "level_id": 2,
+  "planner": "enhsp",
+  "metadata": {
+    "mode": "tc2",
+    "domain": "minicrafter_oo",
+    "level_id": 2,
+    "planner": "enhsp"
+  },
+  "artifacts": {
+    "scale_diagnostics": "scale_diagnostics.json",
+    "plan_log": "plan_log.jsonl",
+    "trajectory": "trajectory.json",
+    "domain_entry": "domain_at_entry.pddl",
+    "domain_current": "domain.pddl",
+    "problem": "problem.pddl",
+    "wm_entry": "wm_at_entry.py",
+    "validated_domain_entry": "validated_domain_at_entry.pddl",
+    "llm_calls": "../llm_calls.jsonl",
+    "llm_prompts_dir": "../llm_prompts",
+    "run_log": "../run.log",
+    "worldmodel_events": "../worldmodel_events",
+    "worldmodel_history": "../worldmodel_history",
+    "run_config": "../run_config.json",
+    "results": "../results.json",
+    "minicrafter_variant": "../minicrafter_variant.json"
+  },
+  "pddl": {
+    "num_operators": 3,
+    "num_predicates": 3,
+    "num_objects": 2,
+    "num_constants": 3,
+    "goal_size": 1,
+    "init_size": 7,
+    "attempts": 1,
+    "ok": true,
+    "source": "revised",
+    "revise_changed_bytes": 285
+  },
+  "random_explore": {
+    "num_actions": 0,
+    "duration_sec": null,
+    "nontrivial_transitions": 0,
+    "achievements_hit": []
+  },
+  "wm_synth": {
+    "version": 0,
+    "duration_sec": null,
+    "ok": false
+  },
+  "predicates": {
+    "names": [
+      "achieved",
+      "adjacent_to",
+      "tree"
+    ],
+    "attempts": 1,
+    "ok": true
+  },
+  "fd": {
+    "translator_facts": null,
+    "translator_operators": null,
+    "walltime": 0.268527866108343,
+    "returncode": 0,
+    "plan_len": 5,
+    "ok": true,
+    "error": null
+  },
+  "bfs": [
+    {
+      "subplan": "collect_wood player tree",
+      "index": 0,
+      "phase": "main_plan",
+      "attempt": 1,
+      "revision": 1,
+      "plan_log_line": 1,
+      "iters": 3,
+      "visited": 8,
+      "success": true,
+      "cutoff_hit": false,
+      "wall_time": 0.018857205053791404,
+      "max_iters": 10000,
+      "num_actions": 2,
+      "actions": [
+        "move_right",
+        "do"
+      ]
+    },
+    {
+      "subplan": "collect_wood player tree",
+      "index": 1,
+      "phase": "main_plan",
+      "attempt": 1,
+      "revision": 1,
+      "plan_log_line": 1,
+      "iters": 9,
+      "visited": 21,
+      "success": true,
+      "cutoff_hit": false,
+      "wall_time": 0.06536048394627869,
+      "max_iters": 10000,
+      "num_actions": 3,
+      "actions": [
+        "move_right",
+        "move_right",
+        "do"
+      ]
+    },
+    {
+      "subplan": "collect_wood player tree",
+      "index": 2,
+      "phase": "main_plan",
+      "attempt": 1,
+      "revision": 1,
+      "plan_log_line": 1,
+      "iters": 3,
+      "visited": 14,
+      "success": true,
+      "cutoff_hit": false,
+      "wall_time": 0.01999775506556034,
+      "max_iters": 10000,
+      "num_actions": 2,
+      "actions": [
+        "move_right",
+        "do"
+      ]
+    },
+    {
+      "subplan": "place_table player",
+      "index": 3,
+      "phase": "main_plan",
+      "attempt": 1,
+      "revision": 1,
+      "plan_log_line": 1,
+      "iters": 1,
+      "visited": 6,
+      "success": true,
+      "cutoff_hit": false,
+      "wall_time": 0.004692417103797197,
+      "max_iters": 10000,
+      "num_actions": 1,
+      "actions": [
+        "place_table"
+      ]
+    },
+    {
+      "subplan": "make_wood_pickaxe player",
+      "index": 4,
+      "phase": "main_plan",
+      "attempt": 1,
+      "revision": 1,
+      "plan_log_line": 1,
+      "iters": 1,
+      "visited": 5,
+      "success": true,
+      "cutoff_hit": false,
+      "wall_time": 0.006213261047378182,
+      "max_iters": 10000,
+      "num_actions": 1,
+      "actions": [
+        "make_wood_pickaxe"
+      ]
+    }
+  ],
+  "revisions": [],
+  "pddl_revise_log": [
+    {
+      "source": "level_transition",
+      "trigger": null,
+      "status": "revised",
+      "attempt_index": 1,
+      "changed_bytes": 285
+    }
+  ],
+  "pddl_revise_counts": {
+    "level_transition": 1
+  },
+  "wm_fidelity": {
+    "overall": null,
+    "by_key_class": {},
+    "hidden_rng_active": false
+  },
+  "totals": {
+    "solved": true,
+    "llm_calls": 3,
+    "wall_time_sec": 47.977709817001596
+  }
+}

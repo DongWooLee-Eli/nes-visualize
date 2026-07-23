@@ -1,0 +1,17 @@
+{
+  "domain_name": "minicrafter_oo",
+  "level_id": 6,
+  "seed": 42,
+  "effective_seed": 6042,
+  "area": [
+    9,
+    7
+  ],
+  "view": [
+    9,
+    9
+  ],
+  "mission": "make stone pickaxe",
+  "solved": false,
+  "actions": []
+}

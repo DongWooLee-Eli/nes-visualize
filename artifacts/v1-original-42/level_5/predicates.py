@@ -1,0 +1,1 @@
+# No predicates are declared in place_stone_domain.

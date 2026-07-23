@@ -1,0 +1,211 @@
+{
+  "schema_version": 2,
+  "mode": "tc2",
+  "domain": "minicrafter_oo",
+  "level_id": 4,
+  "planner": "enhsp",
+  "metadata": {
+    "mode": "tc2",
+    "domain": "minicrafter_oo",
+    "level_id": 4,
+    "planner": "enhsp"
+  },
+  "artifacts": {
+    "scale_diagnostics": "scale_diagnostics.json",
+    "plan_log": "plan_log.jsonl",
+    "trajectory": "trajectory.json",
+    "domain_entry": "domain_at_entry.pddl",
+    "domain_current": "domain.pddl",
+    "problem": "problem.pddl",
+    "wm_entry": "wm_at_entry.py",
+    "validated_domain_entry": "validated_domain_at_entry.pddl",
+    "llm_calls": "../llm_calls.jsonl",
+    "llm_prompts_dir": "../llm_prompts",
+    "run_log": "../run.log",
+    "worldmodel_events": "../worldmodel_events",
+    "worldmodel_history": "../worldmodel_history",
+    "run_config": "../run_config.json",
+    "results": "../results.json",
+    "minicrafter_variant": "../minicrafter_variant.json"
+  },
+  "pddl": {
+    "num_operators": 5,
+    "num_predicates": 5,
+    "num_objects": 0,
+    "num_constants": 0,
+    "goal_size": 1,
+    "init_size": 7,
+    "attempts": 1,
+    "ok": true,
+    "source": "revised",
+    "revise_changed_bytes": 187
+  },
+  "random_explore": {
+    "num_actions": 15,
+    "duration_sec": 0.02507628407329321,
+    "nontrivial_transitions": 15,
+    "achievements_hit": []
+  },
+  "wm_synth": {
+    "version": 0,
+    "duration_sec": null,
+    "ok": false
+  },
+  "predicates": {
+    "names": [
+      "ach_collect_stone",
+      "ach_collect_wood",
+      "ach_make_wood_pickaxe",
+      "ach_make_wood_sword",
+      "ach_place_table"
+    ],
+    "attempts": 1,
+    "ok": true
+  },
+  "fd": {
+    "translator_facts": null,
+    "translator_operators": null,
+    "walltime": 0.3150827060453594,
+    "returncode": 0,
+    "plan_len": 6,
+    "ok": true,
+    "error": null
+  },
+  "bfs": [
+    {
+      "subplan": "collect_wood",
+      "index": 0,
+      "phase": "main_plan",
+      "attempt": 1,
+      "revision": 1,
+      "plan_log_line": 1,
+      "iters": 1,
+      "visited": 5,
+      "success": true,
+      "cutoff_hit": false,
+      "wall_time": 0.042277751956135035,
+      "max_iters": 10000,
+      "num_actions": 1,
+      "actions": [
+        "do"
+      ]
+    },
+    {
+      "subplan": "collect_wood",
+      "index": 1,
+      "phase": "main_plan",
+      "attempt": 1,
+      "revision": 1,
+      "plan_log_line": 1,
+      "iters": 4,
+      "visited": 13,
+      "success": true,
+      "cutoff_hit": false,
+      "wall_time": 0.025517061818391085,
+      "max_iters": 10000,
+      "num_actions": 2,
+      "actions": [
+        "move_up",
+        "do"
+      ]
+    },
+    {
+      "subplan": "collect_wood",
+      "index": 2,
+      "phase": "main_plan",
+      "attempt": 1,
+      "revision": 1,
+      "plan_log_line": 1,
+      "iters": 13,
+      "visited": 46,
+      "success": true,
+      "cutoff_hit": false,
+      "wall_time": 0.09295999491587281,
+      "max_iters": 10000,
+      "num_actions": 3,
+      "actions": [
+        "move_right",
+        "move_up",
+        "do"
+      ]
+    },
+    {
+      "subplan": "place_table",
+      "index": 3,
+      "phase": "main_plan",
+      "attempt": 1,
+      "revision": 1,
+      "plan_log_line": 1,
+      "iters": 1,
+      "visited": 6,
+      "success": true,
+      "cutoff_hit": false,
+      "wall_time": 0.004727956373244524,
+      "max_iters": 10000,
+      "num_actions": 1,
+      "actions": [
+        "place_table"
+      ]
+    },
+    {
+      "subplan": "make_wood_pickaxe",
+      "index": 4,
+      "phase": "main_plan",
+      "attempt": 1,
+      "revision": 1,
+      "plan_log_line": 1,
+      "iters": 1,
+      "visited": 5,
+      "success": true,
+      "cutoff_hit": false,
+      "wall_time": 0.006082493811845779,
+      "max_iters": 10000,
+      "num_actions": 1,
+      "actions": [
+        "make_wood_pickaxe"
+      ]
+    },
+    {
+      "subplan": "collect_stone",
+      "index": 5,
+      "phase": "main_plan",
+      "attempt": 1,
+      "revision": 1,
+      "plan_log_line": 1,
+      "iters": 3,
+      "visited": 8,
+      "success": true,
+      "cutoff_hit": false,
+      "wall_time": 0.01861041784286499,
+      "max_iters": 10000,
+      "num_actions": 2,
+      "actions": [
+        "move_right",
+        "do"
+      ]
+    }
+  ],
+  "revisions": [],
+  "pddl_revise_log": [
+    {
+      "source": "level_transition",
+      "trigger": null,
+      "status": "revised",
+      "attempt_index": 1,
+      "changed_bytes": 187
+    }
+  ],
+  "pddl_revise_counts": {
+    "level_transition": 1
+  },
+  "wm_fidelity": {
+    "overall": null,
+    "by_key_class": {},
+    "hidden_rng_active": false
+  },
+  "totals": {
+    "solved": true,
+    "llm_calls": 4,
+    "wall_time_sec": 27.571168307680637
+  }
+}

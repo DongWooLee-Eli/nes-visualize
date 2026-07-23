@@ -1,0 +1,46 @@
+```pddl
+(define (domain make_wood_tools_domain)
+  (:requirements :strips :typing :negative-preconditions :numeric-fluents)
+  (:types actor source status)
+  (:predicates
+    (wood_accessible ?who - actor ?trees - source)
+    (stone_accessible ?who - actor ?stones - source)
+    (is_set ?flag - status)
+  )
+  (:functions
+    (inv_wood)
+    (inv_stone)
+    (inv_wood_pickaxe)
+  )
+  (:action collect_wood
+    :parameters (?who - actor ?trees - source)
+    :precondition (wood_accessible ?who ?trees)
+    :effect (increase (inv_wood) 1)
+  )
+  (:action collect_stone
+    :parameters (?who - actor ?stones - source)
+    :precondition (and (stone_accessible ?who ?stones) (>= (inv_wood_pickaxe) 1))
+    :effect (increase (inv_stone) 1)
+  )
+  (:action place_table
+    :parameters (?flag - status)
+    :precondition (and (>= (inv_wood) 2) (not (is_set ?flag)))
+    :effect (and (decrease (inv_wood) 2) (is_set ?flag))
+  )
+  (:action place_stone
+    :parameters (?flag - status)
+    :precondition (and (>= (inv_stone) 1) (not (is_set ?flag)))
+    :effect (and (decrease (inv_stone) 1) (is_set ?flag))
+  )
+  (:action make_wood_pickaxe
+    :parameters (?table_flag - status ?pickaxe_flag - status)
+    :precondition (and (is_set ?table_flag) (>= (inv_wood) 1) (not (is_set ?pickaxe_flag)))
+    :effect (and (decrease (inv_wood) 1) (increase (inv_wood_pickaxe) 1) (is_set ?pickaxe_flag))
+  )
+  (:action make_wood_sword
+    :parameters (?table_flag - status ?sword_flag - status)
+    :precondition (and (is_set ?table_flag) (>= (inv_wood) 1) (not (is_set ?sword_flag)))
+    :effect (and (decrease (inv_wood) 1) (is_set ?sword_flag))
+  )
+)
+```

@@ -1,0 +1,82 @@
+{
+  "schema_version": 2,
+  "mode": "tc2",
+  "domain": "minicrafter_oo",
+  "level_id": 7,
+  "planner": "enhsp",
+  "metadata": {
+    "mode": "tc2",
+    "domain": "minicrafter_oo",
+    "level_id": 7,
+    "planner": "enhsp"
+  },
+  "artifacts": {
+    "scale_diagnostics": "scale_diagnostics.json",
+    "plan_log": "plan_log.jsonl",
+    "trajectory": "trajectory.json",
+    "domain_entry": "domain_at_entry.pddl",
+    "domain_current": "domain.pddl",
+    "problem": "problem.pddl",
+    "wm_entry": "wm_at_entry.py",
+    "validated_domain_entry": "validated_domain_at_entry.pddl",
+    "llm_calls": "../llm_calls.jsonl",
+    "llm_prompts_dir": "../llm_prompts",
+    "run_log": "../run.log",
+    "worldmodel_events": "../worldmodel_events",
+    "worldmodel_history": "../worldmodel_history",
+    "run_config": "../run_config.json",
+    "results": "../results.json",
+    "minicrafter_variant": "../minicrafter_variant.json"
+  },
+  "pddl": {
+    "num_operators": 0,
+    "num_predicates": 0,
+    "num_objects": 0,
+    "num_constants": 0,
+    "goal_size": 0,
+    "init_size": 0,
+    "attempts": 3,
+    "ok": false,
+    "source": "",
+    "revise_changed_bytes": 0
+  },
+  "random_explore": {
+    "num_actions": 0,
+    "duration_sec": null,
+    "nontrivial_transitions": 0,
+    "achievements_hit": []
+  },
+  "wm_synth": {
+    "version": 0,
+    "duration_sec": null,
+    "ok": false
+  },
+  "predicates": {
+    "names": [],
+    "attempts": 0,
+    "ok": false
+  },
+  "fd": {
+    "translator_facts": null,
+    "translator_operators": null,
+    "walltime": null,
+    "returncode": null,
+    "plan_len": null,
+    "ok": false,
+    "error": null
+  },
+  "bfs": [],
+  "revisions": [],
+  "pddl_revise_log": [],
+  "pddl_revise_counts": {},
+  "wm_fidelity": {
+    "overall": null,
+    "by_key_class": {},
+    "hidden_rng_active": false
+  },
+  "totals": {
+    "solved": false,
+    "llm_calls": 0,
+    "wall_time_sec": 0.003662221133708954
+  }
+}

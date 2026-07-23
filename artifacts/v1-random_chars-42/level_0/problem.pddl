@@ -1,0 +1,6 @@
+(define (problem collect_tpkhxk_problem)
+  (:domain collect_tpkhxk_domain)
+  (:objects inv_tpkhxk - inventory)
+  (:init (= (amount inv_tpkhxk) 0))
+  (:goal (> (amount inv_tpkhxk) 0))
+)

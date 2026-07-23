@@ -1,0 +1,35 @@
+```pddl
+(define (domain collect_wood_and_place_table)
+  (:requirements :strips :typing :negative-preconditions :fluents)
+  (:types actor resource)
+  (:predicates
+    (reachable ?who - actor ?target - resource)
+    (close_to ?who - actor ?target - resource)
+    (available ?target - resource)
+    (can_place_table ?who - actor)
+    (ach_collect_wood)
+    (ach_place_table)
+  )
+  (:functions
+    (wood_count ?who - actor)
+  )
+
+  (:action approach_tree
+    :parameters (?who - actor ?target - resource)
+    :precondition (and (reachable ?who ?target) (available ?target))
+    :effect (close_to ?who ?target)
+  )
+
+  (:action collect
+    :parameters (?who - actor ?target - resource)
+    :precondition (and (close_to ?who ?target) (available ?target))
+    :effect (and (increase (wood_count ?who) 1) (not (available ?target)) (ach_collect_wood))
+  )
+
+  (:action place_table
+    :parameters (?who - actor)
+    :precondition (and (can_place_table ?who) (>= (wood_count ?who) 2) (not (ach_place_table)))
+    :effect (and (decrease (wood_count ?who) 2) (ach_place_table))
+  )
+)
+```

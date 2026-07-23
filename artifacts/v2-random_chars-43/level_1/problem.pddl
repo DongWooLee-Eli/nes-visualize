@@ -1,0 +1,6 @@
+(define (problem place_zezroc_game_problem)
+  (:domain place_zezroc_game)
+  (:objects)
+  (:init)
+  (:goal (ach_place_zezroc))
+)

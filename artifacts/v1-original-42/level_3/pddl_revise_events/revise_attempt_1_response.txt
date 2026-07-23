@@ -1,0 +1,32 @@
+```pddl
+(define (domain collect_wood_domain)
+  (:requirements :strips :typing :fluents)
+  (:types actor resource)
+  (:predicates
+    (adjacent_to ?who - actor ?target - resource)
+    (wood_collected)
+    (table_adjacent ?who - actor)
+    (table_placed)
+    (wood_sword_made)
+  )
+  (:functions
+    (inventory_wood ?who - actor)
+    (inventory_wood_sword ?who - actor)
+  )
+  (:action collect_wood
+    :parameters (?who - actor ?target - resource)
+    :precondition (adjacent_to ?who ?target)
+    :effect (and (increase (inventory_wood ?who) 1) (wood_collected))
+  )
+  (:action place_table
+    :parameters (?who - actor)
+    :precondition (>= (inventory_wood ?who) 2)
+    :effect (and (decrease (inventory_wood ?who) 2) (table_adjacent ?who) (table_placed))
+  )
+  (:action make_wood_sword
+    :parameters (?who - actor)
+    :precondition (and (table_adjacent ?who) (>= (inventory_wood ?who) 1))
+    :effect (and (decrease (inventory_wood ?who) 1) (increase (inventory_wood_sword ?who) 1) (wood_sword_made))
+  )
+)
+```

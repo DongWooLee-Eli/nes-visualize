@@ -1,0 +1,6 @@
+(define (problem collect_stone_problem)
+  (:domain collect_stone_domain)
+  (:objects player - actor stone - resource ach_collect_stone - achievement)
+  (:init (resource_available stone))
+  (:goal (achievement_reached ach_collect_stone))
+)

@@ -1,0 +1,21 @@
+(define (domain collect_place_domain)
+  (:requirements :strips :typing :numeric-fluents)
+  (:types actor resource)
+  (:predicates (ach_collect_tpkhxk) (ach_collect_sgqeje) (ach_place_sgqeje))
+  (:functions (inv_tpkhxk) (inv_sgqeje))
+  (:action collect_tpkhxk
+    :parameters ()
+    :precondition (and)
+    :effect (and (increase (inv_tpkhxk) 1) (ach_collect_tpkhxk))
+  )
+  (:action collect_sgqeje
+    :parameters ()
+    :precondition (and)
+    :effect (and (increase (inv_sgqeje) 1) (ach_collect_sgqeje))
+  )
+  (:action place_sgqeje
+    :parameters ()
+    :precondition (and (>= (inv_sgqeje) 1))
+    :effect (and (decrease (inv_sgqeje) 1) (ach_place_sgqeje))
+  )
+)

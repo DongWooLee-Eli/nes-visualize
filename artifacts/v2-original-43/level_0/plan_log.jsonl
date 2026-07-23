@@ -1,0 +1,1 @@
+{"line_no": 1, "attempt": 1, "revision": 1, "phase": "main_plan", "hl_plan": ["collect_wood player tree ach_collect_wood"], "hl_plan_len": 1, "hl_to_ll": [{"index": 0, "subplan": "collect_wood player tree ach_collect_wood", "actions": ["move_right", "do"], "success": true, "iters": 3, "visited": 9, "wall_sec": 0.019579020095989108}], "ll_actions_total": 2}

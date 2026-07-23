@@ -1,0 +1,11 @@
+(define (domain collect_item)
+  (:requirements :strips :negative-preconditions)
+  (:predicates
+    (ach_collect_tpkhxk)
+  )
+  (:action collect_tpkhxk
+    :parameters ()
+    :precondition (and (not (ach_collect_tpkhxk)))
+    :effect (ach_collect_tpkhxk)
+  )
+)

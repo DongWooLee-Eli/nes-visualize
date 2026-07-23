@@ -1,0 +1,2 @@
+{"version": 1, "kind": "init", "snapshot": "/data/dwlee/PyNES/projects/tc/runs/explore/v2-original-42/worldmodel_history/wm_v1.py", "timestamp": "2026-07-23T13:52:58.252402", "event_dir": "/data/dwlee/PyNES/projects/tc/runs/explore/v2-original-42/worldmodel_events/wm_v1_init"}
+{"version": 2, "kind": "revision", "snapshot": "/data/dwlee/PyNES/projects/tc/runs/explore/v2-original-42/worldmodel_history/wm_v2.py", "timestamp": "2026-07-23T13:56:22.364062", "event_dir": "/data/dwlee/PyNES/projects/tc/runs/explore/v2-original-42/worldmodel_events/wm_v2_revision"}

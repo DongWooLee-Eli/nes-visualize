@@ -1,0 +1,148 @@
+You are an agent playing a 2D grid game, whose raw state is shown below.
+
+Can you give me a minimal PDDL domain and problem file for this setup that will allow the agent to win the game? Think in terms of the most minimal abstract files you can.
+
+Each object in your PDDL problem file is named using ONLY the keys of the raw state dictionary.
+
+PDDL GUIDANCE
+
+- Ground the abstraction only in the supplied raw state, mission, action
+  space, and observed transitions.
+- Object-valued arguments that denote observed entities or fields must use
+  their exact raw-state keys. Predicate, action, type, and variable names do
+  not need to be state keys.
+- Give every action parameter a declared type. Keep each action's
+  `:parameters`, `:precondition`, and `:effect` expression on one physical
+  line because the downstream parser is line-based.
+- Use lowercase Python-safe predicate, action, function, and type names
+  without hyphens; underscores are allowed. Use `and` and `not`, but not `or`,
+  because the executor treats extracted conditions conjunctively. If an action
+  uses a negative precondition, declare the corresponding PDDL requirement.
+- Every predicate and operator effect must describe a condition that can be
+  checked or reached in the supplied raw state. Do not add symbolic
+  bookkeeping with no state-grounded evaluator or transition.
+- Keep PDDL operators high-level. The learned world model and search execute
+  low-level action sequences. Use relation predicates only when their truth
+  is computable from state and required by an observed transition.
+- Use Boolean predicates only for genuinely binary facts. Do not replace a
+  quantity or threshold with a Boolean fact; use a representation supported
+  by the current planner and grounded in the raw state.
+- A literal object in an action schema must be a typed parameter or a domain
+  constant. Never repeat a domain constant in the problem's `:objects`.
+- Make `:init` match the current raw state and omit false Boolean facts under
+  closed-world semantics. Return exactly one `:goal` expression; use
+  `(and ...)` only when all listed facts must hold in the final state.
+
+EXAMPLES:
+
+- `:parameters (?obj - object)` is typed; `?obj` may be grounded with a raw
+  key such as `object_a`.
+- A grounded relation may be named `(linked_to ?source ?target)` and a
+  grounded binary condition `(is_ready ?obj)`; their evaluators must derive
+  both results from the supplied state.
+- Use `(:goal (processed object_a))` for one terminal fact, or
+  `(:goal (and (processed object_a) (notified object_b)))` only when both are
+  required terminal facts.
+
+
+
+MISSION (the agent's goal):
+collect stone
+
+In your PDDL problem file do not represent configuration attributes when writing objects for example for unopened_black_jar you can represent it as black_jar. See example 2 and example 3!!!!!!!
+
+Feel free to propose multiple operators, and predicates at once. Also you may have two goals in the problem file.
+
+The raw state dictionary keys are considered traversable.
+
+Return your code blocks with
+```pddl ```
+markup tags so I can easily extract it.
+
+Do NOT use symbols like "-" for the predicate names. For example, the predicate "avatar-at" should NOT be proposed since it has a "-".
+Please use all LOWERCASE for the operator names as well!!!!!!!!!!
+
+Do not name your PDDL DOMAIN FILE DO NOT name predicates:
+if, else, in, def, or any other typical python name
+
+predicate names may contain underscores (e.g. `linked_to`, `is_ready`).
+
+Raw state of game (generate the files for this):
+
+{'player': [[4, 3]], 'player_facing': [0, 1], 'player_health': 9, 'player_hunger': 0.0, 'player_thirst': 0.0, 'player_fatigue': 0.0, 'player_sleeping': False, 'daylight': 1.0, 'step_count': 0, 'inv_health': 9, 'inv_food': 9, 'inv_drink': 9, 'inv_energy': 9, 'inv_sapling': 0, 'inv_wood': 0, 'inv_stone': 0, 'inv_coal': 0, 'inv_iron': 0, 'inv_diamond': 0, 'inv_wood_pickaxe': 0, 'inv_stone_pickaxe': 0, 'inv_iron_pickaxe': 0, 'inv_wood_sword': 0, 'inv_stone_sword': 0, 'inv_iron_sword': 0, 'water': [[0, 0], [0, 1], [0, 2], [1, 0], [1, 1], [2, 0]], 'grass': [[0, 3], [0, 4], [0, 5], [0, 6], [1, 2], [1, 3], [1, 5], [2, 3], [2, 4], [2, 6], [3, 0], [3, 2], [3, 3], [3, 4], [3, 5], [4, 0], [4, 1], [4, 3], [4, 5], [4, 6], [5, 0], [5, 3], [5, 4], [5, 6], [6, 0], [6, 4], [6, 6], [7, 6]], 'stone': [[6, 1], [6, 3], [7, 0], [7, 2], [7, 3], [8, 0], [8, 1], [8, 4]], 'sand': [[2, 1], [2, 2], [3, 1]], 'tree': [[1, 4], [1, 6], [2, 5], [3, 6], [4, 2], [4, 4], [5, 1], [5, 2], [5, 5], [6, 5], [7, 5], [8, 5], [8, 6]], 'coal': [[6, 2], [8, 3]], 'iron': [[7, 1], [8, 2]], 'diamond': [[7, 4]], 'ach_collect_coal': 0, 'ach_collect_diamond': 0, 'ach_collect_iron': 0, 'ach_collect_stone': 0, 'ach_collect_wood': 0, 'ach_make_iron_pickaxe': 0, 'ach_make_iron_sword': 0, 'ach_make_stone_pickaxe': 0, 'ach_make_stone_sword': 0, 'ach_make_wood_pickaxe': 0, 'ach_make_wood_sword': 0, 'ach_place_furnace': 0, 'ach_place_stone': 0, 'ach_place_table': 0}
+
+Action Space (what actions can be taken):
+['noop', 'move_left', 'move_right', 'move_up', 'move_down', 'do', 'sleep', 'place_stone', 'place_table', 'place_furnace', 'place_plant', 'make_wood_pickaxe', 'make_stone_pickaxe', 'make_iron_pickaxe', 'make_wood_sword', 'make_stone_sword', 'make_iron_sword']
+
+
+
+Few shot example of what a nice abstraction domain and problem file should look like:
+
+BEGIN EXAMPLE 1
+
+Observed transition:
+- before `action_a`: `{'actor_a': [[0, 0]], 'target_b': [[1, 0]], 'done_c': 0}`
+- after `action_a`: `{'actor_a': [[0, 0]], 'target_b': [[1, 0]], 'done_c': 1}`
+
+Use distinct types for fields with distinct roles. This prevents unrelated raw
+keys from being substituted into every parameter while keeping all objects
+grounded in the observed state.
+
+(define (domain example_typed)
+  (:requirements :strips :typing :negative-preconditions)
+  (:types actor target status)
+  (:predicates (close_to ?who - actor ?what - target) (is_set ?flag - status))
+  (:action complete
+    :parameters (?who - actor ?what - target ?result - status)
+    :precondition (and (close_to ?who ?what) (not (is_set ?result)))
+    :effect (is_set ?result)
+  )
+)
+
+(define (problem example_typed_problem)
+  (:domain example_typed)
+  (:objects actor_a - actor target_b - target done_c - status)
+  (:init (close_to actor_a target_b))
+  (:goal (is_set done_c))
+)
+
+END EXAMPLE 1
+
+BEGIN EXAMPLE 2
+
+Observed transitions:
+- before `action_a`: `{'worker_a': [[0, 0]], 'station_b': [[1, 0]], 'progress_c': 0, 'finished_d': 0}`
+- after `action_a`: `{'worker_a': [[0, 0]], 'station_b': [[1, 0]], 'progress_c': 1, 'finished_d': 0}`
+- after subsequent `action_b`: `{'worker_a': [[0, 0]], 'station_b': [[1, 0]], 'progress_c': 1, 'finished_d': 1}`
+
+When an observed quantity is a prerequisite, model the quantity directly and
+keep the final status as a separate typed fact. The two operators preserve the
+observed ordering instead of collapsing both transitions into one generic
+Boolean action.
+
+(define (domain example_staged)
+  (:requirements :strips :typing :negative-preconditions :numeric-fluents)
+  (:types worker station status)
+  (:predicates (at_station ?who - worker ?where - station) (is_set ?flag - status))
+  (:functions (progress_c))
+  (:action advance
+    :parameters (?who - worker ?where - station)
+    :precondition (at_station ?who ?where)
+    :effect (increase (progress_c) 1)
+  )
+  (:action finish
+    :parameters (?who - worker ?where - station ?result - status)
+    :precondition (and (at_station ?who ?where) (>= (progress_c) 1) (not (is_set ?result)))
+    :effect (is_set ?result)
+  )
+)
+
+(define (problem example_staged_problem)
+  (:domain example_staged)
+  (:objects worker_a - worker station_b - station finished_d - status)
+  (:init (at_station worker_a station_b) (= (progress_c) 0))
+  (:goal (is_set finished_d))
+)
+
+END EXAMPLE 2
+

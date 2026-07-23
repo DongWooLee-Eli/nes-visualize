@@ -1,0 +1,99 @@
+{
+  "schema_version": 2,
+  "mode": "tc2",
+  "domain": "minicrafter_oo",
+  "level_id": 1,
+  "planner": "enhsp",
+  "metadata": {
+    "mode": "tc2",
+    "domain": "minicrafter_oo",
+    "level_id": 1,
+    "planner": "enhsp"
+  },
+  "artifacts": {
+    "scale_diagnostics": "scale_diagnostics.json",
+    "plan_log": "plan_log.jsonl",
+    "trajectory": "trajectory.json",
+    "domain_entry": "domain_at_entry.pddl",
+    "domain_current": "domain.pddl",
+    "problem": "problem.pddl",
+    "wm_entry": "wm_at_entry.py",
+    "validated_domain_entry": "validated_domain_at_entry.pddl",
+    "llm_calls": "../llm_calls.jsonl",
+    "llm_prompts_dir": "../llm_prompts",
+    "run_log": "../run.log",
+    "worldmodel_events": "../worldmodel_events",
+    "worldmodel_history": "../worldmodel_history",
+    "run_config": "../run_config.json",
+    "results": "../results.json",
+    "minicrafter_variant": "../minicrafter_variant.json"
+  },
+  "pddl": {
+    "num_operators": 5,
+    "num_predicates": 6,
+    "num_objects": 4,
+    "num_constants": 0,
+    "goal_size": 1,
+    "init_size": 4,
+    "attempts": 1,
+    "ok": true,
+    "source": "revised",
+    "revise_changed_bytes": 1320
+  },
+  "random_explore": {
+    "num_actions": 0,
+    "duration_sec": null,
+    "nontrivial_transitions": 0,
+    "achievements_hit": []
+  },
+  "wm_synth": {
+    "version": 0,
+    "duration_sec": null,
+    "ok": false
+  },
+  "predicates": {
+    "names": [
+      "achieved",
+      "adjacent_to",
+      "harvestable_wood",
+      "placement_ready",
+      "wood_at_least_one",
+      "wood_at_least_two"
+    ],
+    "attempts": 1,
+    "ok": true
+  },
+  "fd": {
+    "translator_facts": null,
+    "translator_operators": null,
+    "walltime": null,
+    "returncode": null,
+    "plan_len": null,
+    "ok": false,
+    "error": "ENHSP-20 reported the problem as unsolvable.\nstdout tail: Problem parsed\nGrounding..\nGrounding Time: 8\nAibr Preprocessing\n|F|:7\n|X|:0\n|A|:5\n|P|:0\n|E|:0\nH1 Setup Time (msec): 4\nSetting horizon to:NaN\nRunning Greedy Best First Search\nh(n = s_0)=6.0\n g(n)= 1.0 h(n)=4.0\n g(n)= 2.0 h(n)=3.0\nProblem unsolvable\nMetric (Search):2.0\nPlanning Time (msec): 167\nHeuristic Time (msec): 0\nSearch Time (msec): 0\nExpanded Nodes:4\nStates Evaluated:5\nFixed constraint violations during search (zero-crossing):0\nNumbe"
+  },
+  "bfs": [],
+  "revisions": [],
+  "pddl_revise_log": [
+    {
+      "source": "level_transition",
+      "trigger": null,
+      "status": "revised",
+      "attempt_index": 1,
+      "changed_bytes": 1320
+    }
+  ],
+  "pddl_revise_counts": {
+    "level_transition": 1
+  },
+  "wm_fidelity": {
+    "overall": null,
+    "by_key_class": {},
+    "hidden_rng_active": false
+  },
+  "totals": {
+    "solved": false,
+    "llm_calls": 5,
+    "wall_time_sec": 125.40042575704865
+  }
+}

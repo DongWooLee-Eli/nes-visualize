@@ -1,0 +1,201 @@
+You are a software engineer that must write Python predicate evaluators. These functions implement the PDDL predicates declared in the domain file: each function takes the state and predicate arguments, then returns True or False. You will need to write Python predicates for ALL the predicates you see in the domain file. The problem file and raw state are also given to help guide you.
+
+Return your code blocks with
+```python ```
+markup tags so I can easily extract it.
+
+BEGIN EXAMPLE - note that BOTH predicates are defined (do not omit any):
+
+predicate: key_exists(arg1)
+predicate: same_value(arg1, arg2)
+
+def key_exists(state, arg1):
+    """True when arg1 is an observed raw-state key."""
+    return arg1 in state
+
+def same_value(state, arg1, arg2):
+    """True when two observed raw-state keys have equal values."""
+    return arg1 in state and arg2 in state and state[arg1] == state[arg2]
+
+END EXAMPLE
+
+Rules:
+- ALWAYS include `state` as the first argument.
+- Use the EXACT predicate name from the domain file (case-sensitive).
+- Define every predicate the domain declares - even 0-arity ones.
+- For 0-arity predicates use `def name(state, *args): ...` so callers
+  passing extra args don't break.
+- Return `bool` (or a truthy/falsy value coercible to bool).
+
+MANDATORY - you MUST define ALL of these predicate functions, with EXACTLY these names (one `def <name>(state, ...):` per name). Omitting any one will cause the run to fail:
+  - adjacent_to
+
+Starter stubs (you must fill in each body - do not delete any):
+```python
+def adjacent_to(state, *args):
+    ...  # implement
+```
+
+Domain File:
+
+(define (domain collect_tpkhxk_domain)
+  (:requirements :strips :typing :numeric-fluents)
+  (:types actor resource)
+  (:predicates (adjacent_to ?who - actor ?what - resource))
+  (:functions (inv_tpkhxk))
+  (:action collect_tpkhxk
+    :parameters (?who - actor ?what - resource)
+    :precondition (adjacent_to ?who ?what)
+    :effect (increase (inv_tpkhxk) 1)
+  )
+)
+
+Problem File:
+
+(define (problem collect_tpkhxk_problem)
+  (:domain collect_tpkhxk_domain)
+  (:objects player - actor xcvkpr - resource)
+  (:init
+    (adjacent_to player xcvkpr)
+    (= (inv_tpkhxk) 0)
+  )
+  (:goal (>= (inv_tpkhxk) 1))
+)
+
+Raw State:
+
+{'player': [[4, 3]], 'player_facing': [0, 1], 'player_health': 9, 'player_hunger': 0.0, 'player_thirst': 0.0, 'player_fatigue': 0.0, 'player_sleeping': False, 'daylight': 1.0, 'step_count': 0, 'inv_health': 9, 'inv_food': 9, 'inv_drink': 9, 'inv_energy': 9, 'inv_wcgshh': 0, 'inv_tpkhxk': 0, 'inv_sgqeje': 0, 'inv_grpoqi': 0, 'inv_bzracx': 0, 'inv_mwzvua': 0, 'inv_tpkhxk_bcwrvm': 0, 'inv_sgqeje_bcwrvm': 0, 'inv_bzracx_bcwrvm': 0, 'inv_tpkhxk_wqiqzh': 0, 'inv_sgqeje_wqiqzh': 0, 'inv_bzracx_wqiqzh': 0, 'mynbiq': [[0, 1], [0, 2], [0, 3], [1, 2], [2, 2]], 'pmzjpl': [[0, 6], [1, 3], [2, 3], [2, 4], [2, 5], [2, 6], [3, 3], [3, 4], [3, 5], [3, 6], [4, 3], [4, 4], [4, 6], [5, 5], [5, 6], [6, 3], [6, 4], [6, 5], [6, 6], [7, 1], [7, 4], [7, 5], [7, 6], [8, 0], [8, 1], [8, 2], [8, 3], [8, 4], [8, 5], [8, 6]], 'sgqeje': [[0, 0], [1, 1], [2, 1], [3, 0], [3, 1], [4, 2], [5, 0], [5, 1], [5, 2], [6, 0], [6, 1], [7, 0]], 'wztejd': [[0, 4], [0, 5], [1, 4]], 'xcvkpr': [[1, 5], [1, 6], [4, 5], [5, 3], [5, 4], [6, 2], [7, 2], [7, 3]], 'grpoqi': [[2, 0], [4, 0]], 'bzracx': [[3, 2], [4, 1]], 'mwzvua': [[1, 0]], 'ach_collect_grpoqi': 0, 'ach_collect_mwzvua': 0, 'ach_collect_bzracx': 0, 'ach_collect_sgqeje': 0, 'ach_collect_tpkhxk': 0, 'ach_make_bzracx_bcwrvm': 0, 'ach_make_bzracx_wqiqzh': 0, 'ach_make_sgqeje_bcwrvm': 0, 'ach_make_sgqeje_wqiqzh': 0, 'ach_make_tpkhxk_bcwrvm': 0, 'ach_make_tpkhxk_wqiqzh': 0, 'ach_place_ckqpdj': 0, 'ach_place_sgqeje': 0, 'ach_place_zezroc': 0}
+
+Current Python Low Level World Model:
+
+from copy import deepcopy
+
+def transition_model(state, action):
+    new_state = deepcopy(state)
+    new_state["step_count"] = state.get("step_count", 0) + 1
+
+    player = state.get("player", [])
+    if not player:
+        return new_state
+
+    x, y = player[0]
+    directions = {
+        "move_left": (-1, 0),
+        "move_right": (1, 0),
+        "move_up": (0, -1),
+        "move_down": (0, 1),
+    }
+
+    def positions(key):
+        value = new_state.get(key, [])
+        if not isinstance(value, list):
+            return set()
+        return {
+            tuple(p) for p in value
+            if isinstance(p, (list, tuple)) and len(p) == 2
+        }
+
+    # Infer the ordinary walkable ground layer as the largest spatial layer
+    # containing the player's current position.
+    current = (x, y)
+    ground_key = None
+    ground_size = -1
+    for key, value in state.items():
+        if key == "player" or key.startswith("inv_"):
+            continue
+        ps = positions(key)
+        if current in ps and len(ps) > ground_size:
+            ground_key = key
+            ground_size = len(ps)
+
+    if action in directions:
+        dx, dy = directions[action]
+        new_state["player_facing"] = [dx, dy]
+        destination = (x + dx, y + dy)
+
+        # Movement is allowed on the inferred ground layer. If no layer can
+        # be inferred, use the observed map bounds as a conservative fallback.
+        if ground_key is not None:
+            can_move = destination in positions(ground_key)
+        else:
+            all_cells = set()
+            for key in state:
+                if key != "player" and not key.startswith("inv_"):
+                    all_cells.update(positions(key))
+            can_move = destination in all_cells
+
+        if can_move:
+            new_state["player"] = [[destination[0], destination[1]]]
+
+        new_state["player_sleeping"] = False
+        return new_state
+
+    if action == "do":
+        facing = state.get("player_facing", [0, 1])
+        if not isinstance(facing, (list, tuple)) or len(facing) != 2:
+            facing = [0, 1]
+        target = (x + facing[0], y + facing[1])
+
+        # Collect a faced entity when a matching inventory field exists.
+        # Prefer smaller layers, since large layers are generally terrain.
+        collectible_keys = []
+        for key in state:
+            if key == "player" or key.startswith("inv_"):
+                continue
+            if "inv_" + key in state and target in positions(key):
+                collectible_keys.append(key)
+
+        collectible_keys.sort(key=lambda k: len(positions(k)))
+        if collectible_keys:
+            key = collectible_keys[0]
+            new_state[key] = [
+                p for p in new_state.get(key, [])
+                if tuple(p) != target
+            ]
+            inv_key = "inv_" + key
+            new_state[inv_key] = state.get(inv_key, 0) + 1
+
+            # Harvested terrain becomes ordinary ground when one is known.
+            if ground_key is not None and target not in positions(ground_key):
+                new_state.setdefault(ground_key, []).append(list(target))
+
+        new_state["player_sleeping"] = False
+        return new_state
+
+    if action.startswith("place_"):
+        entity = action[len("place_"):]
+        inv_key = "inv_" + entity
+        count = state.get(inv_key, 0)
+
+        if count > 0:
+            facing = state.get("player_facing", [0, 1])
+            if not isinstance(facing, (list, tuple)) or len(facing) != 2:
+                facing = [0, 1]
+            target = (x + facing[0], y + facing[1])
+
+            occupied = target == current
+            for key in state:
+                if key != "player" and not key.startswith("inv_"):
+                    if target in positions(key) and key != ground_key:
+                        occupied = True
+                        break
+
+            if not occupied:
+                new_state[inv_key] = count - 1
+                new_state.setdefault(entity, []).append(list(target))
+
+        new_state["player_sleeping"] = False
+        return new_state
+
+    if action == "sleep":
+        new_state["player_sleeping"] = True
+        return new_state
+
+    # Crafting recipes and their required stations/materials were not
+    # revealed by the observations, so failed/unknown actions only consume
+    # a step, matching the observed transitions.
+    if action != "sleep":
+        new_state["player_sleeping"] = False
+
+    return new_state
+

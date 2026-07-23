@@ -1,0 +1,28 @@
+```pddl
+(define (domain wood_collection)
+  (:requirements :strips :typing :numeric-fluents)
+  (:types actor resource)
+  (:predicates (ach_collect_wood) (ach_place_table) (ach_make_wood_pickaxe) (ach_make_wood_sword))
+  (:functions (inv_wood) (inv_wood_pickaxe) (inv_wood_sword))
+  (:action collect_wood
+    :parameters ()
+    :precondition (and)
+    :effect (and (increase (inv_wood) 1) (ach_collect_wood))
+  )
+  (:action place_table
+    :parameters ()
+    :precondition (>= (inv_wood) 2)
+    :effect (and (decrease (inv_wood) 2) (ach_place_table))
+  )
+  (:action make_wood_pickaxe
+    :parameters ()
+    :precondition (and (ach_place_table) (>= (inv_wood) 1))
+    :effect (and (decrease (inv_wood) 1) (increase (inv_wood_pickaxe) 1) (ach_make_wood_pickaxe))
+  )
+  (:action make_wood_sword
+    :parameters ()
+    :precondition (and (ach_place_table) (>= (inv_wood) 1))
+    :effect (and (decrease (inv_wood) 1) (increase (inv_wood_sword) 1) (ach_make_wood_sword))
+  )
+)
+```

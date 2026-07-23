@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "seed": 42,
+  "levels": [0, 1, 2, 3, 4, 5, 6, 7],
+  "warmup_actions_per_level": 15,
+  "candidate_cap_per_level": 2000,
+  "definitions": {
+    "scope": "candidate phase only; the common 15-step warmup is excluded from discoveries",
+    "unique_public_states": "distinct domain.to_hashable(normalized public state), counted separately per level and then summed",
+    "achievement_discoveries": "distinct (level, ach_* public key) pairs with a positive observed candidate transition delta",
+    "achievement_events": "all positive ach_* transition deltas, including repeated gains of an already discovered key",
+    "mission_achievement_levels": "levels whose target ach_* key increased during candidate exploration",
+    "total_environment_actions": "warmup + candidate + replay actions; resets are not actions"
+  },
+  "random_baseline": {
+    "method": "deterministic exploration-only replay of the existing continuous random policy",
+    "rng": "random.Random(42 + 1000 * level_id), continued after the 15-step warmup",
+    "downstream_llm_or_pddl_run": false,
+    "source": "/data/dwlee/PyNES6/projects/tc/core/base_runner.py"
+  },
+  "arms": {
+    "original_random": {
+      "strategy": "random",
+      "naming": "original",
+      "levels": [
+        {"level": 0, "candidates": 2000, "unique_public_states": 242, "achievement_discoveries": 6, "achievement_events": 22, "mission_achievement": true},
+        {"level": 1, "candidates": 2000, "unique_public_states": 153, "achievement_discoveries": 6, "achievement_events": 9, "mission_achievement": true},
+        {"level": 2, "candidates": 2000, "unique_public_states": 298, "achievement_discoveries": 7, "achievement_events": 26, "mission_achievement": true},
+        {"level": 3, "candidates": 2000, "unique_public_states": 293, "achievement_discoveries": 6, "achievement_events": 38, "mission_achievement": true},
+        {"level": 4, "candidates": 2000, "unique_public_states": 297, "achievement_discoveries": 6, "achievement_events": 19, "mission_achievement": true},
+        {"level": 5, "candidates": 2000, "unique_public_states": 295, "achievement_discoveries": 6, "achievement_events": 35, "mission_achievement": true},
+        {"level": 6, "candidates": 2000, "unique_public_states": 241, "achievement_discoveries": 4, "achievement_events": 13, "mission_achievement": false},
+        {"level": 7, "candidates": 2000, "unique_public_states": 344, "achievement_discoveries": 7, "achievement_events": 26, "mission_achievement": false}
+      ],
+      "totals": {
+        "candidates": 16000,
+        "unique_public_states": 2163,
+        "unique_states_per_100_candidates": 13.51875,
+        "achievement_discoveries": 48,
+        "achievement_discoveries_per_1000_candidates": 3.0,
+        "achievement_events": 188,
+        "mission_achievement_levels": 6,
+        "replay_actions": 0,
+        "total_environment_actions": 16120,
+        "unique_states_per_100_environment_actions": 13.418114143920596,
+        "achievement_discoveries_per_1000_environment_actions": 2.977667493796526
+      }
+    },
+    "original_beam": {
+      "strategy": "llm_beam",
+      "naming": "original",
+      "source": "/data/dwlee/PyNES6/projects/tc/runs/llm_beamsearch/original_c2000_pddl200",
+      "levels": [
+        {"level": 0, "candidates": 305, "unique_public_states": 45, "achievement_discoveries": 2, "achievement_events": 7, "mission_achievement": true},
+        {"level": 1, "candidates": 66, "unique_public_states": 12, "achievement_discoveries": 0, "achievement_events": 0, "mission_achievement": false},
+        {"level": 2, "candidates": 144, "unique_public_states": 30, "achievement_discoveries": 1, "achievement_events": 1, "mission_achievement": false},
+        {"level": 3, "candidates": 348, "unique_public_states": 48, "achievement_discoveries": 2, "achievement_events": 3, "mission_achievement": false},
+        {"level": 4, "candidates": 127, "unique_public_states": 24, "achievement_discoveries": 1, "achievement_events": 2, "mission_achievement": false},
+        {"level": 5, "candidates": 139, "unique_public_states": 21, "achievement_discoveries": 1, "achievement_events": 2, "mission_achievement": false},
+        {"level": 6, "candidates": 246, "unique_public_states": 45, "achievement_discoveries": 2, "achievement_events": 5, "mission_achievement": false},
+        {"level": 7, "candidates": 203, "unique_public_states": 38, "achievement_discoveries": 2, "achievement_events": 4, "mission_achievement": false}
+      ],
+      "totals": {
+        "candidates": 1578,
+        "unique_public_states": 263,
+        "unique_states_per_100_candidates": 16.666666666666668,
+        "achievement_discoveries": 11,
+        "achievement_discoveries_per_1000_candidates": 6.97084917617237,
+        "achievement_events": 24,
+        "mission_achievement_levels": 1,
+        "replay_actions": 7059,
+        "total_environment_actions": 8757,
+        "unique_states_per_100_environment_actions": 3.0033116364051615,
+        "achievement_discoveries_per_1000_environment_actions": 1.2561379467854298
+      }
+    },
+    "random_chars_random": {
+      "strategy": "random",
+      "naming": "random_chars",
+      "note": "A bijective public renaming preserves the deterministic random trajectory and discovery counts.",
+      "levels": [
+        {"level": 0, "candidates": 2000, "unique_public_states": 242, "achievement_discoveries": 6, "achievement_events": 22, "mission_achievement": true},
+        {"level": 1, "candidates": 2000, "unique_public_states": 153, "achievement_discoveries": 6, "achievement_events": 9, "mission_achievement": true},
+        {"level": 2, "candidates": 2000, "unique_public_states": 298, "achievement_discoveries": 7, "achievement_events": 26, "mission_achievement": true},
+        {"level": 3, "candidates": 2000, "unique_public_states": 293, "achievement_discoveries": 6, "achievement_events": 38, "mission_achievement": true},
+        {"level": 4, "candidates": 2000, "unique_public_states": 297, "achievement_discoveries": 6, "achievement_events": 19, "mission_achievement": true},
+        {"level": 5, "candidates": 2000, "unique_public_states": 295, "achievement_discoveries": 6, "achievement_events": 35, "mission_achievement": true},
+        {"level": 6, "candidates": 2000, "unique_public_states": 241, "achievement_discoveries": 4, "achievement_events": 13, "mission_achievement": false},
+        {"level": 7, "candidates": 2000, "unique_public_states": 344, "achievement_discoveries": 7, "achievement_events": 26, "mission_achievement": false}
+      ],
+      "totals": {
+        "candidates": 16000,
+        "unique_public_states": 2163,
+        "unique_states_per_100_candidates": 13.51875,
+        "achievement_discoveries": 48,
+        "achievement_discoveries_per_1000_candidates": 3.0,
+        "achievement_events": 188,
+        "mission_achievement_levels": 6,
+        "replay_actions": 0,
+        "total_environment_actions": 16120,
+        "unique_states_per_100_environment_actions": 13.418114143920596,
+        "achievement_discoveries_per_1000_environment_actions": 2.977667493796526
+      }
+    },
+    "random_chars_beam": {
+      "strategy": "llm_beam",
+      "naming": "random_chars",
+      "source": "/data/dwlee/PyNES6/projects/tc/runs/llm_beamsearch/random_chars_c2000_pddl200",
+      "levels": [
+        {"level": 0, "candidates": 1716, "unique_public_states": 291, "achievement_discoveries": 2, "achievement_events": 71, "mission_achievement": true},
+        {"level": 1, "candidates": 2000, "unique_public_states": 400, "achievement_discoveries": 7, "achievement_events": 63, "mission_achievement": true},
+        {"level": 2, "candidates": 1249, "unique_public_states": 201, "achievement_discoveries": 4, "achievement_events": 37, "mission_achievement": true},
+        {"level": 3, "candidates": 1946, "unique_public_states": 305, "achievement_discoveries": 4, "achievement_events": 45, "mission_achievement": true},
+        {"level": 4, "candidates": 2000, "unique_public_states": 384, "achievement_discoveries": 4, "achievement_events": 93, "mission_achievement": false},
+        {"level": 5, "candidates": 388, "unique_public_states": 46, "achievement_discoveries": 1, "achievement_events": 4, "mission_achievement": false},
+        {"level": 6, "candidates": 2000, "unique_public_states": 296, "achievement_discoveries": 4, "achievement_events": 47, "mission_achievement": false},
+        {"level": 7, "candidates": 2000, "unique_public_states": 322, "achievement_discoveries": 4, "achievement_events": 74, "mission_achievement": false}
+      ],
+      "totals": {
+        "candidates": 13299,
+        "unique_public_states": 2245,
+        "unique_states_per_100_candidates": 16.88096849387172,
+        "achievement_discoveries": 30,
+        "achievement_discoveries_per_1000_candidates": 2.2558087074216107,
+        "achievement_events": 434,
+        "mission_achievement_levels": 4,
+        "replay_actions": 257028,
+        "total_environment_actions": 270447,
+        "unique_states_per_100_environment_actions": 0.8301070032210895,
+        "achievement_discoveries_per_1000_environment_actions": 0.11092709662706095
+      }
+    }
+  }
+}

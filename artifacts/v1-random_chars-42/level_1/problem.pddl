@@ -1,0 +1,6 @@
+(define (problem place_zezroc_problem)
+  (:domain place_zezroc_domain)
+  (:objects ach_place_zezroc - achievement)
+  (:init)
+  (:goal (is_achieved ach_place_zezroc))
+)

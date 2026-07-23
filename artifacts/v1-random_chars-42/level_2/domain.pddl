@@ -1,0 +1,16 @@
+(define (domain make_tpkhxk_bcwrvm_domain)
+  (:requirements :strips :typing :numeric-fluents)
+  (:types source status)
+  (:predicates (harvestable ?source - source) (achieved ?flag - status))
+  (:functions (inv_tpkhxk))
+  (:action collect_tpkhxk
+    :parameters (?source - source)
+    :precondition (harvestable ?source)
+    :effect (increase (inv_tpkhxk) 1)
+  )
+  (:action make_tpkhxk_bcwrvm
+    :parameters (?result - status)
+    :precondition (>= (inv_tpkhxk) 1)
+    :effect (and (decrease (inv_tpkhxk) 1) (achieved ?result))
+  )
+)

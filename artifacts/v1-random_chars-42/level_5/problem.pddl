@@ -1,0 +1,6 @@
+(define (problem sgqeje_placement_problem)
+  (:domain sgqeje_placement)
+  (:objects sgqeje - resource ach_place_sgqeje - status)
+  (:init (available sgqeje) (= (inv_sgqeje) 0))
+  (:goal (is_set ach_place_sgqeje))
+)

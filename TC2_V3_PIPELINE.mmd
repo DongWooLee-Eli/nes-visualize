@@ -1,0 +1,20 @@
+flowchart TB
+    A["random transition 수집"]
+    B["Python scorer 생성"]
+    D["scorer 점수로<br/>대표 transition 선택"]
+    E["Initial PDDL prompt에 전달"]
+
+    A -->|LLM| B
+
+    subgraph BS["Beam search"]
+        direction TB
+        C["현재 prefix에서 모든 액션 수행"]
+        K["scorer 점수로 top-k prefix 유지"]
+
+        C --> K
+        K -->|다음 depth| C
+    end
+
+    B --> BS
+    BS -->|탐색 종료| D
+    D --> E

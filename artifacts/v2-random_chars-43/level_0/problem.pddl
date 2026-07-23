@@ -1,0 +1,6 @@
+(define (problem collect_tpkhxk_problem)
+  (:domain collect_item)
+  (:objects)
+  (:init)
+  (:goal (ach_collect_tpkhxk))
+)

@@ -1,0 +1,114 @@
+{
+  "schema_version": 2,
+  "mode": "tc2",
+  "domain": "minicrafter_oo",
+  "level_id": 0,
+  "planner": "enhsp",
+  "metadata": {
+    "mode": "tc2",
+    "domain": "minicrafter_oo",
+    "level_id": 0,
+    "planner": "enhsp"
+  },
+  "artifacts": {
+    "scale_diagnostics": "scale_diagnostics.json",
+    "plan_log": "plan_log.jsonl",
+    "trajectory": "trajectory.json",
+    "domain_entry": "domain_at_entry.pddl",
+    "domain_current": "domain.pddl",
+    "problem": "problem.pddl",
+    "wm_entry": "wm_at_entry.py",
+    "validated_domain_entry": "validated_domain_at_entry.pddl",
+    "llm_calls": "../llm_calls.jsonl",
+    "llm_prompts_dir": "../llm_prompts",
+    "run_log": "../run.log",
+    "worldmodel_events": "../worldmodel_events",
+    "worldmodel_history": "../worldmodel_history",
+    "run_config": "../run_config.json",
+    "results": "../results.json",
+    "minicrafter_variant": "../minicrafter_variant.json"
+  },
+  "pddl": {
+    "num_operators": 1,
+    "num_predicates": 1,
+    "num_objects": 2,
+    "num_constants": 0,
+    "goal_size": 1,
+    "init_size": 5,
+    "attempts": 1,
+    "ok": true,
+    "source": "fresh",
+    "revise_changed_bytes": 0
+  },
+  "random_explore": {
+    "num_actions": 15,
+    "duration_sec": 0.029348800890147686,
+    "nontrivial_transitions": 15,
+    "achievements_hit": []
+  },
+  "wm_synth": {
+    "version": 1,
+    "duration_sec": 35.750018815044314,
+    "ok": true
+  },
+  "predicates": {
+    "names": [
+      "adjacent_to"
+    ],
+    "attempts": 1,
+    "ok": true
+  },
+  "fd": {
+    "translator_facts": null,
+    "translator_operators": null,
+    "walltime": 0.3273785738274455,
+    "returncode": 0,
+    "plan_len": 1,
+    "ok": true,
+    "error": null
+  },
+  "bfs": [
+    {
+      "subplan": "collect_tpkhxk player xcvkpr",
+      "index": 0,
+      "phase": "main_plan",
+      "attempt": 1,
+      "revision": 1,
+      "plan_log_line": 1,
+      "iters": 10001,
+      "visited": 20107,
+      "success": false,
+      "cutoff_hit": true,
+      "wall_time": 82.91955544939265,
+      "max_iters": 10000,
+      "num_actions": 12,
+      "actions": [
+        "move_up",
+        "do",
+        "move_up",
+        "do",
+        "move_up",
+        "do",
+        "move_up",
+        "move_right",
+        "do",
+        "move_down",
+        "place_sgqeje",
+        "move_left"
+      ]
+    }
+  ],
+  "revisions": [],
+  "pddl_revise_log": [],
+  "pddl_revise_counts": {},
+  "wm_fidelity": {
+    "overall": null,
+    "by_key_class": {},
+    "hidden_rng_active": false
+  },
+  "totals": {
+    "solved": true,
+    "llm_calls": 4,
+    "wall_time_sec": 198.81927350303158
+  }
+}

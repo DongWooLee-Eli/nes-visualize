@@ -1,0 +1,6 @@
+(define (problem stone_sword_problem)
+  (:domain stone_sword_domain)
+  (:objects)
+  (:init (= (inv_wood) 0) (= (inv_stone) 0) (= (inv_wood_pickaxe) 0))
+  (:goal (stone_sword_made))
+)

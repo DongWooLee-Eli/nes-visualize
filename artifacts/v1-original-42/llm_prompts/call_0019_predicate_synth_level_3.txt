@@ -1,0 +1,296 @@
+You are a software engineer that must write Python predicate evaluators. These functions implement the PDDL predicates declared in the domain file: each function takes the state and predicate arguments, then returns True or False. You will need to write Python predicates for ALL the predicates you see in the domain file. The problem file and raw state are also given to help guide you.
+
+Return your code blocks with
+```python ```
+markup tags so I can easily extract it.
+
+BEGIN EXAMPLE - note that BOTH predicates are defined (do not omit any):
+
+predicate: key_exists(arg1)
+predicate: same_value(arg1, arg2)
+
+def key_exists(state, arg1):
+    """True when arg1 is an observed raw-state key."""
+    return arg1 in state
+
+def same_value(state, arg1, arg2):
+    """True when two observed raw-state keys have equal values."""
+    return arg1 in state and arg2 in state and state[arg1] == state[arg2]
+
+END EXAMPLE
+
+Rules:
+- ALWAYS include `state` as the first argument.
+- Use the EXACT predicate name from the domain file (case-sensitive).
+- Define every predicate the domain declares - even 0-arity ones.
+- For 0-arity predicates use `def name(state, *args): ...` so callers
+  passing extra args don't break.
+- Return `bool` (or a truthy/falsy value coercible to bool).
+
+MANDATORY - you MUST define ALL of these predicate functions, with EXACTLY these names (one `def <name>(state, ...):` per name). Omitting any one will cause the run to fail:
+  - adjacent_to
+  - table_adjacent
+  - table_placed
+  - wood_collected
+  - wood_sword_made
+
+Starter stubs (you must fill in each body - do not delete any):
+```python
+def adjacent_to(state, *args):
+    ...  # implement
+
+def table_adjacent(state, *args):
+    ...  # implement
+
+def table_placed(state, *args):
+    ...  # implement
+
+def wood_collected(state, *args):
+    ...  # implement
+
+def wood_sword_made(state, *args):
+    ...  # implement
+```
+
+Domain File:
+
+(define (domain collect_wood_domain)
+  (:requirements :strips :typing :fluents)
+  (:types actor resource)
+  (:predicates
+    (adjacent_to ?who - actor ?target - resource)
+    (wood_collected)
+    (table_adjacent ?who - actor)
+    (table_placed)
+    (wood_sword_made)
+  )
+  (:functions
+    (inventory_wood ?who - actor)
+    (inventory_wood_sword ?who - actor)
+  )
+  (:action collect_wood
+    :parameters (?who - actor ?target - resource)
+    :precondition (adjacent_to ?who ?target)
+    :effect (and (increase (inventory_wood ?who) 1) (wood_collected))
+  )
+  (:action place_table
+    :parameters (?who - actor)
+    :precondition (>= (inventory_wood ?who) 2)
+    :effect (and (decrease (inventory_wood ?who) 2) (table_adjacent ?who) (table_placed))
+  )
+  (:action make_wood_sword
+    :parameters (?who - actor)
+    :precondition (and (table_adjacent ?who) (>= (inventory_wood ?who) 1))
+    :effect (and (decrease (inventory_wood ?who) 1) (increase (inventory_wood_sword ?who) 1) (wood_sword_made))
+  )
+)
+
+Problem File:
+
+(define (problem make_wood_sword_problem)
+  (:domain collect_wood_domain)
+  (:objects
+    player - actor
+    stone - resource
+  )
+  (:init
+    (adjacent_to player stone)
+    (= (inventory_wood player) 0)
+    (= (inventory_wood_sword player) 0)
+  )
+  (:goal (wood_sword_made))
+)
+
+Raw State:
+
+{'player': [[4, 3]], 'player_facing': [0, 1], 'player_health': 9, 'player_hunger': 0.0, 'player_thirst': 0.0, 'player_fatigue': 0.0, 'player_sleeping': False, 'daylight': 1.0, 'step_count': 0, 'inv_health': 9, 'inv_food': 9, 'inv_drink': 9, 'inv_energy': 9, 'inv_sapling': 0, 'inv_wood': 0, 'inv_stone': 0, 'inv_coal': 0, 'inv_iron': 0, 'inv_diamond': 0, 'inv_wood_pickaxe': 0, 'inv_stone_pickaxe': 0, 'inv_iron_pickaxe': 0, 'inv_wood_sword': 0, 'inv_stone_sword': 0, 'inv_iron_sword': 0, 'water': [[6, 0], [6, 1], [7, 0]], 'grass': [[0, 0], [0, 2], [0, 4], [1, 0], [1, 1], [1, 2], [1, 4], [1, 5], [2, 0], [2, 2], [2, 3], [2, 4], [2, 5], [3, 0], [3, 1], [3, 2], [3, 3], [3, 4], [3, 5], [3, 6], [4, 0], [4, 2], [4, 3], [4, 6], [5, 1], [8, 0], [8, 2], [8, 6]], 'stone': [[4, 4], [4, 5], [5, 3], [6, 2], [6, 3], [6, 5], [6, 6], [7, 2], [7, 3], [7, 4], [7, 5], [7, 6], [8, 3], [8, 4], [8, 5]], 'sand': [[7, 1], [8, 1]], 'tree': [[0, 1], [0, 3], [0, 5], [0, 6], [1, 3], [1, 6], [2, 1], [2, 6], [4, 1], [5, 0]], 'coal': [[5, 4], [6, 4]], 'iron': [[5, 2], [5, 6]], 'diamond': [[5, 5]], 'ach_collect_coal': 0, 'ach_collect_diamond': 0, 'ach_collect_iron': 0, 'ach_collect_stone': 0, 'ach_collect_wood': 0, 'ach_make_iron_pickaxe': 0, 'ach_make_iron_sword': 0, 'ach_make_stone_pickaxe': 0, 'ach_make_stone_sword': 0, 'ach_make_wood_pickaxe': 0, 'ach_make_wood_sword': 0, 'ach_place_furnace': 0, 'ach_place_stone': 0, 'ach_place_table': 0}
+
+Current Python Low Level World Model:
+
+from copy import deepcopy
+
+def transition_model(state, action):
+    new_state = deepcopy(state)
+    new_state["step_count"] = state.get("step_count", 0) + 1
+
+    if not state.get("player"):
+        return new_state
+
+    x, y = state["player"][0]
+    facing = state.get("player_facing", [0, 1])
+    directions = {
+        "move_left": (-1, 0),
+        "move_right": (1, 0),
+        "move_up": (0, -1),
+        "move_down": (0, 1),
+    }
+
+    def positions(key):
+        value = new_state.get(key, [])
+        if not isinstance(value, list):
+            return set()
+        return {
+            tuple(pos) for pos in value
+            if isinstance(pos, (list, tuple)) and len(pos) == 2
+        }
+
+    def entity_at(pos):
+        found = []
+        for key, value in new_state.items():
+            if key == "player" or not isinstance(value, list):
+                continue
+            if pos in positions(key):
+                found.append(key)
+        return found
+
+    def remove_at(key, pos):
+        new_state[key] = [
+            p for p in new_state.get(key, [])
+            if not (isinstance(p, (list, tuple)) and tuple(p) == pos)
+        ]
+
+    def add_at(key, pos):
+        new_state.setdefault(key, [])
+        if list(pos) not in new_state[key]:
+            new_state[key].append(list(pos))
+
+    def replace_tile(pos, new_key):
+        for key in list(new_state):
+            if key == "player" or not isinstance(new_state.get(key), list):
+                continue
+            remove_at(key, pos)
+        add_at(new_key, pos)
+
+    def has_nearby(suffix):
+        for key in new_state:
+            if key.endswith(suffix):
+                for px, py in positions(key):
+                    if abs(px - x) <= 1 and abs(py - y) <= 1:
+                        return True
+        return False
+
+    # Infer map bounds from all spatial layers.
+    all_tiles = []
+    for key, value in state.items():
+        if key == "player" or not isinstance(value, list):
+            continue
+        all_tiles.extend(
+            tuple(p) for p in value
+            if isinstance(p, (list, tuple)) and len(p) == 2
+        )
+
+    if all_tiles:
+        min_x = min(p[0] for p in all_tiles)
+        max_x = max(p[0] for p in all_tiles)
+        min_y = min(p[1] for p in all_tiles)
+        max_y = max(p[1] for p in all_tiles)
+    else:
+        min_x = min_y = 0
+        max_x = max_y = float("inf")
+
+    if action in directions:
+        dx, dy = directions[action]
+        new_state["player_facing"] = [dx, dy]
+        target = (x + dx, y + dy)
+
+        in_bounds = (
+            min_x <= target[0] <= max_x and
+            min_y <= target[1] <= max_y
+        )
+        target_entities = entity_at(target)
+        passable = (
+            not target_entities or
+            all(key.endswith(("grass", "sand", "path")) for key in target_entities)
+        )
+
+        if in_bounds and passable:
+            new_state["player"] = [[target[0], target[1]]]
+        return new_state
+
+    dx, dy = facing
+    target = (x + dx, y + dy)
+
+    if action == "do":
+        target_entities = entity_at(target)
+
+        for key in target_entities:
+            if key.endswith("tree"):
+                remove_at(key, target)
+                add_at("grass", target)
+                new_state["inv_wood"] = new_state.get("inv_wood", 0) + 1
+                return new_state
+
+            if key.endswith("stone") and new_state.get("inv_wood_pickaxe", 0) > 0:
+                remove_at(key, target)
+                add_at("path", target)
+                new_state["inv_stone"] = new_state.get("inv_stone", 0) + 1
+                return new_state
+
+            if key.endswith("coal") and new_state.get("inv_wood_pickaxe", 0) > 0:
+                remove_at(key, target)
+                add_at("path", target)
+                new_state["inv_coal"] = new_state.get("inv_coal", 0) + 1
+                return new_state
+
+            if key.endswith("iron") and new_state.get("inv_stone_pickaxe", 0) > 0:
+                remove_at(key, target)
+                add_at("path", target)
+                new_state["inv_iron"] = new_state.get("inv_iron", 0) + 1
+                return new_state
+
+            if key.endswith("diamond") and new_state.get("inv_iron_pickaxe", 0) > 0:
+                remove_at(key, target)
+                add_at("path", target)
+                new_state["inv_diamond"] = new_state.get("inv_diamond", 0) + 1
+                return new_state
+
+        return new_state
+
+    if action.startswith("place_"):
+        item = action[len("place_"):]
+        inventory_key = "inv_" + item
+
+        if new_state.get(inventory_key, 0) <= 0:
+            return new_state
+
+        target_entities = entity_at(target)
+        terrain_only = all(
+            key.endswith(("grass", "sand", "path", "water"))
+            for key in target_entities
+        )
+
+        if target_entities and terrain_only:
+            replace_tile(target, item)
+            new_state[inventory_key] -= 1
+        return new_state
+
+    if action.startswith("make_"):
+        item = action[len("make_"):]
+        inventory_key = "inv_" + item
+
+        recipes = {
+            "wood_pickaxe": {"wood": 1},
+            "wood_sword": {"wood": 1},
+            "stone_pickaxe": {"wood": 1, "stone": 1},
+            "stone_sword": {"wood": 1, "stone": 1},
+            "iron_pickaxe": {"wood": 1, "coal": 1, "iron": 1},
+            "iron_sword": {"wood": 1, "coal": 1, "iron": 1},
+        }
+        recipe = recipes.get(item)
+        if recipe is None or not has_nearby("table"):
+            return new_state
+
+        if item.startswith("iron_") and not has_nearby("furnace"):
+            return new_state
+
+        if all(new_state.get("inv_" + material, 0) >= amount
+               for material, amount in recipe.items()):
+            for material, amount in recipe.items():
+                new_state["inv_" + material] -= amount
+            new_state[inventory_key] = new_state.get(inventory_key, 0) + 1
+
+        return new_state
+
+    # noop, unsuccessful sleep, and unsupported actions only advance time.
+    return new_state
+

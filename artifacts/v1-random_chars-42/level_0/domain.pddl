@@ -1,0 +1,5 @@
+(define (domain collect_tpkhxk_domain)
+  (:requirements :strips :typing :numeric-fluents)
+  (:types inventory)
+  (:functions (amount ?item - inventory))
+)

@@ -1,0 +1,21 @@
+(define (domain make_wood_pickaxe_domain)
+  (:requirements :strips :typing :numeric-fluents)
+  (:types resource status)
+  (:predicates (resource_present ?resource - resource) (is_set ?flag - status))
+  (:functions (inv_wood))
+  (:action collect_wood
+    :parameters (?source - resource ?result - status)
+    :precondition (resource_present ?source)
+    :effect (and (increase (inv_wood) 1) (is_set ?result))
+  )
+  (:action place_table
+    :parameters (?result - status)
+    :precondition (>= (inv_wood) 2)
+    :effect (and (decrease (inv_wood) 2) (is_set ?result))
+  )
+  (:action make_wood_pickaxe
+    :parameters (?table_result - status ?pickaxe_result - status)
+    :precondition (and (is_set ?table_result) (>= (inv_wood) 1))
+    :effect (and (decrease (inv_wood) 1) (is_set ?pickaxe_result))
+  )
+)

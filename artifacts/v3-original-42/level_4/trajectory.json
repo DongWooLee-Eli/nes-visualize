@@ -1,0 +1,28 @@
+{
+  "domain_name": "minicrafter_oo",
+  "level_id": 4,
+  "seed": 42,
+  "effective_seed": 4042,
+  "area": [
+    9,
+    7
+  ],
+  "view": [
+    9,
+    9
+  ],
+  "mission": "collect stone",
+  "solved": true,
+  "actions": [
+    "do",
+    "move_up",
+    "do",
+    "move_right",
+    "move_up",
+    "do",
+    "place_table",
+    "make_wood_pickaxe",
+    "move_right",
+    "do"
+  ]
+}

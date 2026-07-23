@@ -1,0 +1,7 @@
+{
+  "attempt": 1,
+  "llm_call_idx": 35,
+  "llm_label": "pddl_revise",
+  "prompt_file": "/data/dwlee/PyNES6/projects/tc/runs/llm_beamsearch/original_c2000_pddl200/llm_prompts/call_0035_pddl_revise_level_7.txt",
+  "duration_sec": 11.8188153533265
+}

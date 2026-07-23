@@ -1,0 +1,244 @@
+from copy import deepcopy
+
+def transition_model(state, action):
+    new_state = deepcopy(state)
+    new_state["step_count"] = state.get("step_count", 0) + 1
+
+    if not state.get("player"):
+        return new_state
+
+    x, y = state["player"][0]
+    directions = {
+        "move_left": (-1, 0),
+        "move_right": (1, 0),
+        "move_up": (0, -1),
+        "move_down": (0, 1),
+    }
+
+    def positions(key):
+        return new_state.get(key, []) or []
+
+    def contains(key, pos):
+        return list(pos) in positions(key)
+
+    def remove_at(key, pos):
+        if key in new_state:
+            new_state[key] = [
+                p for p in new_state.get(key, []) if p != list(pos)
+            ]
+
+    def add_at(key, pos):
+        new_state.setdefault(key, [])
+        if list(pos) not in new_state[key]:
+            new_state[key].append(list(pos))
+            # Map coordinate lists are maintained in lexicographic order.
+            new_state[key].sort(key=lambda p: (p[0], p[1]))
+
+    def keys_at(pos):
+        result = []
+        for key, value in new_state.items():
+            if key == "player" or not isinstance(value, list):
+                continue
+            if value and isinstance(value[0], list) and list(pos) in value:
+                result.append(key)
+        return result
+
+    def replace_tile(pos, new_key):
+        for key in keys_at(pos):
+            remove_at(key, pos)
+        add_at(new_key, pos)
+
+    def inventory(item):
+        return new_state.get("inv_" + item, 0)
+
+    def can_pay(cost):
+        return all(inventory(item) >= amount for item, amount in cost.items())
+
+    def pay(cost):
+        for item, amount in cost.items():
+            key = "inv_" + item
+            new_state[key] = new_state.get(key, 0) - amount
+
+    def increment_achievement(name):
+        key = "ach_" + name
+        new_state[key] = new_state.get(key, 0) + 1
+
+    def map_bounds():
+        coords = []
+        for key, value in new_state.items():
+            if key == "player" or not isinstance(value, list):
+                continue
+            if value and isinstance(value[0], list):
+                coords.extend(
+                    p for p in value
+                    if len(p) >= 2
+                    and isinstance(p[0], (int, float))
+                    and isinstance(p[1], (int, float))
+                )
+        if not coords:
+            return None
+        return (
+            min(p[0] for p in coords),
+            max(p[0] for p in coords),
+            min(p[1] for p in coords),
+            max(p[1] for p in coords),
+        )
+
+    def is_passable(pos):
+        tile_keys = keys_at(pos)
+        if not tile_keys:
+            return False
+
+        # Ground-like cells are traversable; resources, structures, water,
+        # doors, creatures, and other entities are obstacles.
+        return all(
+            key.endswith(("grass", "sand", "path", "floor"))
+            and not key.startswith(("closed_", "locked_"))
+            for key in tile_keys
+        )
+
+    def adjacent_to(suffix):
+        for key, value in new_state.items():
+            if not key.endswith(suffix) or not isinstance(value, list):
+                continue
+            for px, py in value:
+                if max(abs(px - x), abs(py - y)) <= 1:
+                    return True
+        return False
+
+    # Movement always changes facing, even when an obstacle prevents motion.
+    if action in directions:
+        dx, dy = directions[action]
+        new_state["player_facing"] = [dx, dy]
+        target = (x + dx, y + dy)
+
+        bounds = map_bounds()
+        in_bounds = (
+            bounds is None
+            or (
+                bounds[0] <= target[0] <= bounds[1]
+                and bounds[2] <= target[1] <= bounds[3]
+            )
+        )
+        if in_bounds and is_passable(target):
+            new_state["player"] = [[target[0], target[1]]]
+        return new_state
+
+    facing = state.get("player_facing", [0, 1])
+    if not isinstance(facing, list) or len(facing) < 2:
+        facing = [0, 1]
+    target = (x + facing[0], y + facing[1])
+    target_keys = keys_at(target)
+
+    if action == "do":
+        # Collect wood from a tree directly in front of the player.
+        tree_key = next((k for k in target_keys if k.endswith("tree")), None)
+        if tree_key is not None:
+            remove_at(tree_key, target)
+            add_at("grass", target)
+            new_state["inv_wood"] = new_state.get("inv_wood", 0) + 1
+            increment_achievement("collect_wood")
+            return new_state
+
+        # Other standard resource interactions.
+        resource_rules = (
+            ("diamond", "iron_pickaxe", "diamond"),
+            ("iron", "stone_pickaxe", "iron"),
+            ("coal", "wood_pickaxe", "coal"),
+            ("stone", "wood_pickaxe", "stone"),
+        )
+        pickaxe_rank = 0
+        if inventory("wood_pickaxe") > 0:
+            pickaxe_rank = 1
+        if inventory("stone_pickaxe") > 0:
+            pickaxe_rank = 2
+        if inventory("iron_pickaxe") > 0:
+            pickaxe_rank = 3
+
+        required_rank = {
+            "wood_pickaxe": 1,
+            "stone_pickaxe": 2,
+            "iron_pickaxe": 3,
+        }
+        for suffix, tool, item in resource_rules:
+            resource_key = next(
+                (k for k in target_keys if k.endswith(suffix)), None
+            )
+            if resource_key and pickaxe_rank >= required_rank[tool]:
+                remove_at(resource_key, target)
+                add_at("path", target)
+                inv_key = "inv_" + item
+                new_state[inv_key] = new_state.get(inv_key, 0) + 1
+                increment_achievement("collect_" + item)
+                return new_state
+
+        # Open a closed door if one is directly ahead.
+        closed_key = next(
+            (k for k in target_keys if k.startswith("closed_")), None
+        )
+        if closed_key:
+            remove_at(closed_key, target)
+            add_at(closed_key.replace("closed_", "open_", 1), target)
+        return new_state
+
+    placement_rules = {
+        "place_stone": ("stone", {"stone": 1}),
+        "place_table": ("table", {"wood": 2}),
+        "place_furnace": ("furnace", {"stone": 4}),
+        "place_plant": ("plant", {"sapling": 1}),
+    }
+    if action in placement_rules:
+        placed_key, cost = placement_rules[action]
+        ground_key = next(
+            (
+                k for k in target_keys
+                if k.endswith(("grass", "sand", "path", "floor"))
+            ),
+            None,
+        )
+        if ground_key and len(target_keys) == 1 and can_pay(cost):
+            pay(cost)
+            replace_tile(target, placed_key)
+            increment_achievement("place_" + placed_key)
+        return new_state
+
+    crafting_rules = {
+        "make_wood_pickaxe": ("wood_pickaxe", {"wood": 1}, False),
+        "make_stone_pickaxe": (
+            "stone_pickaxe", {"wood": 1, "stone": 1}, False
+        ),
+        "make_iron_pickaxe": (
+            "iron_pickaxe", {"wood": 1, "coal": 1, "iron": 1}, True
+        ),
+        "make_wood_sword": ("wood_sword", {"wood": 2}, False),
+        "make_stone_sword": (
+            "stone_sword", {"wood": 1, "stone": 2}, False
+        ),
+        "make_iron_sword": (
+            "iron_sword", {"wood": 1, "coal": 1, "iron": 2}, True
+        ),
+    }
+    if action.startswith("make_") and action in crafting_rules:
+        item, cost, needs_furnace = crafting_rules[action]
+        has_table = any(k.endswith("table") for k in target_keys)
+        if (
+            has_table
+            and (not needs_furnace or adjacent_to("furnace"))
+            and can_pay(cost)
+        ):
+            pay(cost)
+            inv_key = "inv_" + item
+            new_state[inv_key] = new_state.get(inv_key, 0) + 1
+        return new_state
+
+    if action == "sleep":
+        # The observed daytime, zero-fatigue sleep attempt has no effect.
+        if (
+            new_state.get("daylight", 1.0) < 0.5
+            and new_state.get("player_fatigue", 0.0) > 0
+        ):
+            new_state["player_sleeping"] = True
+        return new_state
+
+    # noop and unsupported/failed actions only consume one step.
+    return new_state

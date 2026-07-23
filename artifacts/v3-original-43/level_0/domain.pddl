@@ -1,0 +1,11 @@
+(define (domain collect_wood_domain)
+  (:requirements :strips :typing :numeric-fluents)
+  (:types actor resource)
+  (:predicates (wood_reachable ?who - actor ?source - resource))
+  (:functions (inv_wood))
+  (:action collect_wood
+    :parameters (?who - actor ?source - resource)
+    :precondition (wood_reachable ?who ?source)
+    :effect (increase (inv_wood) 1)
+  )
+)

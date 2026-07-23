@@ -1,0 +1,44 @@
+from copy import deepcopy
+
+def transition_model(state, action):
+    new_state = deepcopy(state)
+
+    # Every observed action consumes one step, even when it otherwise fails.
+    new_state["step_count"] = state.get("step_count", 0) + 1
+
+    directions = {
+        "move_left": (-1, 0),
+        "move_right": (1, 0),
+        "move_up": (0, -1),
+        "move_down": (0, 1),
+    }
+
+    if action in directions and state.get("player"):
+        dx, dy = directions[action]
+        new_state["player_facing"] = [dx, dy]
+
+        x, y = state["player"][0]
+        destination = [x + dx, y + dy]
+
+        # Infer the known map from all coordinate-list state entries.
+        known_cells = set()
+        for key, value in state.items():
+            if key in ("player", "player_facing") or not isinstance(value, list):
+                continue
+            for position in value:
+                if (
+                    isinstance(position, (list, tuple))
+                    and len(position) == 2
+                    and all(isinstance(v, int) and not isinstance(v, bool)
+                            for v in position)
+                ):
+                    known_cells.add(tuple(position))
+
+        # A move succeeds only onto a known map cell. Unknown/off-map
+        # destinations are treated as blocked.
+        if not known_cells or tuple(destination) in known_cells:
+            new_state["player"] = [destination]
+
+    # The observations establish no successful effects for noop, do, sleep,
+    # place_*, or make_* actions, so they only advance step_count.
+    return new_state

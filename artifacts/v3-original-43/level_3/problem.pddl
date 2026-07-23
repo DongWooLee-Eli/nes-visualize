@@ -1,0 +1,16 @@
+(define (problem collect_wood_problem)
+  (:domain collect_wood_domain)
+  (:objects
+    player - actor
+  )
+  (:init
+    (= (inv_wood) 0)
+    (= (inv_wood_pickaxe) 0)
+    (= (inv_wood_sword) 0)
+    (= (ach_collect_wood) 0)
+    (= (ach_place_table) 0)
+    (= (ach_make_wood_pickaxe) 0)
+    (= (ach_make_wood_sword) 0)
+  )
+  (:goal (>= (ach_make_wood_sword) 1))
+)

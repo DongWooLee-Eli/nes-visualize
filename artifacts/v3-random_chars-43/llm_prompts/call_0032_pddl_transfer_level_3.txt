@@ -1,0 +1,122 @@
+You are an agent playing a 2D grid game, whose raw state is shown below.
+
+Can you give me a PDDL problem file for this given PDDL domain file that will allow the agent to win the game?
+Each object in your PDDL problem file is named using ONLY the keys of the raw state dictionary.
+
+Return exactly one `:goal` expression that encodes the mission-required final
+condition. Use a conjunction only when every listed fact must hold in the final
+state, for example `(:goal (and (processed object_a) (notified object_b)))`.
+Prerequisites belong in operator preconditions, not as unrelated final goals.
+
+Make `:init` match the current raw state. Use exact raw-state keys for observed
+objects, and do not repeat domain constants in problem `:objects`. If the given
+domain declares a zero-arity numeric function named after a state key,
+initialize it with the exact current value. Omit false Boolean facts under
+closed-world semantics.
+
+Return exactly one problem file in one
+```pddl ```
+code block so I can extract it.
+
+BEGIN EXAMPLE 1
+
+Observed transition:
+- before `action_a`: `{'actor_a': [[0, 0]], 'target_b': [[1, 0]], 'done_c': 0}`
+- after `action_a`: `{'actor_a': [[0, 0]], 'target_b': [[1, 0]], 'done_c': 1}`
+
+Use distinct types for fields with distinct roles. This prevents unrelated raw
+keys from being substituted into every parameter while keeping all objects
+grounded in the observed state.
+
+(define (domain example_typed)
+  (:requirements :strips :typing :negative-preconditions)
+  (:types actor target status)
+  (:predicates (close_to ?who - actor ?what - target) (is_set ?flag - status))
+  (:action complete
+    :parameters (?who - actor ?what - target ?result - status)
+    :precondition (and (close_to ?who ?what) (not (is_set ?result)))
+    :effect (is_set ?result)
+  )
+)
+
+(define (problem example_typed_problem)
+  (:domain example_typed)
+  (:objects actor_a - actor target_b - target done_c - status)
+  (:init (close_to actor_a target_b))
+  (:goal (is_set done_c))
+)
+
+END EXAMPLE 1
+
+BEGIN EXAMPLE 2
+
+Observed transitions:
+- before `action_a`: `{'worker_a': [[0, 0]], 'station_b': [[1, 0]], 'progress_c': 0, 'finished_d': 0}`
+- after `action_a`: `{'worker_a': [[0, 0]], 'station_b': [[1, 0]], 'progress_c': 1, 'finished_d': 0}`
+- after subsequent `action_b`: `{'worker_a': [[0, 0]], 'station_b': [[1, 0]], 'progress_c': 1, 'finished_d': 1}`
+
+When an observed quantity is a prerequisite, model the quantity directly and
+keep the final status as a separate typed fact. The two operators preserve the
+observed ordering instead of collapsing both transitions into one generic
+Boolean action.
+
+(define (domain example_staged)
+  (:requirements :strips :typing :negative-preconditions :numeric-fluents)
+  (:types worker station status)
+  (:predicates (at_station ?who - worker ?where - station) (is_set ?flag - status))
+  (:functions (progress_c))
+  (:action advance
+    :parameters (?who - worker ?where - station)
+    :precondition (at_station ?who ?where)
+    :effect (increase (progress_c) 1)
+  )
+  (:action finish
+    :parameters (?who - worker ?where - station ?result - status)
+    :precondition (and (at_station ?who ?where) (>= (progress_c) 1) (not (is_set ?result)))
+    :effect (is_set ?result)
+  )
+)
+
+(define (problem example_staged_problem)
+  (:domain example_staged)
+  (:objects worker_a - worker station_b - station finished_d - status)
+  (:init (at_station worker_a station_b) (= (progress_c) 0))
+  (:goal (is_set finished_d))
+)
+
+END EXAMPLE 2
+
+
+Domain file you need to use (generate the problem file for this):
+
+(define (domain collect_tpkhxk_domain)
+  (:requirements :strips :typing :numeric-fluents)
+  (:types actor resource)
+  (:predicates (adjacent_to ?who - actor ?what - resource))
+  (:functions (inv_tpkhxk) (inv_tpkhxk_wqiqzh) (ach_collect_tpkhxk) (ach_make_tpkhxk_wqiqzh))
+  (:action collect_tpkhxk
+    :parameters (?who - actor ?what - resource)
+    :precondition (adjacent_to ?who ?what)
+    :effect (and (increase (inv_tpkhxk) 1) (increase (ach_collect_tpkhxk) 1))
+  )
+  (:action make_tpkhxk_wqiqzh
+    :parameters ()
+    :precondition (>= (inv_tpkhxk) 4)
+    :effect (and (decrease (inv_tpkhxk) 4) (increase (inv_tpkhxk_wqiqzh) 1) (increase (ach_make_tpkhxk_wqiqzh) 1))
+  )
+)
+
+Raw state of game (generate the problem file for this):
+
+{'player': [[4, 3]], 'player_facing': [0, 1], 'player_health': 9, 'player_hunger': 0.0, 'player_thirst': 0.0, 'player_fatigue': 0.0, 'player_sleeping': False, 'daylight': 1.0, 'step_count': 0, 'inv_health': 9, 'inv_food': 9, 'inv_drink': 9, 'inv_energy': 9, 'inv_wcgshh': 0, 'inv_tpkhxk': 0, 'inv_sgqeje': 0, 'inv_grpoqi': 0, 'inv_bzracx': 0, 'inv_mwzvua': 0, 'inv_tpkhxk_bcwrvm': 0, 'inv_sgqeje_bcwrvm': 0, 'inv_bzracx_bcwrvm': 0, 'inv_tpkhxk_wqiqzh': 0, 'inv_sgqeje_wqiqzh': 0, 'inv_bzracx_wqiqzh': 0, 'mynbiq': [[7, 3], [8, 3], [8, 4]], 'pmzjpl': [[0, 0], [0, 1], [0, 2], [0, 3], [1, 0], [1, 1], [1, 2], [2, 0], [2, 1], [3, 0], [4, 0], [4, 1], [4, 2], [4, 3], [5, 0], [5, 1], [6, 0], [6, 1], [6, 2], [6, 3], [6, 6], [7, 0], [7, 1], [7, 2], [8, 0], [8, 2], [8, 6]], 'sgqeje': [[0, 5], [1, 4], [1, 5], [1, 6], [2, 3], [2, 4], [2, 5], [3, 3], [3, 5], [4, 4], [4, 5], [4, 6], [5, 5], [5, 6]], 'wztejd': [[6, 4], [7, 4], [7, 5]], 'xcvkpr': [[0, 4], [1, 3], [2, 2], [3, 1], [3, 2], [5, 2], [5, 3], [6, 5], [7, 6], [8, 1], [8, 5]], 'grpoqi': [[2, 6], [3, 4]], 'bzracx': [[3, 6], [5, 4]], 'mwzvua': [[0, 6]], 'ach_collect_grpoqi': 0, 'ach_collect_mwzvua': 0, 'ach_collect_bzracx': 0, 'ach_collect_sgqeje': 0, 'ach_collect_tpkhxk': 0, 'ach_make_bzracx_bcwrvm': 0, 'ach_make_bzracx_wqiqzh': 0, 'ach_make_sgqeje_bcwrvm': 0, 'ach_make_sgqeje_wqiqzh': 0, 'ach_make_tpkhxk_bcwrvm': 0, 'ach_make_tpkhxk_wqiqzh': 0, 'ach_place_ckqpdj': 0, 'ach_place_sgqeje': 0, 'ach_place_zezroc': 0}
+
+Action Space (what actions can be taken):
+
+['noop', 'move_left', 'move_right', 'move_up', 'move_down', 'do', 'sleep', 'place_sgqeje', 'place_zezroc', 'place_ckqpdj', 'place_rjwdrk', 'make_tpkhxk_bcwrvm', 'make_sgqeje_bcwrvm', 'make_bzracx_bcwrvm', 'make_tpkhxk_wqiqzh', 'make_sgqeje_wqiqzh', 'make_bzracx_wqiqzh']
+
+
+MISSION:
+
+make tpkhxk wqiqzh
+
+

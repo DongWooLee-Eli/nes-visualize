@@ -1,0 +1,6 @@
+(define (problem make_tpkhxk_bcwrvm_problem)
+  (:domain make_tpkhxk_bcwrvm_domain)
+  (:objects mynbiq - source ach_make_tpkhxk_bcwrvm - status)
+  (:init (harvestable mynbiq) (= (inv_tpkhxk) 0))
+  (:goal (achieved ach_make_tpkhxk_bcwrvm))
+)

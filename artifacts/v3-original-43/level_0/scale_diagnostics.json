@@ -1,0 +1,104 @@
+{
+  "schema_version": 2,
+  "mode": "tc2",
+  "domain": "minicrafter_oo",
+  "level_id": 0,
+  "planner": "enhsp",
+  "metadata": {
+    "mode": "tc2",
+    "domain": "minicrafter_oo",
+    "level_id": 0,
+    "planner": "enhsp"
+  },
+  "artifacts": {
+    "scale_diagnostics": "scale_diagnostics.json",
+    "plan_log": "plan_log.jsonl",
+    "trajectory": "trajectory.json",
+    "domain_entry": "domain_at_entry.pddl",
+    "domain_current": "domain.pddl",
+    "problem": "problem.pddl",
+    "wm_entry": "wm_at_entry.py",
+    "validated_domain_entry": "validated_domain_at_entry.pddl",
+    "llm_calls": "../llm_calls.jsonl",
+    "llm_prompts_dir": "../llm_prompts",
+    "run_log": "../run.log",
+    "worldmodel_events": "../worldmodel_events",
+    "worldmodel_history": "../worldmodel_history",
+    "run_config": "../run_config.json",
+    "results": "../results.json",
+    "minicrafter_variant": "../minicrafter_variant.json"
+  },
+  "pddl": {
+    "num_operators": 1,
+    "num_predicates": 1,
+    "num_objects": 2,
+    "num_constants": 0,
+    "goal_size": 1,
+    "init_size": 5,
+    "attempts": 1,
+    "ok": true,
+    "source": "fresh",
+    "revise_changed_bytes": 0
+  },
+  "random_explore": {
+    "num_actions": 15,
+    "duration_sec": 0.02963194204494357,
+    "nontrivial_transitions": 15,
+    "achievements_hit": []
+  },
+  "wm_synth": {
+    "version": 1,
+    "duration_sec": 69.11709806276485,
+    "ok": true
+  },
+  "predicates": {
+    "names": [
+      "wood_reachable"
+    ],
+    "attempts": 1,
+    "ok": true
+  },
+  "fd": {
+    "translator_facts": null,
+    "translator_operators": null,
+    "walltime": 0.3191687180660665,
+    "returncode": 0,
+    "plan_len": 1,
+    "ok": true,
+    "error": null
+  },
+  "bfs": [
+    {
+      "subplan": "collect_wood player tree",
+      "index": 0,
+      "phase": "main_plan",
+      "attempt": 1,
+      "revision": 1,
+      "plan_log_line": 1,
+      "iters": 3,
+      "visited": 9,
+      "success": true,
+      "cutoff_hit": false,
+      "wall_time": 0.03399757109582424,
+      "max_iters": 10000,
+      "num_actions": 2,
+      "actions": [
+        "move_right",
+        "do"
+      ]
+    }
+  ],
+  "revisions": [],
+  "pddl_revise_log": [],
+  "pddl_revise_counts": {},
+  "wm_fidelity": {
+    "overall": null,
+    "by_key_class": {},
+    "hidden_rng_active": false
+  },
+  "totals": {
+    "solved": true,
+    "llm_calls": 4,
+    "wall_time_sec": 130.17946454090998
+  }
+}

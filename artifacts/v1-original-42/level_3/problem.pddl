@@ -1,0 +1,6 @@
+(define (problem make_wood_sword_problem)
+  (:domain make_wood_sword_domain)
+  (:objects tree - wood_source ach_place_table - table_status ach_make_wood_sword - sword_status)
+  (:init (wood_available tree) (= (inv_wood) 0))
+  (:goal (sword_made ach_make_wood_sword))
+)

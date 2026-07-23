@@ -1,0 +1,16 @@
+(define (domain collect_tpkhxk_domain)
+  (:requirements :strips :typing :numeric-fluents)
+  (:types actor resource)
+  (:predicates (adjacent_to ?who - actor ?what - resource) (ach_place_zezroc))
+  (:functions (inv_tpkhxk))
+  (:action collect_tpkhxk
+    :parameters (?who - actor ?what - resource)
+    :precondition (adjacent_to ?who ?what)
+    :effect (increase (inv_tpkhxk) 1)
+  )
+  (:action place_zezroc
+    :parameters (?who - actor)
+    :precondition (and)
+    :effect (ach_place_zezroc)
+  )
+)

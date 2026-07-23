@@ -1,0 +1,15 @@
+(define (domain craft_goal)
+  (:requirements :strips :numeric-fluents)
+  (:predicates (ach_make_tpkhxk_bcwrvm))
+  (:functions (inv_tpkhxk) (inv_tpkhxk_bcwrvm))
+  (:action do
+    :parameters ()
+    :precondition (and)
+    :effect (increase (inv_tpkhxk) 1)
+  )
+  (:action make_tpkhxk_bcwrvm
+    :parameters ()
+    :precondition (>= (inv_tpkhxk) 1)
+    :effect (and (decrease (inv_tpkhxk) 1) (increase (inv_tpkhxk_bcwrvm) 1) (ach_make_tpkhxk_bcwrvm))
+  )
+)

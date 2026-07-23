@@ -1,0 +1,181 @@
+{
+  "schema_version": 2,
+  "mode": "tc2",
+  "domain": "minicrafter_oo",
+  "level_id": 1,
+  "planner": "enhsp",
+  "metadata": {
+    "mode": "tc2",
+    "domain": "minicrafter_oo",
+    "level_id": 1,
+    "planner": "enhsp"
+  },
+  "artifacts": {
+    "scale_diagnostics": "scale_diagnostics.json",
+    "plan_log": "plan_log.jsonl",
+    "trajectory": "trajectory.json",
+    "domain_entry": "domain_at_entry.pddl",
+    "domain_current": "domain.pddl",
+    "problem": "problem.pddl",
+    "wm_entry": "wm_at_entry.py",
+    "validated_domain_entry": "validated_domain_at_entry.pddl",
+    "llm_calls": "../llm_calls.jsonl",
+    "llm_prompts_dir": "../llm_prompts",
+    "run_log": "../run.log",
+    "worldmodel_events": "../worldmodel_events",
+    "worldmodel_history": "../worldmodel_history",
+    "run_config": "../run_config.json",
+    "results": "../results.json",
+    "minicrafter_variant": "../minicrafter_variant.json"
+  },
+  "pddl": {
+    "num_operators": 2,
+    "num_predicates": 1,
+    "num_objects": 2,
+    "num_constants": 0,
+    "goal_size": 1,
+    "init_size": 6,
+    "attempts": 1,
+    "ok": true,
+    "source": "revised",
+    "revise_changed_bytes": 173
+  },
+  "random_explore": {
+    "num_actions": 0,
+    "duration_sec": null,
+    "nontrivial_transitions": 0,
+    "achievements_hit": []
+  },
+  "wm_synth": {
+    "version": 0,
+    "duration_sec": null,
+    "ok": false
+  },
+  "predicates": {
+    "names": [],
+    "attempts": 1,
+    "ok": true
+  },
+  "fd": {
+    "translator_facts": null,
+    "translator_operators": null,
+    "walltime": 0.2656290370505303,
+    "returncode": 0,
+    "plan_len": 3,
+    "ok": true,
+    "error": null
+  },
+  "bfs": [
+    {
+      "subplan": "collect_wood player tree",
+      "index": 0,
+      "phase": "main_plan",
+      "attempt": 1,
+      "revision": 1,
+      "plan_log_line": 1,
+      "iters": 0,
+      "visited": 0,
+      "success": false,
+      "cutoff_hit": false,
+      "wall_time": 0.0006095429416745901,
+      "max_iters": 10000,
+      "num_actions": 0,
+      "actions": []
+    },
+    {
+      "subplan": "collect_wood",
+      "index": 0,
+      "phase": "main_plan",
+      "attempt": 2,
+      "revision": 1,
+      "plan_log_line": 2,
+      "iters": 5,
+      "visited": 19,
+      "success": true,
+      "cutoff_hit": false,
+      "wall_time": 0.035416099010035396,
+      "max_iters": 10000,
+      "num_actions": 2,
+      "actions": [
+        "move_down",
+        "do"
+      ]
+    },
+    {
+      "subplan": "collect_wood",
+      "index": 1,
+      "phase": "main_plan",
+      "attempt": 2,
+      "revision": 1,
+      "plan_log_line": 2,
+      "iters": 2,
+      "visited": 6,
+      "success": true,
+      "cutoff_hit": false,
+      "wall_time": 0.011447664117440581,
+      "max_iters": 10000,
+      "num_actions": 2,
+      "actions": [
+        "move_left",
+        "do"
+      ]
+    },
+    {
+      "subplan": "place_table",
+      "index": 2,
+      "phase": "main_plan",
+      "attempt": 2,
+      "revision": 1,
+      "plan_log_line": 2,
+      "iters": 10001,
+      "visited": 19242,
+      "success": false,
+      "cutoff_hit": true,
+      "wall_time": 59.97642942308448,
+      "max_iters": 10000,
+      "num_actions": 9,
+      "actions": [
+        "move_down",
+        "do",
+        "move_left",
+        "move_right",
+        "place_table",
+        "make_wood_pickaxe",
+        "move_left",
+        "move_up",
+        "move_down"
+      ]
+    }
+  ],
+  "revisions": [],
+  "pddl_revise_log": [
+    {
+      "source": "level_transition",
+      "trigger": null,
+      "status": "revised",
+      "attempt_index": 1,
+      "changed_bytes": 173
+    },
+    {
+      "source": "interaction_failure",
+      "trigger": "planner",
+      "status": "revised",
+      "attempt_index": 1,
+      "changed_bytes": -134
+    }
+  ],
+  "pddl_revise_counts": {
+    "level_transition": 1,
+    "interaction_failure": 1
+  },
+  "wm_fidelity": {
+    "overall": null,
+    "by_key_class": {},
+    "hidden_rng_active": false
+  },
+  "totals": {
+    "solved": true,
+    "llm_calls": 6,
+    "wall_time_sec": 103.47636671504006
+  }
+}

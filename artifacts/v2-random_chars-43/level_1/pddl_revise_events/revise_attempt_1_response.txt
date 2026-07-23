@@ -1,0 +1,12 @@
+```pddl
+(define (domain place_zezroc_game)
+  (:requirements :strips :typing)
+  (:predicates (ach_place_zezroc))
+
+  (:action place_zezroc
+    :parameters ()
+    :precondition (and)
+    :effect (ach_place_zezroc)
+  )
+)
+```
