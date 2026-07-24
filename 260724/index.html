@@ -284,9 +284,9 @@
       <ul role="tablist">
         <li><a href="#versions">버전</a></li>
         <li><a href="#results">주요 결과</a></li>
-        <li><a href="#log">Log</a></li>
-        <li><a href="#examples">구체적 예시</a></li>
+        <li><a href="#examples">주요 사례</a></li>
         <li><a href="#random-chars">random_chars</a></li>
+        <li><a href="#log">Log</a></li>
       </ul>
     </nav>
   </header>
@@ -460,13 +460,20 @@ flowchart TB
           <tr><td>v3</td><td class="num">0 / 8</td><td class="num">1 / 8</td></tr>
         </tbody>
       </table>
-      <pre># v2 · random_chars · seed 42 · initial WM
-observed transitions: do = 0, successful craft/place delta = 0
+      <pre># Generated WM · verbatim excerpt
+if tile == "xcvkpr":
+<span class="leak-highlight">    # Scattered xcvkpr tiles behave like trees and yield tpkhxk.
+    collected = "tpkhxk"</span>
 
-# generated response
-<span class="leak-highlight">xcvkpr  → "trees" → tpkhxk
-place_zezroc cost = 2 × tpkhxk
-make_* recipes and tool hierarchy reconstructed</span></pre>
+costs = {
+<span class="leak-highlight">    "zezroc": {"tpkhxk": 2},</span>
+}
+
+recipes = {
+<span class="leak-highlight">    "tpkhxk": {"tpkhxk": 1},
+    "sgqeje": {"tpkhxk": 1, "sgqeje": 1},
+    "bzracx": {"tpkhxk": 1, "grpoqi": 1, "bzracx": 1},</span>
+}</pre>
       <div class="choice-tabs" data-choice="leakage" role="tablist" aria-label="Leakage run 상세">
         <button class="active" type="button" data-choice-value="prompt">Initial prompt</button>
         <button type="button" data-choice-value="wm">Generated WM</button>
@@ -516,9 +523,9 @@ make_* recipes and tool hierarchy reconstructed</span></pre>
     </section>
 
     <section class="panel" id="examples">
-      <h1>버전별 구체적 예시</h1>
+      <h1>버전별 주요 사례</h1>
 
-      <div class="choice-tabs" data-choice="example-versions" role="tablist" aria-label="예시 버전 선택">
+      <div class="choice-tabs" data-choice="example-versions" role="tablist" aria-label="주요 사례 버전 선택">
         <button class="active" type="button" data-choice-value="v0">v0</button>
         <button type="button" data-choice-value="v1">v1</button>
         <button type="button" data-choice-value="v2">v2</button>
@@ -534,26 +541,26 @@ make_* recipes and tool hierarchy reconstructed</span></pre>
             <h3>Generated PDDL</h3>
             <pre>(:action collect
   :parameters (?x)
-  :effect (collected ?x))
+<span class="leak-highlight">  :effect (collected ?x)</span>)
 
 goal:
-  collected(inv_tpkhxk)</pre>
+<span class="leak-highlight">  collected(inv_tpkhxk)</span></pre>
           </div>
           <div>
             <h3>Planning → execution</h3>
-            <pre>HL: collect inv_tpkhxk
-BFS: 10,003 iterations → failed
+            <pre><span class="leak-highlight">HL: collect inv_tpkhxk
+BFS: 10,003 iterations → failed</span>
 attempts: 3
 trajectory actions: []
 
-result: unsolved</pre>
+<span class="leak-highlight">result: unsolved</span></pre>
           </div>
         </div>
       </div>
 
       <div data-choice-panel="example-versions" data-choice-value="v1">
         <h2>v1 · transition → initial PDDL</h2>
-        <div class="choice-tabs" data-choice="examples-v1" role="tablist" aria-label="v1 예시 선택">
+        <div class="choice-tabs" data-choice="examples-v1" role="tablist" aria-label="v1 주요 사례 선택">
           <button class="active" type="button" data-choice-value="improvement">개선 사례</button>
           <button type="button" data-choice-value="failure">실패 사례</button>
         </div>
@@ -565,23 +572,23 @@ result: unsolved</pre>
             <div>
               <h3>Observed transition</h3>
               <pre>Action: do
-front material:         xcvkpr
+<span class="leak-highlight">front material:         xcvkpr
 ach_collect_tpkhxk: 0 → 1
 inv_tpkhxk:          0 → 1
-xcvkpr:              target removed</pre>
+xcvkpr:              target removed</span></pre>
             </div>
             <div>
               <h3>Grounded PDDL</h3>
               <pre>do_collect(
   player,
-  xcvkpr,
-  ach_collect_tpkhxk
+<span class="leak-highlight">  xcvkpr,
+  ach_collect_tpkhxk</span>
 )
 
-pre: available(xcvkpr)
-effect: achieved(ach_collect_tpkhxk)
+<span class="leak-highlight">pre: available(xcvkpr)
+effect: achieved(ach_collect_tpkhxk)</span>
 
-source binding: recovered</pre>
+<span class="leak-highlight">source binding: recovered</span></pre>
             </div>
           </div>
           <p class="caption">PDDL grounding은 개선됐지만 이 run의 low-level executor는 여전히 실패했다.</p>
@@ -597,20 +604,20 @@ source binding: recovered</pre>
 
 collect_wood:
   + wood_at_least_one
-  - harvestable(tree)
+<span class="leak-highlight">  - harvestable(tree)</span>
 
 collect_more_wood pre:
-  harvestable(tree)</pre>
+<span class="leak-highlight">  harvestable(tree)</span></pre>
             </div>
             <div>
               <h3>Dead end</h3>
               <pre>goal: wood ≥ 2 → place_table
 
-collect #1: tree consumed
-collect #2: impossible
+<span class="leak-highlight">collect #1: tree consumed
+collect #2: impossible</span>
 
-ENHSP: unsolvable × 3
-result: failed</pre>
+<span class="leak-highlight">ENHSP: unsolvable × 3
+result: failed</span></pre>
             </div>
           </div>
         </div>
@@ -618,7 +625,7 @@ result: failed</pre>
 
       <div data-choice-panel="example-versions" data-choice-value="v2">
         <h2>v2 · failure → PDDL revision</h2>
-        <div class="choice-tabs" data-choice="examples-v2" role="tablist" aria-label="v2 예시 선택">
+        <div class="choice-tabs" data-choice="examples-v2" role="tablist" aria-label="v2 주요 사례 선택">
           <button class="active" type="button" data-choice-value="improvement">개선 사례</button>
           <button type="button" data-choice-value="failure">실패 사례</button>
         </div>
@@ -630,25 +637,25 @@ result: failed</pre>
             <div>
               <h3>Failure signal</h3>
               <pre>collect_wood effect:
-  - tree(target)
+<span class="leak-highlight">  - tree(target)</span>
   + inv_wood 1
 
 place_table pre:
   inv_wood ≥ 2
 
-planner: unsolvable</pre>
+<span class="leak-highlight">planner: unsolvable</span></pre>
             </div>
             <div>
               <h3>After revision</h3>
               <pre>removed:
-  not(tree(target))
+<span class="leak-highlight">  not(tree(target))</span>
 
-plan:
+<span class="leak-highlight">plan:
   collect_wood
   collect_wood
-  place_table
+  place_table</span>
 
-result: solved</pre>
+<span class="leak-highlight">result: solved</span></pre>
             </div>
           </div>
         </div>
@@ -663,11 +670,11 @@ result: solved</pre>
   ach_collect_wood only
 
 level 6:
-  exploration actions: 0
-  achievements_hit: []
+<span class="leak-highlight">  exploration actions: 0
+  achievements_hit: []</span>
 
 ach_make_stone_pickaxe:
-  successful evidence 없음</pre>
+<span class="leak-highlight">  successful evidence 없음</span></pre>
             </div>
             <div>
               <h3>Execution failure</h3>
@@ -675,16 +682,16 @@ ach_make_stone_pickaxe:
 
 revision 1:
   make_wood_pickaxe
-  → 10,001 iterations · failed
+<span class="leak-highlight">  → 10,001 iterations · failed</span>
 
 WM revision
 
 revision 2:
   collect_stone
-  → 10,001 iterations · failed
+<span class="leak-highlight">  → 10,001 iterations · failed</span>
 
-target: never reached
-result: budget exhausted · failed</pre>
+<span class="leak-highlight">target: never reached
+result: budget exhausted · failed</span></pre>
             </div>
           </div>
         </div>
@@ -692,7 +699,7 @@ result: budget exhausted · failed</pre>
 
       <div data-choice-panel="example-versions" data-choice-value="v3">
         <h2>v3 · scored prefix → mechanics</h2>
-        <div class="choice-tabs" data-choice="examples-v3" role="tablist" aria-label="v3 예시 선택">
+        <div class="choice-tabs" data-choice="examples-v3" role="tablist" aria-label="v3 주요 사례 선택">
           <button class="active" type="button" data-choice-value="improvement">개선 사례</button>
           <button type="button" data-choice-value="failure">실패 사례</button>
         </div>
@@ -703,24 +710,24 @@ result: budget exhausted · failed</pre>
           <div class="split">
             <div>
               <h3>Selected evidence</h3>
-              <pre>#585  make_wood_pickaxe
+              <pre><span class="leak-highlight">#585  make_wood_pickaxe
 #1531 collect_stone
-#1708 make_stone_pickaxe
+#1708 make_stone_pickaxe</span>
 
-ach_make_stone_pickaxe: 0 → 1
+<span class="leak-highlight">ach_make_stone_pickaxe: 0 → 1
 inv_stone:              1 → 0
 inv_wood:               1 → 0
-inv_stone_pickaxe:      0 → 1</pre>
+inv_stone_pickaxe:      0 → 1</span></pre>
             </div>
             <div>
               <h3>Execution</h3>
               <pre>HL plan: 8 steps
 
-make_wood_pickaxe: 2 actions
+<span class="leak-highlight">make_wood_pickaxe: 2 actions
 collect_stone:     8 actions
-make_stone_pickaxe: 6 actions
+make_stone_pickaxe: 6 actions</span>
 
-result: solved</pre>
+<span class="leak-highlight">result: solved</span></pre>
             </div>
           </div>
         </div>
@@ -734,21 +741,21 @@ result: solved</pre>
               <pre>action: place_zezroc
 score: 797 · selected
 
-inv_tpkhxk:       2 → 0
+<span class="leak-highlight">inv_tpkhxk:       2 → 0
 ach_place_zezroc: 0 → 1
-zezroc:           created</pre>
+zezroc:           created</span></pre>
             </div>
             <div>
               <h3>Generated mismatch</h3>
               <pre>place_zezroc:
-  precondition: ()
-  effect: ach_place_zezroc
+<span class="leak-highlight">  precondition: ()
+  effect: ach_place_zezroc</span>
 
 missing:
-  inv_tpkhxk ≥ 2
-  inv_tpkhxk -= 2
+<span class="leak-highlight">  inv_tpkhxk ≥ 2
+  inv_tpkhxk -= 2</span>
 
-result: unsolved</pre>
+<span class="leak-highlight">result: unsolved</span></pre>
             </div>
           </div>
         </div>

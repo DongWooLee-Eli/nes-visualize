@@ -20,8 +20,11 @@ assert 'data-choice-value="v0"' in html and html.count(">개선 사례</button>"
 assert 'id="log-version"' in html and 'id="log-roles"' in html
 assert html.count('data-log-role=') == 3
 assert "버전별 핵심 차이" in html and "Research Question" in html
+assert "구체적 예시" not in html and "<h1>버전별 주요 사례</h1>" in html
+assert html.index('href="#examples"') < html.index('href="#random-chars"') < html.index('href="#log"')
 assert html.index("<h2>v3 exploration coverage</h2>") < html.index("<h2>Leakage run</h2>")
-assert "data-highlight=" in html and "log-stats" not in html
+assert "# generated response" not in html and "# Generated WM · verbatim excerpt" in html
+assert "data-highlight=" in html and html.count('class="leak-highlight"') >= 20 and "log-stats" not in html
 assert len(manifest["runs"]) == 12
 assert len([item for item in manifest["items"] if item["kind"] == "prompt"]) == 703
 assert all((HERE / item["path"]).is_file() for item in manifest["items"])
