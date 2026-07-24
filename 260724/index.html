@@ -52,6 +52,11 @@
       white-space: pre-wrap;
       word-break: break-word;
     }
+    pre[data-syntax] .syn-keyword { color: #7c3aed; font-weight: 650; }
+    pre[data-syntax] .syn-function { color: #1d4ed8; }
+    pre[data-syntax] .syn-string { color: #a31515; }
+    pre[data-syntax] .syn-number, pre[data-syntax] .syn-literal { color: #098658; }
+    pre[data-syntax] .syn-comment { color: #6a737d; font-style: italic; }
     h1, h2, h3, p { margin-top: 0; }
     h1 { margin-bottom: 28px; font-size: 25px; font-weight: 650; letter-spacing: -.025em; }
     h2 {
@@ -440,7 +445,7 @@ flowchart TB
           </pre>
         </div>
         <p class="caption">Generated scorer의 핵심 구조 · original · seed 43 · level 6 · make stone pickaxe (축약)</p>
-        <pre>def score_transition(transition: dict, search_context: dict) -> float:
+        <pre data-syntax="python">def score_transition(transition: dict, search_context: dict) -> float:
     before = transition.get("before", {})
     after = transition.get("after", {})
 
@@ -462,6 +467,47 @@ flowchart TB
         + novelty
     )
     return float(max(-10000.0, min(10000.0, score)))</pre>
+        <div class="split">
+          <div>
+            <h3>transition · candidate #1708</h3>
+            <p class="caption">실제 관측의 핵심 field만 표시</p>
+            <pre data-syntax="python">{
+    "before": {
+        "inv_wood": 1,
+        "inv_stone": 1,
+        "inv_stone_pickaxe": 0,
+        "ach_make_stone_pickaxe": 0,
+    },
+    "action": "make_stone_pickaxe",
+    "after": {
+        "inv_wood": 0,
+        "inv_stone": 0,
+        "inv_stone_pickaxe": 1,
+        "ach_make_stone_pickaxe": 1,
+    },
+    "delta": (
+        "ach_make_stone_pickaxe: predicted=0, actual=1\n"
+        "inv_stone: predicted=1, actual=0\n"
+        "inv_stone_pickaxe: predicted=0, actual=1\n"
+        "inv_wood: predicted=1, actual=0"
+    ),
+}</pre>
+          </div>
+          <div>
+            <h3>search_context · candidate #1708</h3>
+            <p class="caption">현재 candidate 직전의 탐색 이력</p>
+            <pre data-syntax="python">{
+    "candidate_index": 1708,
+    "depth": 38,
+    "new_context_action": True,
+    "novel_state": True,
+    "novel_effect": True,
+    "seen_state_count": 267,
+    "seen_effect_count": 228,
+}</pre>
+          </div>
+        </div>
+        <p class="caption">Mission과 전체 action prefix는 scorer 호출 인자에 포함되지 않는다.</p>
         <ul class="caption">
           <li>warmup: 15 / level</li>
           <li>beam width: 3</li>
@@ -1408,6 +1454,22 @@ def transition_model(state, action):
       activateTab(location.hash || "#versions");
       addEventListener("load", () => scrollTo({ top: 0, behavior: "auto" }), { once: true });
       addEventListener("popstate", () => activateTab(location.hash || "#versions"));
+
+      const syntaxPattern = /(#.*$)|("(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')|\b(def|return|if|else|and|or|not|in)\b|\b(True|False|None)\b|\b(\d+(?:\.\d+)?)\b|\b([A-Za-z_]\w*)(?=\()/gm;
+      document.querySelectorAll("pre[data-syntax]").forEach(block => {
+        const escaped = block.textContent
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;");
+        block.innerHTML = escaped.replace(
+          syntaxPattern,
+          (match, comment, string, keyword, literal, number, fn) => {
+            const type = comment ? "comment" : string ? "string" : keyword ? "keyword"
+              : literal ? "literal" : number ? "number" : "function";
+            return `<span class="syn-${type}">${match}</span>`;
+          }
+        );
+      });
 
       const canonicalNames = [...document.querySelectorAll("#log-name-map [data-canonical]")]
         .map(cell => [cell.textContent, cell.dataset.canonical]);

@@ -54,6 +54,9 @@ assert "Research Question: domain description 없음 + online learning setting�
 assert "Generated scorer의 핵심 구조" in overview
 assert 'def score_transition(transition: dict, search_context: dict) -> float:' in overview
 assert '9000.0 * target' in overview and '1200.0 * collect_stone' in overview
+assert 'transition · candidate #1708' in overview and 'search_context · candidate #1708' in overview
+assert '"seen_state_count": 267' in overview and '"seen_effect_count": 228' in overview
+assert html.count('data-syntax="python"') == 3 and "const syntaxPattern =" in html
 assert overview.count('class="overview-heading"') == 3 and ".overview-heading { font-size: 18px; }" in html
 assert overview.index('aria-label="버전별 research question"') < overview.index('class="overview-heading">버전별 핵심 차이</h1>') < overview.index('data-choice="versions"')
 assert "Revision trigger" in html and ">Trigger<" not in html
