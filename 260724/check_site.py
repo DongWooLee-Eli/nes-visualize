@@ -78,6 +78,7 @@ examples = html[html.index('id="examples"'):html.index('id="random-chars"')]
 assert all(name not in examples for name in ("xcvkpr", "tpkhxk", "zezroc"))
 assert "candidate #479" not in examples
 assert examples.count('class="case-question"') == 3
+assert ".case-question {" in html and "font-size: 15px;" in html and "border: 1px solid #cbd6ee;" in html
 assert ".case-question strong {" in html and "background: var(--blue-soft);" in html
 assert all(
     question in examples
