@@ -189,7 +189,7 @@
       word-break: break-word;
     }
 
-    #log {
+    #log, #templates {
       width: min(1500px, calc(100vw - 40px));
       margin-left: 50%;
       transform: translateX(-50%);
@@ -275,7 +275,7 @@
     @media print {
       .topbar { display: none !important; }
       main { width: 100%; padding: 0; }
-      #log { width: 100%; margin-left: 0; transform: none; }
+      #log, #templates { width: 100%; margin-left: 0; transform: none; }
       .panel { display: block !important; break-after: page; }
       [data-choice-panel] { display: block !important; }
     }
@@ -290,6 +290,7 @@
         <li><a href="#results">주요 결과</a></li>
         <li><a href="#examples">주요 사례</a></li>
         <li><a href="#random-chars">random_chars</a></li>
+        <li><a href="#templates">프롬프트</a></li>
         <li><a href="#log">Log</a></li>
       </ul>
     </nav>
@@ -800,6 +801,363 @@ flowchart LR
 → inv_tpkhxk - 1
 + inv_tpkhxk_bcwrvm + 1</pre>
       <p class="caption">핵심은 더 많은 candidate가 아니라 scorer·WM·PDDL이 같은 prerequisite–action–effect를 공유하고 다음 level까지 유지하는 것. Textual theory는 가능한 구현 중 하나.</p>
+    </section>
+
+    <section class="panel" id="templates">
+      <h1>프롬프트 템플릿</h1>
+      <p class="caption"><code>{}</code> = run마다 달라지는 값. Scorer는 v3에서만 사용한다.</p>
+
+      <div class="role-grid">
+        <article class="role-card" data-template-role="Scorer">
+          <h3>Scorer</h3>
+          <div class="choice-tabs" data-choice="template-scorer" aria-label="Scorer 프롬프트 단계">
+            <button class="active" type="button" data-choice-value="generate">Generate</button>
+            <button type="button" data-choice-value="repair">Repair</button>
+          </div>
+
+          <div class="active" data-choice-panel="template-scorer" data-choice-value="generate">
+            <pre>Write one safe deterministic Python transition scorer.
+Return only one ```python``` block with this exact signature:
+def score_transition(transition: dict, search_context: dict) -&gt; float:
+
+Score observed transitions only. Do not choose actions or predict outcomes.
+Use only arithmetic, conditionals, local variables, mapping.get, and these builtins:
+abs, bool, float, int, len, max, min, sum. No imports, I/O, dunder access,
+recursion, loops, exceptions, mutation, or non-finite results.
+
+Mission: {}
+Public state format: {}
+Public actions: {}
+Initial public state: {}
+All warmup transition evidence: {}
+
+Neutral novelty scorer:
+```python
+def score_transition(transition: dict, search_context: dict) -&gt; float:
+    return float(search_context.get("novel_effect", False)) + float(search_context.get("novel_state", False))
+```
+
+Previous valid scorer, if any:
+```python
+{}
+```</pre>
+          </div>
+
+          <div data-choice-panel="template-scorer" data-choice-value="repair">
+            <pre>Generate prompt에 다음 문장을 추가:
+
+Repair the scorer. The prior output failed validation with: {}</pre>
+          </div>
+        </article>
+
+        <article class="role-card" data-template-role="PDDL">
+          <h3>PDDL</h3>
+          <div class="choice-tabs" data-choice="template-pddl" aria-label="PDDL 프롬프트 단계">
+            <button class="active" type="button" data-choice-value="init">Init</button>
+            <button type="button" data-choice-value="revise">Revise</button>
+            <button type="button" data-choice-value="transfer">Transfer</button>
+            <button type="button" data-choice-value="predicate">Predicate</button>
+          </div>
+
+          <div class="active" data-choice-panel="template-pddl" data-choice-value="init">
+            <pre>You are an agent playing a 2D grid game, whose raw state is shown below.
+
+Give me a minimal PDDL domain and problem file that will allow the agent to win.
+Each object in the problem file must use only keys from the raw state.
+
+PDDL GUIDANCE
+- Ground the abstraction only in the raw state, mission, action space, and observed transitions.
+- Give every action parameter a declared type.
+- Keep each :parameters, :precondition, and :effect on one physical line.
+- Use lowercase Python-safe names without hyphens; underscores are allowed.
+- Use and/not, but not or. Declare negative-preconditions when needed.
+- Every predicate and effect must be checkable or reachable in the supplied state.
+- Keep operators high-level; the world model and search execute low-level actions.
+- Use Boolean predicates only for binary facts; keep quantities state-grounded.
+- Literal objects must be typed parameters or domain constants.
+- Make :init match the raw state and return exactly one :goal expression.
+
+Domain Description:
+{}
+
+MISSION:
+{}
+
+Raw state:
+{}
+
+Action Space:
+{}
+
+OBSERVED INTERACTION EVIDENCE:
+Ground preconditions and effects in these transitions.
+{}
+
+YOUR CURRENT DOMAIN FILE, if any:
+{}
+
+Return the domain and problem in ```pddl``` code blocks.
+
+Fixed neutral few-shot examples:
+
+BEGIN EXAMPLE 1
+Observed transition:
+- before action_a: {'actor_a': [[0, 0]], 'target_b': [[1, 0]], 'done_c': 0}
+- after action_a:  {'actor_a': [[0, 0]], 'target_b': [[1, 0]], 'done_c': 1}
+
+(define (domain example_typed)
+  (:requirements :strips :typing :negative-preconditions)
+  (:types actor target status)
+  (:predicates (close_to ?who - actor ?what - target) (is_set ?flag - status))
+  (:action complete
+    :parameters (?who - actor ?what - target ?result - status)
+    :precondition (and (close_to ?who ?what) (not (is_set ?result)))
+    :effect (is_set ?result)
+  )
+)
+
+(define (problem example_typed_problem)
+  (:domain example_typed)
+  (:objects actor_a - actor target_b - target done_c - status)
+  (:init (close_to actor_a target_b))
+  (:goal (is_set done_c))
+)
+END EXAMPLE 1
+
+BEGIN EXAMPLE 2
+Observed transitions:
+- action_a changes progress_c: 0 → 1
+- subsequent action_b changes finished_d: 0 → 1
+
+(define (domain example_staged)
+  (:requirements :strips :typing :negative-preconditions :numeric-fluents)
+  (:types worker station status)
+  (:predicates (at_station ?who - worker ?where - station) (is_set ?flag - status))
+  (:functions (progress_c))
+  (:action advance
+    :parameters (?who - worker ?where - station)
+    :precondition (at_station ?who ?where)
+    :effect (increase (progress_c) 1)
+  )
+  (:action finish
+    :parameters (?who - worker ?where - station ?result - status)
+    :precondition (and (at_station ?who ?where) (&gt;= (progress_c) 1) (not (is_set ?result)))
+    :effect (is_set ?result)
+  )
+)
+
+(define (problem example_staged_problem)
+  (:domain example_staged)
+  (:objects worker_a - worker station_b - station finished_d - status)
+  (:init (at_station worker_a station_b) (= (progress_c) 0))
+  (:goal (is_set finished_d))
+)
+END EXAMPLE 2</pre>
+          </div>
+
+          <div data-choice-panel="template-pddl" data-choice-value="revise">
+            <pre>You previously synthesized the following PDDL DOMAIN for a 2D grid game.
+The agent has moved to a new level with a different mission.
+Adapt the existing domain so it solves both the old and new missions.
+
+Constraints:
+- Give every action parameter a declared type.
+- Keep :parameters, :precondition, and :effect on one physical line.
+- Predicate names are lowercase, contain no hyphens, and may use underscores.
+- Use and/not, but not or.
+- Keep every predicate and effect checkable or reachable in the raw state.
+- Keep operators high-level and quantities state-grounded.
+- A literal object must be a typed parameter or domain constant.
+- If the domain already covers the mission, return it unchanged.
+
+CURRENT DOMAIN:
+```pddl
+{}
+```
+
+NEW MISSION:
+{}
+
+CURRENT RAW STATE:
+{}
+
+OBSERVED INTERACTION EVIDENCE:
+Ground revisions in these transitions. Preserve operators unless evidence or a failure signal contradicts them.
+{}
+
+Action Space:
+{}
+
+DOMAIN DESCRIPTION:
+{}
+
+FAILURE SIGNALS:
+- Predicate-classifier error: {}
+- Planner failure or empty plan: {}
+- World-model prediction mismatch: {}
+
+Return EXACTLY ONE ```pddl``` code block containing only the domain.</pre>
+          </div>
+
+          <div data-choice-panel="template-pddl" data-choice-value="transfer">
+            <pre>You are an agent playing a 2D grid game.
+Using the existing PDDL domain, generate a problem file that allows the agent to win.
+
+- Object names must use only raw-state keys.
+- Return exactly one mission-required :goal expression.
+- Put prerequisites in operator preconditions, not in the final goal.
+- Make :init match the raw state.
+- Do not repeat domain constants in problem :objects.
+- Initialize numeric functions with the exact current value.
+- Omit false Boolean facts under closed-world semantics.
+- Return exactly one ```pddl``` code block.
+
+Fixed neutral few-shot examples:
+[same fixed block as Init]
+
+Domain file:
+{}
+
+Raw state:
+{}
+
+Action Space:
+{}
+
+MISSION:
+{}
+
+Domain Description:
+{}</pre>
+          </div>
+
+          <div data-choice-panel="template-pddl" data-choice-value="predicate">
+            <pre>You are a software engineer writing Python predicate evaluators.
+Each function implements a predicate declared in the PDDL domain.
+
+Rules:
+- Define every declared predicate, including zero-arity predicates.
+- Always include state as the first argument.
+- Use the exact, case-sensitive predicate name.
+- For zero-arity predicates use def name(state, *args).
+- Return bool or a truthy/falsy value.
+- Return only a ```python``` code block.
+
+Predicates that must be defined:
+{}
+
+Starter stubs:
+```python
+{}
+```
+
+Domain File:
+{}
+
+Problem File:
+{}
+
+Raw State:
+{}
+
+Current Python Low Level World Model:
+{}
+
+Game Description:
+{}</pre>
+          </div>
+        </article>
+
+        <article class="role-card" data-template-role="WM">
+          <h3>WM</h3>
+          <div class="choice-tabs" data-choice="template-wm" aria-label="WM 프롬프트 단계">
+            <button class="active" type="button" data-choice-value="init">Init</button>
+            <button type="button" data-choice-value="revise">Revise</button>
+          </div>
+
+          <div class="active" data-choice-panel="template-wm" data-choice-value="init">
+            <pre>Domain Description:
+{}
+
+## Your Task
+
+Based on the following observations from random exploration, write a general-purpose
+`transition_model(state, action)` function in Python that predicts the next state.
+
+If an action returns no state change, movement may have been prevented by an obstacle.
+
+### Mission
+{}
+
+### Available Actions
+{}
+
+### Current State
+{}
+
+### Observed Transitions
+{}
+
+### Notes
+- Use `.endswith()` or `.startswith()` instead of hardcoding entity lists.
+- You may replace keys for state items that transform.
+- Use `state.get(...)` defensively.
+
+### Response Format
+Return ONLY a Python code block:
+```python
+from copy import deepcopy
+
+def transition_model(state, action):
+    new_state = deepcopy(state)
+    # ... your implementation ...
+    return new_state
+```</pre>
+          </div>
+
+          <div data-choice-panel="template-wm" data-choice-value="revise">
+            <pre>Domain Description:
+{}
+
+### Current Mission
+{}
+
+## Your Task
+
+The current world model has prediction errors.
+Fix the transition model to handle the cases below.
+Pay attention to the EXPLORATION PLAN and its state transitions.
+
+### Available Actions
+{}
+
+### Current World Model
+```python
+{}
+```
+
+### Prediction Errors
+{}
+
+### Requirements
+1. Return the COMPLETE revised transition_model function.
+2. Fix the errors while keeping correct behavior.
+3. Make the fix general, not a special case for the exact states.
+4. Preserve mechanics that are already correct.
+
+### Response Format
+Return ONLY a Python code block:
+```python
+from copy import deepcopy
+
+def transition_model(state, action):
+    new_state = deepcopy(state)
+    # ... your revised implementation ...
+    return new_state
+```</pre>
+          </div>
+        </article>
+      </div>
     </section>
   </main>
 

@@ -25,7 +25,12 @@ assert html.count('data-log-role=') == 3
 assert "버전별 핵심 차이" in html and "Research Question" in html
 assert "Revision trigger" in html and ">Trigger<" not in html
 assert "구체적 예시" not in html and "<h1>버전별 주요 사례</h1>" in html
-assert html.index('href="#examples"') < html.index('href="#random-chars"') < html.index('href="#log"')
+assert (
+    html.index('href="#examples"')
+    < html.index('href="#random-chars"')
+    < html.index('href="#templates"')
+    < html.index('href="#log"')
+)
 assert html.index("<h2>v3 exploration coverage</h2>") < html.index("<h2>Leakage run</h2>")
 assert 'aria-label="버전별 solve rate"' not in html and "<th>전략</th>" not in html
 assert "# generated response" not in html and "# Generated WM · verbatim excerpt" not in html
@@ -49,6 +54,26 @@ for canonical, random_name in name_map.items():
 assert '"table": {"wood": 2}' in canonical_wm and '"wood": {"wood": 1}' in canonical_wm
 examples = html[html.index('id="examples"'):html.index('id="random-chars"')]
 assert all(name not in examples for name in ("xcvkpr", "tpkhxk", "zezroc"))
+templates = html[html.index('id="templates"'):html.index("</main>")]
+assert html.count("data-template-role=") == 3
+assert all(
+    f'data-choice="template-{role}"' in templates
+    for role in ("scorer", "pddl", "wm")
+)
+assert templates.count("{}") >= 25
+assert "Repair the scorer. The prior output failed validation with: {}" in templates
+assert all(
+    value in templates
+    for value in (
+        'data-choice-value="generate"',
+        'data-choice-value="repair"',
+        'data-choice-value="init"',
+        'data-choice-value="revise"',
+        'data-choice-value="transfer"',
+        'data-choice-value="predicate"',
+    )
+)
+assert all(value not in templates for value in ("seed 42", "seed 43", "make_stone_pickaxe"))
 assert len(manifest["runs"]) == 12
 assert len([item for item in manifest["items"] if item["kind"] == "prompt"]) == 703
 assert all((HERE / item["path"]).is_file() for item in manifest["items"])
