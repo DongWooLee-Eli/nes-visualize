@@ -60,7 +60,7 @@ assert 'nameMap.hidden = state.benchmark !== "random_chars"' in html
 assert "PDDL grounding은 개선됐지만" not in html
 assert "PDDL이 채집 가능한 <code>tree</code>를 하나만 있다고 작성해" in html
 assert "타깃 level은 <code>make_stone_pickaxe</code>였지만, 탐색에서 관측한 achievement는 <code>ach_collect_wood</code>뿐이었다." in html
-assert 'data-choice="examples-v3"' not in html and "candidate #479" not in html
+assert 'data-choice="examples-v3"' not in html
 assert "성공 사례 · original · seed 43 · level 6 · candidate #1708" in html
 name_map = dict(re.findall(r'<td data-canonical="([^"]+)">([^<]+)</td>', html))
 assert len(name_map) == 22 and name_map["tree"] == "xcvkpr" and name_map["wood"] == "tpkhxk"
@@ -74,6 +74,16 @@ for canonical, random_name in name_map.items():
 assert '"table": {"wood": 2}' in canonical_wm and '"wood": {"wood": 1}' in canonical_wm
 examples = html[html.index('id="examples"'):html.index('id="random-chars"')]
 assert all(name not in examples for name in ("xcvkpr", "tpkhxk", "zezroc"))
+assert "candidate #479" not in examples
+random_analysis = html[html.index('id="random-chars"'):html.index('id="templates"')]
+assert "<h2>Exploration의 문제?</h2>" in random_analysis and "두 단계의 병목" not in random_analysis
+assert "<h2>Causal identifiability 부족</h2>" in random_analysis
+assert "<h2>지식의 공유 실패</h2>" in random_analysis
+assert "candidate #427" in random_analysis and "candidate #495" in random_analysis and "candidate #479" in random_analysis
+assert "동일 action의 성공과 no-op을 서로 다른 context에서 대조해야 한다." in random_analysis
+assert "발견된 mechanics를 모듈 간에 공유해야 한다." in random_analysis
+assert "mission과 관련 없어 보여도 다양하게 exploration 필요 &amp; clustered, abstracted 된 지식 필요 &amp; 이를 공유할 필요" in random_analysis
+assert all(name not in random_analysis for name in name_map.values())
 templates = html[html.index('id="templates"'):html.index("</main>")]
 assert html.count("data-template-role=") == 3
 assert all(

@@ -717,17 +717,7 @@ make_stone_pickaxe: 6 actions</span>
     <section class="panel" id="random-chars">
       <h1>random_chars 실패</h1>
 
-      <div class="diagram">
-        <pre class="mermaid">
-flowchart LR
-    A["xcvkpr"] --> B["tpkhxk"]
-    B --> C["zezroc"]
-    C --> D["tpkhxk_bcwrvm"]
-        </pre>
-      </div>
-      <p class="caption">tree → wood → table → pickaxe의 이름 기반 causal theory가 opaque token에서는 사라진다.</p>
-
-      <h2>두 단계의 병목</h2>
+      <h2>Exploration의 문제?</h2>
       <table aria-label="v3 random chars discovery와 solve 비교">
         <thead><tr><th>두 seed 합산 / 평균</th><th class="num">original</th><th class="num">random_chars</th></tr></thead>
         <tbody>
@@ -740,73 +730,123 @@ flowchart LR
       <p>전체 탐색량은 부족하지 않았지만, random_chars의 실패 15개 중 10개는 target effect를 못 찾았고 5개는 찾고도 실행하지 못했다.</p>
       <p class="caption">v3 · seed 42/43. Unique state와 achievement는 candidate phase의 run별 합계 평균. Target effect는 현재 mission의 achievement delta 관측 여부.</p>
 
-      <h2>근본 원인 · causal relation의 복원·공유·유지 실패</h2>
-      <table aria-label="random chars failure causes">
-        <thead><tr><th>단계</th><th>받는 정보</th><th>실패</th></tr></thead>
-        <tbody>
-          <tr><td>Discovery / scorer</td><td>현재 action의 즉시 delta</td><td>미래 prerequisite인 자원 소비 행동을 낮게 평가해 target path가 끊길 수 있음</td></tr>
-          <tr><td>Abstraction / PDDL</td><td>action + changed delta</td><td>prefix와 unchanged context가 빠지고, failure revision 뒤 recipe cost·station 조건도 evidence와 불일치</td></tr>
-          <tr><td>Execution / WM</td><td>level 0의 15-step warmup</td><td>beam evidence를 받지 못해 opaque <code>do</code>/<code>make</code>를 no-op으로 예측</td></tr>
-          <tr><td>Persistence</td><td>validated snapshot</td><td>실패 level의 PDDL은 clear/rollback되고, snapshot이 있으면 WM도 rollback되어 지식이 누적되지 않음</td></tr>
-        </tbody>
-      </table>
+      <h2>Causal identifiability 부족</h2>
+      <p class="caption">v3 · random_chars · seed 42 · level 2. 아래 로그는 original name으로 변환했다.</p>
 
-      <h3>1 · prerequisite가 beam에서 끊김</h3>
-      <pre># v3 · random_chars · seed 43 · level 2
-action: place_zezroc
-inv_tpkhxk:       2 → 0     resource loss  -40
-ach_place_zezroc: 0 → 1     achievement     +6
-                              novelty        +2
-                              score         -32
-selected: false</pre>
+      <h3>Negative evidence가 scorer에서 걸러짐</h3>
+      <div class="split">
+        <div>
+          <h3>No-op · candidate #427</h3>
+          <pre>context
+<span class="leak-highlight">  inv_wood: 3
+  table: []</span>
 
-      <h3>2 · target을 찾고도 PDDL이 context를 잃음</h3>
-      <pre># v3 · random_chars · seed 42 · level 2
-# observed candidate #495
-prefix: 10 actions → place_zezroc → make_tpkhxk_bcwrvm
-inv_tpkhxk:        1 → 0
-pickaxe:           0 → 1
-score:             20000 · selected
+action: make_wood_pickaxe
+<span class="leak-highlight">result: state unchanged
+score: 0
+selected: false</span></pre>
+        </div>
+        <div>
+          <h3>Success · candidate #495</h3>
+          <pre>context
+<span class="leak-highlight">  inv_wood: 1
+  player: [0, 1]
+  facing: [0, -1]
+  table: [[0, 0]]</span>
 
-# final PDDL
-(:action make_tpkhxk_bcwrvm
-  :precondition (>= (inv_tpkhxk) 3)
-  :effect
-    (and (decrease (inv_tpkhxk) 3)
-         (increase (inv_tpkhxk_bcwrvm) 1))
-)
-# station precondition 없음</pre>
-
-      <h3>3 · WM에는 발견한 effect가 전달되지 않음</h3>
-      <pre># v3 · random_chars · seed 42 · level 0
-Beam / PDDL:
-do @ xcvkpr → inv_tpkhxk + 1
-
-WM:
-# No successful do or make transition was observed.
-return new_state
-
-LL collect_tpkhxk → failed</pre>
-
-      <div class="diagram">
-        <pre class="mermaid">
-flowchart LR
-    E["Beam evidence<br/>prefix + context + action + result"]
-    E -->|"single-step delta"| P["PDDL<br/>불완전한 조건"]
-    E -. "전달 안 됨" .-> W["WM<br/>no-op 예측"]
-    E -. "future relation 없음" .-> S["Scorer<br/>prerequisite prune"]
-    P --> R["실행 실패 / rollback"]
-    W --> R
-        </pre>
+action: make_wood_pickaxe
+<span class="leak-highlight">inv_wood:          1 → 0
+inv_wood_pickaxe:  0 → 1
+ach_make_wood_pickaxe: 0 → 1
+score: 20000
+selected: true</span></pre>
+        </div>
       </div>
 
-      <h2>공유해야 할 최소 관계</h2>
-      <pre>ach_place_zezroc ≥ 1
-+ inv_tpkhxk ≥ 1
-→ make_tpkhxk_bcwrvm
-→ inv_tpkhxk - 1
-+ inv_tpkhxk_bcwrvm + 1</pre>
-      <p class="caption">핵심은 더 많은 candidate가 아니라 scorer·WM·PDDL이 같은 prerequisite–action–effect를 공유하고 다음 level까지 유지하는 것. Textual theory는 가능한 구현 중 하나.</p>
+      <h3>선택된 evidence에서도 context가 PDDL에 반영되지 않음</h3>
+      <div class="split">
+        <div>
+          <h3>PDDL prompt · delta only</h3>
+          <pre>Action: make_wood_pickaxe
+Observed delta:
+<span class="leak-highlight">  ach_make_wood_pickaxe: 0 → 1
+  inv_wood:              1 → 0
+  inv_wood_pickaxe:      0 → 1</span>
+
+<span class="leak-highlight"># unchanged context 누락
+table: [[0, 0]]</span></pre>
+        </div>
+        <div>
+          <h3>Retained PDDL</h3>
+          <pre>(:action make_wood_pickaxe
+  :parameters ()
+<span class="leak-highlight">  :precondition (&gt;= (inv_wood) 3)</span>
+  :effect
+    (and
+<span class="leak-highlight">      (decrease (inv_wood) 3)</span>
+      (increase (inv_wood_pickaxe) 1)
+      (increase (ach_make_wood_pickaxe) 1))
+)
+<span class="leak-highlight"># table condition 없음</span></pre>
+        </div>
+      </div>
+      <p><strong>소결:</strong> 동일 action의 성공과 no-op을 서로 다른 context에서 대조해야 한다.</p>
+
+      <h2>지식의 공유 실패</h2>
+      <p class="caption">v3 · random_chars · seed 43 · level 1→2. 같은 <code>place_table</code> mechanic을 모듈별로 대조했다.</p>
+
+      <h3>Exploration에서 발견된 mechanic</h3>
+      <pre># level 1 · candidate #479
+action: place_table
+<span class="leak-highlight">inv_wood:       2 → 0
+ach_place_table: 0 → 1
+table:          없음 → [[4, 4]]
+score: 797
+selected: true</span></pre>
+
+      <div class="triple">
+        <div>
+          <h3>PDDL · level 1</h3>
+          <pre>(:action place_table
+  :parameters (?who - actor)
+<span class="leak-highlight">  :precondition (and)
+  :effect (ach_place_table)</span>
+)
+
+<span class="leak-highlight"># wood 조건·소비 없음</span></pre>
+        </div>
+        <div>
+          <h3>WM · level 1</h3>
+          <pre>entity = "table"
+<span class="leak-highlight">inv_key = "inv_" + entity
+# inv_table
+count = state.get(inv_key, 0)
+# 0</span>
+
+if count &gt; 0:
+    place(entity)
+
+<span class="leak-highlight">result: no-op</span></pre>
+        </div>
+        <div>
+          <h3>Scorer · level 2</h3>
+          <pre># 성공한 place_table
+<span class="leak-highlight">wood loss:    -2 × 20 = -40
+achievement:  +1 × 6  =  +6
+novelty:                +2
+score:                  -32
+selected: false</span></pre>
+        </div>
+      </div>
+
+      <h3>Execution</h3>
+      <pre>high-level plan: [place_table player]
+low-level BFS:
+<span class="leak-highlight">  visited: 70
+  success: false</span></pre>
+      <p><strong>소결:</strong> 발견된 mechanics를 모듈 간에 공유해야 한다.</p>
+
+      <p><strong>결론:</strong> mission과 관련 없어 보여도 다양하게 exploration 필요 &amp; clustered, abstracted 된 지식 필요 &amp; 이를 공유할 필요</p>
     </section>
 
     <section class="panel" id="templates">
