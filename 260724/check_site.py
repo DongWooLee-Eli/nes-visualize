@@ -75,25 +75,38 @@ assert '"table": {"wood": 2}' in canonical_wm and '"wood": {"wood": 1}' in canon
 examples = html[html.index('id="examples"'):html.index('id="random-chars"')]
 assert all(name not in examples for name in ("xcvkpr", "tpkhxk", "zezroc"))
 assert "candidate #479" not in examples
+assert examples.count('class="case-question"') == 3
+assert all(
+    question in examples
+    for question in (
+        "실제 transition을 관측하면 상태 변화에 근거한 PDDL을 생성할 수 있는가?",
+        "실행 중 드러난 abstraction failure를 실제 interaction evidence로 수정·개선할 수 있는가?",
+        "LLM을 이용해 exploration에서 task-relevant mechanics를 찾을 수 있는가?",
+    )
+)
 random_analysis = html[html.index('id="random-chars"'):html.index('id="templates"')]
 assert "<h2>Exploration의 문제?</h2>" in random_analysis and "두 단계의 병목" not in random_analysis
 assert "<h2>Causal identifiability 부족</h2>" in random_analysis
 assert "<h2>지식의 공유 실패</h2>" in random_analysis
-assert "candidate #427" in random_analysis and "candidate #495" in random_analysis and "candidate #479" in random_analysis
+assert "candidate #427" in random_analysis and "candidate #495" in random_analysis and "candidate #430" in random_analysis
+assert "# adjacent_to(table) 조건 없음" in random_analysis
 assert "동일 action의 성공과 no-op을 서로 다른 context에서 대조해야 한다." in random_analysis
-assert "발견된 mechanics를 모듈 간에 공유해야 한다." in random_analysis
+assert "같은 selected transition이 PDDL에는 recipe로 반영됐지만 WM에는 전달되지 않았다." in random_analysis
 assert "선택된 evidence에서도 context가 PDDL에 반영되지 않음" not in random_analysis
 assert "관측된 mechanic이 PDDL operator로 구현되지 않음" in random_analysis
 assert "candidates #457, #715" in random_analysis
 assert "# place_table operator 없음" in random_analysis and "# make_wood_pickaxe operator 없음" in random_analysis
-assert random_analysis.count('class="case-note"') == 9
+assert random_analysis.count('class="case-note"') == 8
 assert all(
     text in random_analysis
     for text in (
         "<h2>결론</h2>",
-        "<strong>탐색</strong>",
-        "<strong>추상화</strong>",
-        "<strong>공유</strong>",
+        "<strong>다양한 context의 탐색</strong>",
+        "<strong>Mechanic 단위 추상화</strong>",
+        "<strong>모듈 간 공유</strong>",
+        "candidate #427 같은 no-op을 버리면 table prerequisite를 식별할 수 없다.",
+        "candidates #457·#715처럼 transition을 선택해도 operator chain에서 소실될 수 있다.",
+        "candidate #430의 recipe는 PDDL만 학습하고 WM은 no-op으로 남았다.",
     )
 )
 assert "#random-chars > h2 { font-size: 21px; }" in html

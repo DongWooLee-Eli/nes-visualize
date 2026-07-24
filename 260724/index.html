@@ -67,6 +67,8 @@
     ul, ol { margin: 10px 0 20px; padding-left: 22px; }
     li { margin: 5px 0; }
     .caption, .note { color: var(--muted); font-size: 12px; }
+    .case-question { margin-bottom: 12px; font-size: 13px; }
+    .case-question strong { color: var(--blue); }
     .overview-heading { font-size: 18px; }
 
     .topbar {
@@ -608,6 +610,7 @@ trajectory actions: []
 
         <div class="active" data-choice-panel="examples-v1" data-choice-value="improvement">
           <p class="caption">100-action pilot · random_chars · seed 42 · level 0</p>
+          <p class="case-question"><strong>Research Question · covered</strong> — 실제 transition을 관측하면 상태 변화에 근거한 PDDL을 생성할 수 있는가?</p>
           <p>v0이 연결하지 못한 <code>tree → wood</code> 관계를 실제 transition으로 복원해 source가 명시된 operator를 만들었다.</p>
           <div class="split">
             <div>
@@ -672,6 +675,7 @@ result: failed</span></pre>
 
         <div class="active" data-choice-panel="examples-v2" data-choice-value="improvement">
           <p class="caption">original · seed 43 · level 1</p>
+          <p class="case-question"><strong>Research Question · covered</strong> — 실행 중 드러난 abstraction failure를 실제 interaction evidence로 수정·개선할 수 있는가?</p>
           <p>planner의 unsolvable 신호를 revision prompt로 보내 <code>tree</code>를 소모하는 잘못된 효과를 제거했고, 두 번 채집한 뒤 table을 만들어 해결했다.</p>
           <div class="split">
             <div>
@@ -708,6 +712,7 @@ place_table pre:
       <div data-choice-panel="example-versions" data-choice-value="v3">
         <h2>v3 · scored prefix → mechanics</h2>
         <p class="caption">성공 사례 · original · seed 43 · level 6 · candidate #1708</p>
+        <p class="case-question"><strong>Research Question · covered</strong> — LLM을 이용해 exploration에서 task-relevant mechanics를 찾을 수 있는가?</p>
         <p>per-level beam이 v2가 계획 전에 보지 못한 crafting → mining → stone-tool chain을 실제 transition으로 수집했고, 같은 level을 end-to-end로 해결했다.</p>
         <div class="split">
           <div>
@@ -786,6 +791,19 @@ selected: true</span></pre>
         </div>
       </div>
 
+      <h4 class="case-title">Initial generated PDDL · level 2</h4>
+      <p class="case-note">성공 transition의 delta만 반영해 wood 수량은 모델링했지만, 성공과 no-op을 가른 table 인접 조건은 빠졌다.</p>
+      <pre>(:action make_wood_pickaxe
+  :parameters ()
+<span class="leak-highlight">  :precondition (&gt;= (inv_wood) 1)</span>
+  :effect
+    (and
+      (decrease (inv_wood) 1)
+      (increase (inv_wood_pickaxe) 1)
+      (increase (ach_make_wood_pickaxe) 1))
+)
+<span class="leak-highlight"># adjacent_to(table) 조건 없음</span></pre>
+
       <h3>관측된 mechanic이 PDDL operator로 구현되지 않음</h3>
       <div class="split">
         <div>
@@ -828,70 +846,64 @@ selected:                 true</span></pre>
       <p class="takeaway"><strong>소결:</strong> 동일 action의 성공과 no-op을 서로 다른 context에서 대조해야 한다.</p>
 
       <h2>지식의 공유 실패</h2>
-      <p class="caption">v3 · random_chars · seed 43 · level 1→2. 같은 <code>place_table</code> mechanic을 모듈별로 대조했다.</p>
+      <p class="caption">v3 · random_chars · seed 42 · level 3. 같은 <code>make_wood_sword</code> mechanic을 PDDL과 WM에서 대조했다.</p>
 
-      <h3>Exploration에서 발견된 mechanic</h3>
-      <h4 class="case-title">place_table · candidate #479</h4>
-      <p class="case-note">exploration은 wood 2개를 소비해 table을 놓는 완전한 transition을 찾았다.</p>
-      <pre>action: place_table
-<span class="leak-highlight">inv_wood:       2 → 0
-ach_place_table: 0 → 1
-table:          없음 → [[4, 4]]
-score: 797
+      <h3>같은 mechanic: PDDL은 학습, WM은 미반영</h3>
+      <h4 class="case-title">make_wood_sword · candidate #430</h4>
+      <p class="case-note">beam에서 성공한 recipe를 scorer가 선택했고, 같은 transition이 PDDL prompt에 전달됐다.</p>
+      <pre>context
+<span class="leak-highlight">  inv_wood: 1
+  player: [0, 2]
+  facing: [0, -1]
+  table: [[0, 1]]</span>
+
+action: make_wood_sword
+<span class="leak-highlight">inv_wood:            1 → 0
+inv_wood_sword:      0 → 1
+ach_make_wood_sword: 0 → 1
+score: 20000
 selected: true</span></pre>
 
-      <div class="triple">
+      <div class="split">
         <div>
-          <h4 class="case-title">PDDL · level 1</h4>
-          <p class="case-note">achievement effect만 남기고 실제 wood 조건과 소비를 모델링하지 않았다.</p>
-          <pre>(:action place_table
-  :parameters (?who - actor)
-<span class="leak-highlight">  :precondition (and)
-  :effect (ach_place_table)</span>
-)
-
-<span class="leak-highlight"># wood 조건·소비 없음</span></pre>
+          <h4 class="case-title">PDDL · learned</h4>
+          <p class="case-note">PDDL은 table dependency, wood 비용, sword 생성을 하나의 recipe로 반영했다.</p>
+          <pre>(:action make_wood_sword
+  :parameters (?item - material
+               ?result - product)
+<span class="leak-highlight">  :precondition
+    (and
+      (table_placed)
+      (&gt;= (amount_material ?item) 1))
+  :effect
+    (and
+      (decrease (amount_material ?item) 1)
+      (increase (amount_product ?result) 1))</span>
+)</pre>
         </div>
         <div>
-          <h4 class="case-title">WM · level 1</h4>
-          <p class="case-note">place_table에 존재하지 않는 inv_table을 요구해 action을 no-op으로 예측했다.</p>
-          <pre>entity = "table"
-<span class="leak-highlight">inv_key = "inv_" + entity
-# inv_table
-count = state.get(inv_key, 0)
-# 0</span>
+          <h4 class="case-title">WM · missed</h4>
+          <p class="case-note">WM에는 make action 구현이 없어 같은 action을 state unchanged로 예측했다.</p>
+          <pre># movement와 place_* 처리 뒤
+<span class="leak-highlight"># make_* branch 없음
+return new_state</span>
 
-if count &gt; 0:
-    place(entity)
-
-<span class="leak-highlight">result: no-op</span></pre>
-        </div>
-        <div>
-          <h4 class="case-title">Scorer · level 2</h4>
-          <p class="case-note">다음 mission에서는 같은 성공 transition을 resource loss로 평가해 제외했다.</p>
-          <pre># 성공한 place_table
-<span class="leak-highlight">wood loss:    -2 × 20 = -40
-achievement:  +1 × 6  =  +6
-novelty:                +2
-score:                  -32
-selected: false</span></pre>
+prediction:
+<span class="leak-highlight">  ach_make_wood_sword: 0
+  inv_wood:            1
+  inv_wood_sword:      0
+  result:              no-op</span></pre>
         </div>
       </div>
 
-      <h4 class="case-title">Execution · level 1</h4>
-      <p class="case-note">place_table subplan은 만들어졌지만 WM search가 성공 상태에 도달하지 못했다.</p>
-      <pre>high-level plan: [place_table player]
-low-level BFS:
-<span class="leak-highlight">  visited: 70
-  success: false</span></pre>
-      <p class="takeaway"><strong>소결:</strong> 발견된 mechanics를 모듈 간에 공유해야 한다.</p>
+      <p class="takeaway"><strong>소결:</strong> 같은 selected transition이 PDDL에는 recipe로 반영됐지만 WM에는 전달되지 않았다.</p>
 
       <div class="analysis-conclusion">
         <h2>결론</h2>
         <ul>
-          <li><strong>탐색</strong> — mission relevance를 미리 단정하지 않고, 동일 action을 다양한 context에서 시도한다.</li>
-          <li><strong>추상화</strong> — 흩어진 transition을 조건–행동–효과 mechanics로 묶어 level 간에 유지한다.</li>
-          <li><strong>공유</strong> — 같은 mechanics를 scorer·PDDL·WM의 공통 근거로 사용한다.</li>
+          <li><strong>다양한 context의 탐색</strong> — candidate #427 같은 no-op을 버리면 table prerequisite를 식별할 수 없다. 성공·실패 evidence를 함께 보존한다.</li>
+          <li><strong>Mechanic 단위 추상화</strong> — candidates #457·#715처럼 transition을 선택해도 operator chain에서 소실될 수 있다. 조건–행동–효과와 선행 관계를 한 단위로 묶는다.</li>
+          <li><strong>모듈 간 공유</strong> — candidate #430의 recipe는 PDDL만 학습하고 WM은 no-op으로 남았다. 같은 mechanic을 scorer·PDDL·WM이 공통으로 사용한다.</li>
         </ul>
       </div>
     </section>
