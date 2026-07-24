@@ -321,9 +321,22 @@
       </table>
 
       <div class="choice-tabs" data-choice="versions" role="tablist" aria-label="버전 선택">
+        <button type="button" data-choice-value="v0">v0</button>
         <button class="active" type="button" data-choice-value="v1">v1</button>
         <button type="button" data-choice-value="v2">v2</button>
         <button type="button" data-choice-value="v3">v3</button>
+      </div>
+
+      <div data-choice-panel="versions" data-choice-value="v0">
+        <h2>v0 · Initial PDDL without transition</h2>
+        <div class="diagram">
+          <pre class="mermaid">
+graph TD
+    A["Transition 없이<br/>[Domain description] · Goal · Action · State<br/>Neutral few-shot example"]
+    A --> B["Initial PDDL prompt에 전달"]
+          </pre>
+        </div>
+        <p class="caption">실제 transition evidence 없이 prompt 구성 정보만 전달.</p>
       </div>
 
       <div class="active" data-choice-panel="versions" data-choice-value="v1">
@@ -666,7 +679,7 @@ place_table pre:
 
       <div data-choice-panel="example-versions" data-choice-value="v3">
         <h2>v3 · scored prefix → mechanics</h2>
-        <p class="caption">original · seed 43 · level 6 · candidate #1708</p>
+        <p class="caption">성공 사례 · original · seed 43 · level 6 · candidate #1708</p>
         <p>per-level beam이 v2가 계획 전에 보지 못한 crafting → mining → stone-tool chain을 실제 transition으로 수집했고, 같은 level을 end-to-end로 해결했다.</p>
         <div class="split">
           <div>

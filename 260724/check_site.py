@@ -15,6 +15,8 @@ manifest = json.loads(
 
 assert (HERE / "index.html").is_file()
 assert 'data-choice="versions"' in html
+assert html.count('data-choice-panel="versions"') == 4
+assert 'A["Transition 없이<br/>[Domain description] · Goal · Action · State<br/>Neutral few-shot example"]' in html
 assert 'data-choice="leakage"' in html
 assert 'data-choice="example-versions"' in html
 assert 'data-choice-value="v0"' in html and html.count(">개선 사례</button>") == 2 and html.count(">실패 사례</button>") == 2
@@ -34,6 +36,7 @@ assert "PDDL grounding은 개선됐지만" not in html
 assert "PDDL이 채집 가능한 <code>tree</code>를 하나만 있다고 작성해" in html
 assert "타깃 level은 <code>make_stone_pickaxe</code>였지만, 탐색에서 관측한 achievement는 <code>ach_collect_wood</code>뿐이었다." in html
 assert 'data-choice="examples-v3"' not in html and "candidate #479" not in html
+assert "성공 사례 · original · seed 43 · level 6 · candidate #1708" in html
 name_map = dict(re.findall(r'<td data-canonical="([^"]+)">([^<]+)</td>', html))
 assert len(name_map) == 22 and name_map["tree"] == "xcvkpr" and name_map["wood"] == "tpkhxk"
 canonicalized = "place_zezroc inv_tpkhxk ach_place_zezroc make_tpkhxk_bcwrvm"
