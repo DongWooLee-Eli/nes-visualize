@@ -82,7 +82,23 @@ assert "<h2>지식의 공유 실패</h2>" in random_analysis
 assert "candidate #427" in random_analysis and "candidate #495" in random_analysis and "candidate #479" in random_analysis
 assert "동일 action의 성공과 no-op을 서로 다른 context에서 대조해야 한다." in random_analysis
 assert "발견된 mechanics를 모듈 간에 공유해야 한다." in random_analysis
-assert "mission과 관련 없어 보여도 다양하게 exploration 필요 &amp; clustered, abstracted 된 지식 필요 &amp; 이를 공유할 필요" in random_analysis
+assert "선택된 evidence에서도 context가 PDDL에 반영되지 않음" not in random_analysis
+assert "관측된 mechanic이 PDDL operator로 구현되지 않음" in random_analysis
+assert "candidates #457, #715" in random_analysis
+assert "# place_table operator 없음" in random_analysis and "# make_wood_pickaxe operator 없음" in random_analysis
+assert random_analysis.count('class="case-note"') == 9
+assert all(
+    text in random_analysis
+    for text in (
+        "<h2>결론</h2>",
+        "<strong>탐색</strong>",
+        "<strong>추상화</strong>",
+        "<strong>공유</strong>",
+    )
+)
+assert "#random-chars > h2 { font-size: 21px; }" in html
+assert "#random-chars > h3 { font-size: 16px; }" in html
+assert '#random-chars .case-title {' in html and "font-size: 13px;" in html
 assert all(name not in random_analysis for name in name_map.values())
 templates = html[html.index('id="templates"'):html.index("</main>")]
 assert html.count("data-template-role=") == 3

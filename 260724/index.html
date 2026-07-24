@@ -254,6 +254,27 @@
     .name-map th:first-child { position: sticky; left: 0; z-index: 1; }
     .empty { padding: 28px 0; color: var(--muted); text-align: center; }
     .source-links { display: flex; flex-wrap: wrap; gap: 14px; margin: 8px 0 24px; font-size: 12px; }
+    #random-chars > h2 { font-size: 21px; }
+    #random-chars > h3 { font-size: 16px; }
+    #random-chars .case-title {
+      margin: 20px 0 3px;
+      font-size: 13px;
+      font-weight: 650;
+      line-height: 1.4;
+    }
+    #random-chars .case-note { margin-bottom: 8px; color: var(--muted); font-size: 12px; }
+    #random-chars .takeaway { margin-top: 18px; font-size: 13px; }
+    .analysis-conclusion {
+      margin-top: 48px;
+      padding-top: 20px;
+      border-top: 2px solid var(--ink);
+    }
+    .analysis-conclusion h2 {
+      margin: 0 0 10px;
+      padding: 0;
+      border: 0;
+      font-size: 21px;
+    }
 
     @media (max-width: 760px) {
       body { word-break: normal; }
@@ -736,7 +757,8 @@ make_stone_pickaxe: 6 actions</span>
       <h3>Negative evidence가 scorer에서 걸러짐</h3>
       <div class="split">
         <div>
-          <h3>No-op · candidate #427</h3>
+          <h4 class="case-title">No-op · candidate #427</h4>
+          <p class="case-note">wood는 충분했지만 table이 없는 context에서는 제작 결과가 no-op이었다.</p>
           <pre>context
 <span class="leak-highlight">  inv_wood: 3
   table: []</span>
@@ -747,7 +769,8 @@ score: 0
 selected: false</span></pre>
         </div>
         <div>
-          <h3>Success · candidate #495</h3>
+          <h4 class="case-title">Success · candidate #495</h4>
+          <p class="case-note">wood가 더 적어도 인접한 table이 있으면 wood pickaxe 제작에 성공했다.</p>
           <pre>context
 <span class="leak-highlight">  inv_wood: 1
   player: [0, 1]
@@ -763,41 +786,54 @@ selected: true</span></pre>
         </div>
       </div>
 
-      <h3>선택된 evidence에서도 context가 PDDL에 반영되지 않음</h3>
+      <h3>관측된 mechanic이 PDDL operator로 구현되지 않음</h3>
       <div class="split">
         <div>
-          <h3>PDDL prompt · delta only</h3>
-          <pre>Action: make_wood_pickaxe
-Observed delta:
-<span class="leak-highlight">  ach_make_wood_pickaxe: 0 → 1
-  inv_wood:              1 → 0
-  inv_wood_pickaxe:      0 → 1</span>
+          <h4 class="case-title">Selected prerequisites · candidates #457, #715</h4>
+          <p class="case-note">stone pickaxe의 선행 단계인 table 설치와 wood pickaxe 제작이 모두 PDDL prompt에 전달됐다.</p>
+          <pre>place_table · candidate #457
+<span class="leak-highlight">inv_wood:         2 → 0
+ach_place_table:  0 → 1
+table:            없음 → [[2, 2]]
+selected:         true</span>
 
-<span class="leak-highlight"># unchanged context 누락
-table: [[0, 0]]</span></pre>
+make_wood_pickaxe · candidate #715
+<span class="leak-highlight">inv_wood:                 1 → 0
+inv_wood_pickaxe:         0 → 1
+ach_make_wood_pickaxe:    0 → 1
+selected:                 true</span></pre>
         </div>
         <div>
-          <h3>Retained PDDL</h3>
-          <pre>(:action make_wood_pickaxe
+          <h4 class="case-title">Generated PDDL · level 6</h4>
+          <p class="case-note">생성된 domain은 마지막 두 단계만 구현해, 관측된 prerequisite operator를 실행 계획에 넣을 수 없었다.</p>
+          <pre>(:action collect_stone
   :parameters ()
-<span class="leak-highlight">  :precondition (&gt;= (inv_wood) 3)</span>
+  :precondition (and)
+  :effect (increase (inv_stone) 1)
+)
+
+(:action make_stone_pickaxe
+  :parameters ()
+  :precondition (&gt;= (inv_stone) 3)
   :effect
     (and
-<span class="leak-highlight">      (decrease (inv_wood) 3)</span>
-      (increase (inv_wood_pickaxe) 1)
-      (increase (ach_make_wood_pickaxe) 1))
+      (decrease (inv_stone) 3)
+      (increase (inv_stone_pickaxe) 1)
+      (ach_make_stone_pickaxe))
 )
-<span class="leak-highlight"># table condition 없음</span></pre>
+<span class="leak-highlight"># place_table operator 없음
+# make_wood_pickaxe operator 없음</span></pre>
         </div>
       </div>
-      <p><strong>소결:</strong> 동일 action의 성공과 no-op을 서로 다른 context에서 대조해야 한다.</p>
+      <p class="takeaway"><strong>소결:</strong> 동일 action의 성공과 no-op을 서로 다른 context에서 대조해야 한다.</p>
 
       <h2>지식의 공유 실패</h2>
       <p class="caption">v3 · random_chars · seed 43 · level 1→2. 같은 <code>place_table</code> mechanic을 모듈별로 대조했다.</p>
 
       <h3>Exploration에서 발견된 mechanic</h3>
-      <pre># level 1 · candidate #479
-action: place_table
+      <h4 class="case-title">place_table · candidate #479</h4>
+      <p class="case-note">exploration은 wood 2개를 소비해 table을 놓는 완전한 transition을 찾았다.</p>
+      <pre>action: place_table
 <span class="leak-highlight">inv_wood:       2 → 0
 ach_place_table: 0 → 1
 table:          없음 → [[4, 4]]
@@ -806,7 +842,8 @@ selected: true</span></pre>
 
       <div class="triple">
         <div>
-          <h3>PDDL · level 1</h3>
+          <h4 class="case-title">PDDL · level 1</h4>
+          <p class="case-note">achievement effect만 남기고 실제 wood 조건과 소비를 모델링하지 않았다.</p>
           <pre>(:action place_table
   :parameters (?who - actor)
 <span class="leak-highlight">  :precondition (and)
@@ -816,7 +853,8 @@ selected: true</span></pre>
 <span class="leak-highlight"># wood 조건·소비 없음</span></pre>
         </div>
         <div>
-          <h3>WM · level 1</h3>
+          <h4 class="case-title">WM · level 1</h4>
+          <p class="case-note">place_table에 존재하지 않는 inv_table을 요구해 action을 no-op으로 예측했다.</p>
           <pre>entity = "table"
 <span class="leak-highlight">inv_key = "inv_" + entity
 # inv_table
@@ -829,7 +867,8 @@ if count &gt; 0:
 <span class="leak-highlight">result: no-op</span></pre>
         </div>
         <div>
-          <h3>Scorer · level 2</h3>
+          <h4 class="case-title">Scorer · level 2</h4>
+          <p class="case-note">다음 mission에서는 같은 성공 transition을 resource loss로 평가해 제외했다.</p>
           <pre># 성공한 place_table
 <span class="leak-highlight">wood loss:    -2 × 20 = -40
 achievement:  +1 × 6  =  +6
@@ -839,14 +878,22 @@ selected: false</span></pre>
         </div>
       </div>
 
-      <h3>Execution</h3>
+      <h4 class="case-title">Execution · level 1</h4>
+      <p class="case-note">place_table subplan은 만들어졌지만 WM search가 성공 상태에 도달하지 못했다.</p>
       <pre>high-level plan: [place_table player]
 low-level BFS:
 <span class="leak-highlight">  visited: 70
   success: false</span></pre>
-      <p><strong>소결:</strong> 발견된 mechanics를 모듈 간에 공유해야 한다.</p>
+      <p class="takeaway"><strong>소결:</strong> 발견된 mechanics를 모듈 간에 공유해야 한다.</p>
 
-      <p><strong>결론:</strong> mission과 관련 없어 보여도 다양하게 exploration 필요 &amp; clustered, abstracted 된 지식 필요 &amp; 이를 공유할 필요</p>
+      <div class="analysis-conclusion">
+        <h2>결론</h2>
+        <ul>
+          <li><strong>탐색</strong> — mission relevance를 미리 단정하지 않고, 동일 action을 다양한 context에서 시도한다.</li>
+          <li><strong>추상화</strong> — 흩어진 transition을 조건–행동–효과 mechanics로 묶어 level 간에 유지한다.</li>
+          <li><strong>공유</strong> — 같은 mechanics를 scorer·PDDL·WM의 공통 근거로 사용한다.</li>
+        </ul>
+      </div>
     </section>
 
     <section class="panel" id="templates">
