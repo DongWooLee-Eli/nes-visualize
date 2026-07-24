@@ -591,26 +591,107 @@ flowchart TB
 
       <div class="active" data-choice-panel="example-versions" data-choice-value="v0">
         <h2>v0 · observation 없이 initial PDDL</h2>
-        <p class="caption">실패 사례 · v0 ablation · random_chars · Domain desc. OFF · seed 42 · level 0</p>
-        <p>실제 transition이 없자 <code>wood</code>를 <code>tree</code>와 연결하지 못하고 inventory token 자체를 수집 대상으로 둬, 실행 가능한 interaction으로 내려가지 못했다.</p>
-        <div class="split">
-          <div>
-            <h3>Generated PDDL</h3>
-            <pre>(:action collect
+        <div class="choice-tabs" data-choice="examples-v0" role="tablist" aria-label="v0 주요 사례 선택">
+          <button class="active" type="button" data-choice-value="failure-1">실패 사례 1</button>
+          <button type="button" data-choice-value="failure-2">실패 사례 2</button>
+        </div>
+
+        <div class="active" data-choice-panel="examples-v0" data-choice-value="failure-1">
+          <p class="caption">Domain desc. ON · original · seed 42 · 11/14 solved</p>
+          <p>Domain description이 recipe를 제공해도 PDDL abstraction이 실제 transition system을 보존하는지 검증하지 않아, planner의 가능성과 실제 실행 가능성이 어긋났다.</p>
+
+          <p><strong>공간 조건 실패 · level 11</strong> — 이동 후에도 station adjacency가 남는다고 표현해, 떨어진 table과 furnace에 동시에 인접할 수 있다고 계획했다.</p>
+          <div class="split">
+            <div>
+              <h3>Generated PDDL</h3>
+              <pre>place_table:
+<span class="leak-highlight">  + adjacent_to(table)</span>
+
+place_furnace:
+<span class="leak-highlight">  + adjacent_to(furnace)</span>
+
+<span class="leak-highlight"># 이동 후 이전 adjacency를
+# 지우는 effect 없음</span>
+
+setup_iron_crafting pre:
+<span class="leak-highlight">  adjacent_to(table)
+  adjacent_to(furnace)</span></pre>
+            </div>
+            <div>
+              <h3>Planning → execution</h3>
+              <pre><span class="leak-highlight">table:   (6, 2)
+furnace: (3, 2)
+Manhattan distance: 3
+common adjacent cell: 없음</span>
+
+PDDL plan:
+  … → place_table
+    → place_furnace
+    → setup_iron_crafting
+    → make_iron_pickaxe
+
+low-level setup:
+<span class="leak-highlight">  visited: 1,608
+  success: false</span></pre>
+            </div>
+          </div>
+
+          <p><strong>재료 조건 실패 · level 13</strong> — PDDL은 table 하나만 계산했지만, 실제 executor가 인접 조건을 복구하려 table을 하나 더 설치해 iron 단계의 wood가 소진됐다.</p>
+          <div class="split">
+            <div>
+              <h3>PDDL resource budget</h3>
+              <pre>collect_wood × 5
+
+place_table          -2
+make_wood_pickaxe    -1
+make_stone_pickaxe   -1
+make_iron_pickaxe    -1
+
+iron pickaxe 직전:
+<span class="leak-highlight">  wood = 5 - 2 - 1 - 1 = 1</span></pre>
+            </div>
+            <div>
+              <h3>Actual execution</h3>
+              <pre>make_stone_pickaxe subplan:
+<span class="leak-highlight">  … → place_table
+    → make_stone_pickaxe</span>
+
+actual:
+  collect_wood × 6
+<span class="leak-highlight">  place_table × 2     -4
+  wood pickaxe        -1
+  stone pickaxe       -1
+  inv_wood             0</span>
+
+make_iron_pickaxe:
+<span class="leak-highlight">  requires inv_wood ≥ 1
+  precondition failed</span></pre>
+            </div>
+          </div>
+        </div>
+
+        <div data-choice-panel="examples-v0" data-choice-value="failure-2">
+          <p class="caption">v0 ablation · random_chars · Domain desc. OFF · seed 42 · level 0</p>
+          <p>실제 transition이 없자 <code>wood</code>를 <code>tree</code>와 연결하지 못하고 inventory token 자체를 수집 대상으로 둬, 실행 가능한 interaction으로 내려가지 못했다.</p>
+          <div class="split">
+            <div>
+              <h3>Generated PDDL</h3>
+              <pre>(:action collect
   :parameters (?x)
 <span class="leak-highlight">  :effect (collected ?x)</span>)
 
 goal:
 <span class="leak-highlight">  collected(inv_wood)</span></pre>
-          </div>
-          <div>
-            <h3>Planning → execution</h3>
-            <pre><span class="leak-highlight">HL: collect inv_wood
+            </div>
+            <div>
+              <h3>Planning → execution</h3>
+              <pre><span class="leak-highlight">HL: collect inv_wood
 BFS: 10,003 iterations → failed</span>
 attempts: 3
 trajectory actions: []
 
 <span class="leak-highlight">result: unsolved</span></pre>
+            </div>
           </div>
         </div>
       </div>

@@ -35,6 +35,11 @@ assert "실제 transition evidence 없이 prompt 구성 정보만 전달." not i
 assert 'data-choice="leakage"' in html
 assert 'data-choice="example-versions"' in html
 assert 'data-choice-value="v0"' in html and html.count(">개선 사례</button>") == 2 and html.count(">실패 사례</button>") == 2
+assert 'data-choice="examples-v0"' in html
+assert ">실패 사례 1</button>" in html and ">실패 사례 2</button>" in html
+assert "Domain desc. ON · original · seed 42 · 11/14 solved" in html
+assert "common adjacent cell: 없음" in html and "visited: 1,608" in html
+assert "collect_wood × 5" in html and "place_table × 2" in html and "precondition failed" in html
 assert 'id="log-version"' in html and 'id="log-roles"' in html
 assert html.count('data-log-role=') == 3
 overview = html[html.index('id="versions"'):html.index('id="results"')]
