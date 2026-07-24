@@ -67,7 +67,7 @@
     ul, ol { margin: 10px 0 20px; padding-left: 22px; }
     li { margin: 5px 0; }
     .caption, .note { color: var(--muted); font-size: 12px; }
-    .question { margin-bottom: 26px; font-size: 16px; }
+    .overview-heading { font-size: 18px; }
 
     .topbar {
       position: sticky;
@@ -301,7 +301,7 @@
 
   <main>
     <section class="panel active" id="versions">
-      <p><strong>Recap:</strong></p>
+      <p class="overview-heading"><strong>Recap:</strong></p>
       <ul>
         <li>long-horizon planning이 domain knowledge 부족 문제가 두드러지는 과업 조건이다.</li>
         <li>기존 연구, 문제 설정을 고려할 때 online, non-demo 세팅으로 가야한다.</li>
@@ -316,7 +316,7 @@
         </tbody>
       </table>
 
-      <h2>Research Question: domain knowledge가 없음 + online learning setting에서 high-level을 어떻게 복원할까?</h2>
+      <h2 class="overview-heading">Research Question: domain knowledge가 없음 + online learning setting에서 high-level을 어떻게 복원할까?</h2>
       <table aria-label="버전별 research question">
         <thead><tr><th>버전</th><th>질문</th></tr></thead>
         <tbody>
@@ -326,7 +326,7 @@
         </tbody>
       </table>
 
-      <h1>버전별 핵심 차이</h1>
+      <h1 class="overview-heading">버전별 핵심 차이</h1>
       <div class="choice-tabs" data-choice="versions" role="tablist" aria-label="버전 선택">
         <button type="button" data-choice-value="v0">v0</button>
         <button class="active" type="button" data-choice-value="v1">v1</button>
