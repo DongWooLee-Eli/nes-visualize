@@ -2,6 +2,7 @@
 """Small integrity check for the packaged static presentation."""
 
 import json
+import re
 from pathlib import Path
 
 
@@ -20,11 +21,28 @@ assert 'data-choice-value="v0"' in html and html.count(">개선 사례</button>"
 assert 'id="log-version"' in html and 'id="log-roles"' in html
 assert html.count('data-log-role=') == 3
 assert "버전별 핵심 차이" in html and "Research Question" in html
+assert "Revision trigger" in html and ">Trigger<" not in html
 assert "구체적 예시" not in html and "<h1>버전별 주요 사례</h1>" in html
 assert html.index('href="#examples"') < html.index('href="#random-chars"') < html.index('href="#log"')
 assert html.index("<h2>v3 exploration coverage</h2>") < html.index("<h2>Leakage run</h2>")
-assert "# generated response" not in html and "# Generated WM · verbatim excerpt" in html
+assert 'aria-label="버전별 solve rate"' not in html and "<th>전략</th>" not in html
+assert "# generated response" not in html and "# Generated WM · verbatim excerpt" not in html
 assert "data-highlight=" in html and html.count('class="leak-highlight"') >= 20 and "log-stats" not in html
+assert html.count('<pre class="inline-viewer" data-canonicalize') == 3 and 'id="log-name-map" hidden' in html
+assert 'nameMap.hidden = state.benchmark !== "random_chars"' in html
+assert "PDDL grounding은 개선됐지만" not in html
+name_map = dict(re.findall(r'<td data-canonical="([^"]+)">([^<]+)</td>', html))
+assert len(name_map) == 22 and name_map["tree"] == "xcvkpr" and name_map["wood"] == "tpkhxk"
+canonicalized = "place_zezroc inv_tpkhxk ach_place_zezroc make_tpkhxk_bcwrvm"
+for canonical, random_name in name_map.items():
+    canonicalized = canonicalized.replace(random_name, canonical)
+assert canonicalized == "place_table inv_wood ach_place_table make_wood_pickaxe"
+canonical_wm = (HERE / "artifacts/leakage/v2-random_chars-42-initial-response.txt").read_text()
+for canonical, random_name in name_map.items():
+    canonical_wm = canonical_wm.replace(random_name, canonical)
+assert '"table": {"wood": 2}' in canonical_wm and '"wood": {"wood": 1}' in canonical_wm
+examples = html[html.index('id="examples"'):html.index('id="random-chars"')]
+assert all(name not in examples for name in ("xcvkpr", "tpkhxk", "zezroc"))
 assert len(manifest["runs"]) == 12
 assert len([item for item in manifest["items"] if item["kind"] == "prompt"]) == 703
 assert all((HERE / item["path"]).is_file() for item in manifest["items"])

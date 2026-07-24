@@ -147,7 +147,7 @@
     .bar-group { display: grid; grid-template-columns: 52px minmax(0, 1fr); gap: 12px; margin: 15px 0; }
     .bar-group > strong { padding-top: 3px; font: 650 12px/1.2 var(--mono); }
     .bar-lines { display: grid; gap: 7px; }
-    .bar-line { display: grid; grid-template-columns: 92px minmax(0, 1fr) 48px; gap: 10px; align-items: center; }
+    .bar-line { display: grid; grid-template-columns: 92px minmax(0, 1fr) 58px; gap: 10px; align-items: center; }
     .bar-label { color: #666a6e; font-size: 12px; }
     .track { height: 12px; background: #ececea; }
     .fill { width: var(--w); height: 100%; background: var(--blue); }
@@ -245,6 +245,10 @@
       white-space: pre-wrap;
       word-break: break-word;
     }
+    .name-map { margin: 20px 0 6px; overflow-x: auto; }
+    .name-map table { width: max-content; min-width: 100%; margin: 0; }
+    .name-map th, .name-map td { min-width: 92px; white-space: nowrap; }
+    .name-map th:first-child { position: sticky; left: 0; z-index: 1; }
     .empty { padding: 28px 0; color: var(--muted); text-align: center; }
     .source-links { display: flex; flex-wrap: wrap; gap: 14px; margin: 8px 0 24px; font-size: 12px; }
 
@@ -258,7 +262,7 @@
       .split, .triple { grid-template-columns: 1fr; gap: 0; }
       .role-grid { grid-template-columns: 1fr; overflow: visible; }
       .role-card { min-height: 360px; }
-      .bar-line { grid-template-columns: 82px minmax(0, 1fr) 42px; }
+      .bar-line { grid-template-columns: 82px minmax(0, 1fr) 50px; }
       .metric-chart { grid-template-columns: 150px 1fr 48px; }
     }
     @media (max-width: 480px) {
@@ -346,7 +350,7 @@ graph TD
     D --> E["Replan"]
           </pre>
         </div>
-        <p class="caption">Trigger</p>
+        <p class="caption">Revision trigger</p>
         <ul class="caption">
           <li>predicate classifier 생성 실패</li>
           <li>high-level planner 실패 또는 empty plan</li>
@@ -393,36 +397,26 @@ flowchart TB
 
       <h2>Solve rate</h2>
       <p class="caption">MiniCrafter-OO lv0–7 · original은 seed 42/43 평균 · random_chars headline은 leakage run 제외.</p>
-      <div class="split">
-        <table aria-label="버전별 solve rate">
-          <thead><tr><th>버전</th><th class="num">original</th><th class="num">random_chars</th></tr></thead>
-          <tbody>
-            <tr><td>v1</td><td class="num">4 / 8</td><td class="num">0 / 8</td></tr>
-            <tr><td>v2</td><td class="num">6.5 / 8</td><td class="num">0 / 8</td></tr>
-            <tr><td>v3</td><td class="num em">8 / 8</td><td class="num">1 / 8</td></tr>
-          </tbody>
-        </table>
-        <div class="bar-chart" aria-label="solve rate bar chart">
-          <div class="bar-group">
-            <strong>v1</strong>
-            <div class="bar-lines">
-              <div class="bar-line"><span class="bar-label">original</span><div class="track"><div class="fill" style="--w:50%"></div></div><span class="bar-value">4</span></div>
-              <div class="bar-line"><span class="bar-label">random_chars</span><div class="track"><div class="fill gray" style="--w:0%"></div></div><span class="bar-value">0</span></div>
-            </div>
+      <div class="bar-chart" aria-label="solve rate bar chart">
+        <div class="bar-group">
+          <strong>v1</strong>
+          <div class="bar-lines">
+            <div class="bar-line"><span class="bar-label">original</span><div class="track"><div class="fill" style="--w:50%"></div></div><span class="bar-value">4 / 8</span></div>
+            <div class="bar-line"><span class="bar-label">random_chars</span><div class="track"><div class="fill gray" style="--w:0%"></div></div><span class="bar-value">0 / 8</span></div>
           </div>
-          <div class="bar-group">
-            <strong>v2</strong>
-            <div class="bar-lines">
-              <div class="bar-line"><span class="bar-label">original</span><div class="track"><div class="fill" style="--w:81.25%"></div></div><span class="bar-value">6.5</span></div>
-              <div class="bar-line"><span class="bar-label">random_chars</span><div class="track"><div class="fill gray" style="--w:0%"></div></div><span class="bar-value">0</span></div>
-            </div>
+        </div>
+        <div class="bar-group">
+          <strong>v2</strong>
+          <div class="bar-lines">
+            <div class="bar-line"><span class="bar-label">original</span><div class="track"><div class="fill" style="--w:81.25%"></div></div><span class="bar-value">6.5 / 8</span></div>
+            <div class="bar-line"><span class="bar-label">random_chars</span><div class="track"><div class="fill gray" style="--w:0%"></div></div><span class="bar-value">0 / 8</span></div>
           </div>
-          <div class="bar-group">
-            <strong>v3</strong>
-            <div class="bar-lines">
-              <div class="bar-line"><span class="bar-label">original</span><div class="track"><div class="fill" style="--w:100%"></div></div><span class="bar-value">8</span></div>
-              <div class="bar-line"><span class="bar-label">random_chars</span><div class="track"><div class="fill gray" style="--w:12.5%"></div></div><span class="bar-value">1</span></div>
-            </div>
+        </div>
+        <div class="bar-group">
+          <strong>v3</strong>
+          <div class="bar-lines">
+            <div class="bar-line"><span class="bar-label">original</span><div class="track"><div class="fill" style="--w:100%"></div></div><span class="bar-value">8 / 8</span></div>
+            <div class="bar-line"><span class="bar-label">random_chars</span><div class="track"><div class="fill gray" style="--w:12.5%"></div></div><span class="bar-value">1 / 8</span></div>
           </div>
         </div>
       </div>
@@ -433,19 +427,11 @@ flowchart TB
           <h3>Unique state / 100 candidate</h3>
           <div class="metric-chart"><span>Random</span><div class="track"><div class="fill gray" style="--w:81.1%"></div></div><strong>13.52</strong></div>
           <div class="metric-chart"><span>Beam</span><div class="track"><div class="fill" style="--w:100%"></div></div><strong>16.67</strong></div>
-          <table>
-            <thead><tr><th>전략</th><th class="num">100 candidate당</th></tr></thead>
-            <tbody><tr><td>Random</td><td class="num">13.52</td></tr><tr><td>Beam</td><td class="num em">16.67</td></tr></tbody>
-          </table>
         </div>
         <div>
           <h3>Distinct achievement / 1,000 candidate</h3>
           <div class="metric-chart"><span>Random</span><div class="track"><div class="fill gray" style="--w:43%"></div></div><strong>3.00</strong></div>
           <div class="metric-chart"><span>Beam</span><div class="track"><div class="fill" style="--w:100%"></div></div><strong>6.97</strong></div>
-          <table>
-            <thead><tr><th>전략</th><th class="num">1,000 candidate당</th></tr></thead>
-            <tbody><tr><td>Random</td><td class="num">3.00</td></tr><tr><td>Beam</td><td class="num em">6.97</td></tr></tbody>
-          </table>
         </div>
       </div>
       <p class="caption">Original naming · seed 42 · candidate phase · warmup/replay 제외. Unique state는 level별 distinct state 합, achievement는 positive <code>(level, ach_* key)</code> 발견.</p>
@@ -460,37 +446,23 @@ flowchart TB
           <tr><td>v3</td><td class="num">0 / 8</td><td class="num">1 / 8</td></tr>
         </tbody>
       </table>
-      <pre># Generated WM · verbatim excerpt
-if tile == "xcvkpr":
-<span class="leak-highlight">    # Scattered xcvkpr tiles behave like trees and yield tpkhxk.
-    collected = "tpkhxk"</span>
-
-costs = {
-<span class="leak-highlight">    "zezroc": {"tpkhxk": 2},</span>
-}
-
-recipes = {
-<span class="leak-highlight">    "tpkhxk": {"tpkhxk": 1},
-    "sgqeje": {"tpkhxk": 1, "sgqeje": 1},
-    "bzracx": {"tpkhxk": 1, "grpoqi": 1, "bzracx": 1},</span>
-}</pre>
       <div class="choice-tabs" data-choice="leakage" role="tablist" aria-label="Leakage run 상세">
         <button class="active" type="button" data-choice-value="prompt">Initial prompt</button>
         <button type="button" data-choice-value="wm">Generated WM</button>
         <button type="button" data-choice-value="result">8/8 result</button>
       </div>
       <div class="active" data-choice-panel="leakage" data-choice-value="prompt">
-        <pre class="inline-viewer" data-src="artifacts/leakage/v2-random_chars-42-initial-prompt.txt">Loading…</pre>
+        <pre class="inline-viewer" data-canonicalize data-src="artifacts/leakage/v2-random_chars-42-initial-prompt.txt">Loading…</pre>
       </div>
       <div data-choice-panel="leakage" data-choice-value="wm">
-        <pre class="inline-viewer"
+        <pre class="inline-viewer" data-canonicalize
           data-src="artifacts/leakage/v2-random_chars-42-initial-response.txt"
-          data-highlight="collected =|required_tool =|costs = {|&quot;zezroc&quot;:|&quot;ckqpdj&quot;:|recipes = {|&quot;tpkhxk&quot;: {|&quot;sgqeje&quot;: {|&quot;bzracx&quot;: {">Loading…</pre>
+          data-highlight="collected =|required_tool =|costs = {|&quot;table&quot;:|&quot;furnace&quot;:|recipes = {|&quot;wood&quot;: {|&quot;stone&quot;: {|&quot;iron&quot;: {">Loading…</pre>
       </div>
       <div data-choice-panel="leakage" data-choice-value="result">
-        <pre class="inline-viewer" data-src="artifacts/leakage/v2-random_chars-42-results.json">Loading…</pre>
+        <pre class="inline-viewer" data-canonicalize data-src="artifacts/leakage/v2-random_chars-42-results.json">Loading…</pre>
       </div>
-      <p class="caption">* 관측되지 않은 recipe를 action/state prefix의 structural cue 또는 pretrained prior로 완성한 leakage-compatible run은 headline에서 제외.</p>
+      <p class="caption">* 관측되지 않은 recipe를 action/state prefix의 structural cue 또는 pretrained prior로 완성한 leakage-compatible run은 headline에서 제외. Prompt·WM·result의 identifier는 canonical name으로 표시.</p>
     </section>
 
     <section class="panel" id="log">
@@ -515,6 +487,34 @@ recipes = {
         </div>
       </div>
 
+      <div class="name-map" id="log-name-map" hidden>
+        <table aria-label="Original과 random chars 이름 매핑">
+          <tbody>
+            <tr>
+              <th scope="row">Original</th>
+              <td>arrow</td><td>coal</td><td>cow</td><td>diamond</td><td>fence</td><td>furnace</td>
+              <td>grass</td><td>iron</td><td>lava</td><td>path</td><td>pickaxe</td><td>plant</td>
+              <td>sand</td><td>sapling</td><td>skeleton</td><td>stone</td><td>sword</td><td>table</td>
+              <td>tree</td><td>water</td><td>wood</td><td>zombie</td>
+            </tr>
+            <tr>
+              <th scope="row">random_chars</th>
+              <td data-canonical="arrow">ccvyee</td><td data-canonical="coal">grpoqi</td>
+              <td data-canonical="cow">joctzm</td><td data-canonical="diamond">mwzvua</td>
+              <td data-canonical="fence">rgztrs</td><td data-canonical="furnace">ckqpdj</td>
+              <td data-canonical="grass">pmzjpl</td><td data-canonical="iron">bzracx</td>
+              <td data-canonical="lava">dlnktu</td><td data-canonical="path">ydtzir</td>
+              <td data-canonical="pickaxe">bcwrvm</td><td data-canonical="plant">rjwdrk</td>
+              <td data-canonical="sand">wztejd</td><td data-canonical="sapling">wcgshh</td>
+              <td data-canonical="skeleton">fbtvip</td><td data-canonical="stone">sgqeje</td>
+              <td data-canonical="sword">wqiqzh</td><td data-canonical="table">zezroc</td>
+              <td data-canonical="tree">xcvkpr</td><td data-canonical="water">mynbiq</td>
+              <td data-canonical="wood">tpkhxk</td><td data-canonical="zombie">kshjfg</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
       <div class="role-grid" id="log-roles" hidden>
         <article class="role-card" data-log-role="Exploration scorer"></article>
         <article class="role-card" data-log-role="PDDL"></article>
@@ -535,7 +535,7 @@ recipes = {
       <div class="active" data-choice-panel="example-versions" data-choice-value="v0">
         <h2>v0 · observation 없이 initial PDDL</h2>
         <p class="caption">실패 사례 · v0 ablation · random_chars · Domain desc. OFF · seed 42 · level 0</p>
-        <p>실제 transition이 없자 <code>tpkhxk</code>를 <code>xcvkpr</code>와 연결하지 못하고 inventory token 자체를 수집 대상으로 둬, 실행 가능한 interaction으로 내려가지 못했다.</p>
+        <p>실제 transition이 없자 <code>wood</code>를 <code>tree</code>와 연결하지 못하고 inventory token 자체를 수집 대상으로 둬, 실행 가능한 interaction으로 내려가지 못했다.</p>
         <div class="split">
           <div>
             <h3>Generated PDDL</h3>
@@ -544,11 +544,11 @@ recipes = {
 <span class="leak-highlight">  :effect (collected ?x)</span>)
 
 goal:
-<span class="leak-highlight">  collected(inv_tpkhxk)</span></pre>
+<span class="leak-highlight">  collected(inv_wood)</span></pre>
           </div>
           <div>
             <h3>Planning → execution</h3>
-            <pre><span class="leak-highlight">HL: collect inv_tpkhxk
+            <pre><span class="leak-highlight">HL: collect inv_wood
 BFS: 10,003 iterations → failed</span>
 attempts: 3
 trajectory actions: []
@@ -567,31 +567,30 @@ trajectory actions: []
 
         <div class="active" data-choice-panel="examples-v1" data-choice-value="improvement">
           <p class="caption">100-action pilot · random_chars · seed 42 · level 0</p>
-          <p>v0이 연결하지 못한 <code>xcvkpr → tpkhxk</code> 관계를 실제 transition으로 복원해 source가 명시된 operator를 만들었다.</p>
+          <p>v0이 연결하지 못한 <code>tree → wood</code> 관계를 실제 transition으로 복원해 source가 명시된 operator를 만들었다.</p>
           <div class="split">
             <div>
               <h3>Observed transition</h3>
               <pre>Action: do
-<span class="leak-highlight">front material:         xcvkpr
-ach_collect_tpkhxk: 0 → 1
-inv_tpkhxk:          0 → 1
-xcvkpr:              target removed</span></pre>
+<span class="leak-highlight">front material:       tree
+ach_collect_wood: 0 → 1
+inv_wood:          0 → 1
+tree:              target removed</span></pre>
             </div>
             <div>
               <h3>Grounded PDDL</h3>
               <pre>do_collect(
   player,
-<span class="leak-highlight">  xcvkpr,
-  ach_collect_tpkhxk</span>
+<span class="leak-highlight">  tree,
+  ach_collect_wood</span>
 )
 
-<span class="leak-highlight">pre: available(xcvkpr)
-effect: achieved(ach_collect_tpkhxk)</span>
+<span class="leak-highlight">pre: available(tree)
+effect: achieved(ach_collect_wood)</span>
 
 <span class="leak-highlight">source binding: recovered</span></pre>
             </div>
           </div>
-          <p class="caption">PDDL grounding은 개선됐지만 이 run의 low-level executor는 여전히 실패했다.</p>
         </div>
 
         <div data-choice-panel="examples-v1" data-choice-value="failure">
@@ -738,22 +737,22 @@ make_stone_pickaxe: 6 actions</span>
           <div class="split">
             <div>
               <h3>Beam discovery</h3>
-              <pre>action: place_zezroc
+              <pre>action: place_table
 score: 797 · selected
 
-<span class="leak-highlight">inv_tpkhxk:       2 → 0
-ach_place_zezroc: 0 → 1
-zezroc:           created</span></pre>
+<span class="leak-highlight">inv_wood:       2 → 0
+ach_place_table: 0 → 1
+table:           created</span></pre>
             </div>
             <div>
               <h3>Generated mismatch</h3>
-              <pre>place_zezroc:
+              <pre>place_table:
 <span class="leak-highlight">  precondition: ()
-  effect: ach_place_zezroc</span>
+  effect: ach_place_table</span>
 
 missing:
-<span class="leak-highlight">  inv_tpkhxk ≥ 2
-  inv_tpkhxk -= 2</span>
+<span class="leak-highlight">  inv_wood ≥ 2
+  inv_wood -= 2</span>
 
 <span class="leak-highlight">result: unsolved</span></pre>
             </div>
@@ -916,6 +915,12 @@ flowchart LR
       addEventListener("load", () => scrollTo({ top: 0, behavior: "auto" }), { once: true });
       addEventListener("popstate", () => activateTab(location.hash || "#versions"));
 
+      const canonicalNames = [...document.querySelectorAll("#log-name-map [data-canonical]")]
+        .map(cell => [cell.textContent, cell.dataset.canonical]);
+      const canonicalize = text => canonicalNames.reduce(
+        (value, [randomName, canonicalName]) => value.replaceAll(randomName, canonicalName),
+        text
+      );
       const loadText = async (element, path) => {
         if (!path || element.dataset.loaded === path) return;
         element.dataset.loaded = path;
@@ -923,7 +928,8 @@ flowchart LR
         try {
           const response = await fetch(path);
           if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
-          const text = await response.text();
+          const rawText = await response.text();
+          const text = element.hasAttribute("data-canonicalize") ? canonicalize(rawText) : rawText;
           if (element.dataset.loaded !== path) return;
           const highlights = (element.dataset.highlight || "").split("|").filter(Boolean);
           if (!highlights.length) {
@@ -1070,10 +1076,12 @@ flowchart LR
         const benchmarkStep = document.getElementById("log-benchmark-step");
         const seedStep = document.getElementById("log-seed-step");
         const levelStep = document.getElementById("log-level-step");
+        const nameMap = document.getElementById("log-name-map");
         const roleGrid = document.getElementById("log-roles");
         benchmarkStep.hidden = !state.version;
         seedStep.hidden = !state.benchmark;
         levelStep.hidden = !state.seed;
+        nameMap.hidden = state.benchmark !== "random_chars";
         roleGrid.hidden = !Number.isInteger(state.level);
         if (!state.version) return;
 
