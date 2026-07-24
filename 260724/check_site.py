@@ -51,10 +51,11 @@ assert "Domain desc. OFF (v0)" not in overview
 assert "long-horizon planning이 domain knowledge 문제가 두드러지는 과업 조건이다." in overview
 assert "기존 연구, 문제 설정을 고려할 때 online, non-demo 세팅으로 가야한다." in overview
 assert "Research Question: domain description 없음 + online learning setting에서 high-level을 어떻게 복원할까?" in overview
-assert "Generated scorer의 핵심 구조" in overview
+assert "Scorer 함수 예시" in overview
 assert 'def score_transition(transition: dict, search_context: dict) -> float:' in overview
 assert '9000.0 * target' in overview and '1200.0 * collect_stone' in overview
-assert 'transition · candidate #1708' in overview and 'search_context · candidate #1708' in overview
+assert 'transition 예시 · candidate #1708' in overview and 'search_context 예시 · candidate #1708' in overview
+assert "실제 관측의 핵심 field만 표시" not in overview and "현재 candidate 직전의 탐색 이력" not in overview
 assert '"seen_state_count": 267' in overview and '"seen_effect_count": 228' in overview
 assert html.count('data-syntax="python"') == 3 and "const syntaxPattern =" in html
 assert overview.count('class="overview-heading"') == 3 and ".overview-heading { font-size: 18px; }" in html

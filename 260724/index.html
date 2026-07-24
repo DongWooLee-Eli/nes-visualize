@@ -444,7 +444,7 @@ flowchart TB
     D --> E
           </pre>
         </div>
-        <p class="caption">Generated scorer의 핵심 구조 · original · seed 43 · level 6 · make stone pickaxe (축약)</p>
+        <p class="caption">Scorer 함수 예시 · original · seed 43 · level 6 · make stone pickaxe (축약)</p>
         <pre data-syntax="python">def score_transition(transition: dict, search_context: dict) -> float:
     before = transition.get("before", {})
     after = transition.get("after", {})
@@ -469,8 +469,7 @@ flowchart TB
     return float(max(-10000.0, min(10000.0, score)))</pre>
         <div class="split">
           <div>
-            <h3>transition · candidate #1708</h3>
-            <p class="caption">실제 관측의 핵심 field만 표시</p>
+            <h3>transition 예시 · candidate #1708</h3>
             <pre data-syntax="python">{
     "before": {
         "inv_wood": 1,
@@ -494,8 +493,7 @@ flowchart TB
 }</pre>
           </div>
           <div>
-            <h3>search_context · candidate #1708</h3>
-            <p class="caption">현재 candidate 직전의 탐색 이력</p>
+            <h3>search_context 예시 · candidate #1708</h3>
             <pre data-syntax="python">{
     "candidate_index": 1708,
     "depth": 38,
