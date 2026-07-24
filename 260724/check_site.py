@@ -29,7 +29,9 @@ assert all(
 )
 assert 'data-choice="versions"' in html
 assert html.count('data-choice-panel="versions"') == 4
-assert 'A["Transition 없이<br/>[Domain description] · Goal · Action · State<br/>Neutral few-shot example"]' in html
+assert 'A["환경 interaction 정보 없이<br/>[Domain description] · Goal · Action · State<br/>Neutral few-shot example"]' in html
+assert 'A["기존 + (WM 생성과 동일한) Random transition"]' in html
+assert "실제 transition evidence 없이 prompt 구성 정보만 전달." not in html
 assert 'data-choice="leakage"' in html
 assert 'data-choice="example-versions"' in html
 assert 'data-choice-value="v0"' in html and html.count(">개선 사례</button>") == 2 and html.count(">실패 사례</button>") == 2
@@ -38,9 +40,9 @@ assert html.count('data-log-role=') == 3
 overview = html[html.index('id="versions"'):html.index('id="results"')]
 assert '<a href="#versions">Overview</a>' in html and '<a href="#versions">버전</a>' not in html
 assert '<p class="overview-heading"><strong>Recap:</strong></p>' in overview
-assert "long-horizon planning이 domain knowledge 부족 문제가 두드러지는 과업 조건이다." in overview
+assert "long-horizon planning이 domain knowledge 문제가 두드러지는 과업 조건이다." in overview
 assert "기존 연구, 문제 설정을 고려할 때 online, non-demo 세팅으로 가야한다." in overview
-assert "Research Question: domain knowledge가 없음 + online learning setting에서 high-level을 어떻게 복원할까?" in overview
+assert "Research Question: domain description 없음 + online learning setting에서 high-level을 어떻게 복원할까?" in overview
 assert overview.count('class="overview-heading"') == 3 and ".overview-heading { font-size: 18px; }" in html
 assert overview.index('aria-label="버전별 research question"') < overview.index('class="overview-heading">버전별 핵심 차이</h1>') < overview.index('data-choice="versions"')
 assert "Revision trigger" in html and ">Trigger<" not in html

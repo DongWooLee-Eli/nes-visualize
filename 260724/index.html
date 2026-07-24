@@ -326,7 +326,7 @@
     <section class="panel active" id="versions">
       <p class="overview-heading"><strong>Recap:</strong></p>
       <ul>
-        <li>long-horizon planning이 domain knowledge 부족 문제가 두드러지는 과업 조건이다.</li>
+        <li>long-horizon planning이 domain knowledge 문제가 두드러지는 과업 조건이다.</li>
         <li>기존 연구, 문제 설정을 고려할 때 online, non-demo 세팅으로 가야한다.</li>
       </ul>
       <table aria-label="TC2 domain description ablation">
@@ -339,7 +339,7 @@
         </tbody>
       </table>
 
-      <h2 class="overview-heading">Research Question: domain knowledge가 없음 + online learning setting에서 high-level을 어떻게 복원할까?</h2>
+      <h2 class="overview-heading">Research Question: domain description 없음 + online learning setting에서 high-level을 어떻게 복원할까?</h2>
       <table aria-label="버전별 research question">
         <thead><tr><th>버전</th><th>질문</th></tr></thead>
         <tbody>
@@ -362,11 +362,10 @@
         <div class="diagram">
           <pre class="mermaid">
 graph TD
-    A["Transition 없이<br/>[Domain description] · Goal · Action · State<br/>Neutral few-shot example"]
+    A["환경 interaction 정보 없이<br/>[Domain description] · Goal · Action · State<br/>Neutral few-shot example"]
     A --> B["Initial PDDL prompt에 전달"]
           </pre>
         </div>
-        <p class="caption">실제 transition evidence 없이 prompt 구성 정보만 전달.</p>
       </div>
 
       <div class="active" data-choice-panel="versions" data-choice-value="v1">
@@ -374,7 +373,7 @@ graph TD
         <div class="diagram">
           <pre class="mermaid">
 graph TD
-    A["Random transition 수집"]
+    A["기존 + (WM 생성과 동일한) Random transition"]
     A --> B["Initial PDDL prompt에 전달"]
           </pre>
         </div>
