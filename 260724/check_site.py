@@ -92,7 +92,7 @@ assert all(
     question in examples
     for question in (
         "실제 transition을 관측하면 상태 변화에 근거한 PDDL을 생성할 수 있는가?",
-        "실행 중 드러난 abstraction failure를 실제 interaction evidence로 수정·개선할 수 있는가?",
+        "실행 중 드러난 abstraction failure를 failure signal로 수정·개선할 수 있는가?",
         "LLM을 이용해 exploration에서 task-relevant mechanics를 찾을 수 있는가?",
     )
 )
