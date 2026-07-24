@@ -120,11 +120,12 @@ assert random_analysis.count('class="case-note"') == 8
 assert all(
     text in random_analysis
     for text in (
-        "<h2>결론</h2>",
+        "<h2>To do</h2>",
         "<strong>다양한 context의 탐색</strong>",
         "<strong>규칙 발견과 코드 생성의 분리</strong>",
         "<strong>모듈 간 공유</strong>",
         "같은 action의 여러 성공 context까지 함께 봐야 반복되는 조건과 우연히 동반된 상태를 구분할 수 있다.",
+        "negative evidence도 관측할 필요가 있다.",
         "먼저 여러 transition에서 조건–행동–효과 규칙을 확정하고, 그 규칙을 PDDL·WM·scorer 코드로 각각 변환한다.",
         "candidate #430의 recipe는 PDDL만 학습하고 WM은 no-op으로 남았다.",
     )
