@@ -35,7 +35,13 @@ assert 'data-choice="example-versions"' in html
 assert 'data-choice-value="v0"' in html and html.count(">개선 사례</button>") == 2 and html.count(">실패 사례</button>") == 2
 assert 'id="log-version"' in html and 'id="log-roles"' in html
 assert html.count('data-log-role=') == 3
-assert "버전별 핵심 차이" in html and "Research Question" in html
+overview = html[html.index('id="versions"'):html.index('id="results"')]
+assert '<a href="#versions">Overview</a>' in html and '<a href="#versions">버전</a>' not in html
+assert "<p><strong>Recap:</strong></p>" in overview
+assert "long-horizon planning이 domain knowledge 부족 문제가 두드러지는 과업 조건이다." in overview
+assert "기존 연구, 문제 설정을 고려할 때 online, non-demo 세팅으로 가야한다." in overview
+assert "Research Question: domain knowledge가 없음 + online learning setting에서 high-level을 어떻게 복원할까?" in overview
+assert overview.index('aria-label="버전별 research question"') < overview.index("<h1>버전별 핵심 차이</h1>") < overview.index('data-choice="versions"')
 assert "Revision trigger" in html and ">Trigger<" not in html
 assert "구체적 예시" not in html and "<h1>버전별 주요 사례</h1>" in html
 assert (
