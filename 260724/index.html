@@ -595,7 +595,7 @@ effect: achieved(ach_collect_wood)</span>
 
         <div data-choice-panel="examples-v1" data-choice-value="failure">
           <p class="caption">original · seed 42 · level 1</p>
-          <p>PDDL이 하나뿐인 <code>tree</code>를 첫 채집에서 삭제해 두 번째 wood를 얻을 수 없었고, planner가 세 번 모두 unsolvable로 판정했다.</p>
+          <p>PDDL이 채집 가능한 <code>tree</code>를 하나만 있다고 작성해 두 번째 wood를 얻을 수 없었고, planner가 세 번 모두 unsolvable로 판정했다.</p>
           <div class="split">
             <div>
               <h3>Wrong PDDL</h3>
@@ -660,56 +660,18 @@ place_table pre:
         </div>
 
         <div data-choice-panel="examples-v2" data-choice-value="failure">
-          <p class="caption">original · seed 43 · level 6</p>
-          <p>level-entry exploration이 0 actions라 후반 mechanic의 성공 근거 없이 8-step chain을 추측했고, WM revision 뒤에도 <code>collect_stone</code> cutoff와 budget 소진으로 target에 도달하지 못했다.</p>
-          <div class="split">
-            <div>
-              <h3>Exploration coverage</h3>
-              <pre>level 0 · 200 actions:
-  ach_collect_wood only
-
-level 6:
-<span class="leak-highlight">  exploration actions: 0
-  achievements_hit: []</span>
-
-ach_make_stone_pickaxe:
-<span class="leak-highlight">  successful evidence 없음</span></pre>
-            </div>
-            <div>
-              <h3>Execution failure</h3>
-              <pre>HL plan: 8 steps
-
-revision 1:
-  make_wood_pickaxe
-<span class="leak-highlight">  → 10,001 iterations · failed</span>
-
-WM revision
-
-revision 2:
-  collect_stone
-<span class="leak-highlight">  → 10,001 iterations · failed</span>
-
-<span class="leak-highlight">target: never reached
-result: budget exhausted · failed</span></pre>
-            </div>
-          </div>
+          <p>타깃 level은 <code>make_stone_pickaxe</code>였지만, 탐색에서 관측한 achievement는 <code>ach_collect_wood</code>뿐이었다.</p>
         </div>
       </div>
 
       <div data-choice-panel="example-versions" data-choice-value="v3">
         <h2>v3 · scored prefix → mechanics</h2>
-        <div class="choice-tabs" data-choice="examples-v3" role="tablist" aria-label="v3 주요 사례 선택">
-          <button class="active" type="button" data-choice-value="improvement">개선 사례</button>
-          <button type="button" data-choice-value="failure">실패 사례</button>
-        </div>
-
-        <div class="active" data-choice-panel="examples-v3" data-choice-value="improvement">
-          <p class="caption">original · seed 43 · level 6 · candidate #1708</p>
-          <p>per-level beam이 v2가 계획 전에 보지 못한 crafting → mining → stone-tool chain을 실제 transition으로 수집했고, 같은 level을 end-to-end로 해결했다.</p>
-          <div class="split">
-            <div>
-              <h3>Selected evidence</h3>
-              <pre><span class="leak-highlight">#585  make_wood_pickaxe
+        <p class="caption">original · seed 43 · level 6 · candidate #1708</p>
+        <p>per-level beam이 v2가 계획 전에 보지 못한 crafting → mining → stone-tool chain을 실제 transition으로 수집했고, 같은 level을 end-to-end로 해결했다.</p>
+        <div class="split">
+          <div>
+            <h3>Selected evidence</h3>
+            <pre><span class="leak-highlight">#585  make_wood_pickaxe
 #1531 collect_stone
 #1708 make_stone_pickaxe</span>
 
@@ -717,45 +679,16 @@ result: budget exhausted · failed</span></pre>
 inv_stone:              1 → 0
 inv_wood:               1 → 0
 inv_stone_pickaxe:      0 → 1</span></pre>
-            </div>
-            <div>
-              <h3>Execution</h3>
-              <pre>HL plan: 8 steps
+          </div>
+          <div>
+            <h3>Execution</h3>
+            <pre>HL plan: 8 steps
 
 <span class="leak-highlight">make_wood_pickaxe: 2 actions
 collect_stone:     8 actions
 make_stone_pickaxe: 6 actions</span>
 
 <span class="leak-highlight">result: solved</span></pre>
-            </div>
-          </div>
-        </div>
-
-        <div data-choice-panel="examples-v3" data-choice-value="failure">
-          <p class="caption">random_chars · seed 43 · level 1 · candidate #479</p>
-          <p>target effect를 찾고 operator도 만들었지만, PDDL이 2-unit prerequisite와 consumption을 버려 WM·PDDL이 같은 causal rule을 공유하지 못했다.</p>
-          <div class="split">
-            <div>
-              <h3>Beam discovery</h3>
-              <pre>action: place_table
-score: 797 · selected
-
-<span class="leak-highlight">inv_wood:       2 → 0
-ach_place_table: 0 → 1
-table:           created</span></pre>
-            </div>
-            <div>
-              <h3>Generated mismatch</h3>
-              <pre>place_table:
-<span class="leak-highlight">  precondition: ()
-  effect: ach_place_table</span>
-
-missing:
-<span class="leak-highlight">  inv_wood ≥ 2
-  inv_wood -= 2</span>
-
-<span class="leak-highlight">result: unsolved</span></pre>
-            </div>
           </div>
         </div>
       </div>

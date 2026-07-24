@@ -17,7 +17,7 @@ assert (HERE / "index.html").is_file()
 assert 'data-choice="versions"' in html
 assert 'data-choice="leakage"' in html
 assert 'data-choice="example-versions"' in html
-assert 'data-choice-value="v0"' in html and html.count(">개선 사례</button>") == 3 and html.count(">실패 사례</button>") == 3
+assert 'data-choice-value="v0"' in html and html.count(">개선 사례</button>") == 2 and html.count(">실패 사례</button>") == 2
 assert 'id="log-version"' in html and 'id="log-roles"' in html
 assert html.count('data-log-role=') == 3
 assert "버전별 핵심 차이" in html and "Research Question" in html
@@ -31,6 +31,9 @@ assert "data-highlight=" in html and html.count('class="leak-highlight"') >= 20 
 assert html.count('<pre class="inline-viewer" data-canonicalize') == 3 and 'id="log-name-map" hidden' in html
 assert 'nameMap.hidden = state.benchmark !== "random_chars"' in html
 assert "PDDL grounding은 개선됐지만" not in html
+assert "PDDL이 채집 가능한 <code>tree</code>를 하나만 있다고 작성해" in html
+assert "타깃 level은 <code>make_stone_pickaxe</code>였지만, 탐색에서 관측한 achievement는 <code>ach_collect_wood</code>뿐이었다." in html
+assert 'data-choice="examples-v3"' not in html and "candidate #479" not in html
 name_map = dict(re.findall(r'<td data-canonical="([^"]+)">([^<]+)</td>', html))
 assert len(name_map) == 22 and name_map["tree"] == "xcvkpr" and name_map["wood"] == "tpkhxk"
 canonicalized = "place_zezroc inv_tpkhxk ach_place_zezroc make_tpkhxk_bcwrvm"
