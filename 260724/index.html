@@ -888,7 +888,7 @@ make_stone_pickaxe: 6 actions</span>
       <p class="caption">v3 · seed 42/43. Unique state와 achievement는 candidate phase의 run별 합계 평균. Target effect는 현재 mission의 achievement delta 관측 여부.</p>
 
       <h2>Causal identifiability 부족</h2>
-      <p class="caption">v3 · random_chars · seed 42 · level 2. 아래 로그는 original name으로 변환했다.</p>
+      <p class="caption">v3 · random_chars · seed 42 · level 1–2. 아래 로그는 original name으로 변환했다.</p>
 
       <h3>Negative evidence가 scorer에서 걸러짐</h3>
       <div class="split">
@@ -938,40 +938,39 @@ selected: true</span></pre>
       <h3>관측된 mechanic이 PDDL operator로 구현되지 않음</h3>
       <div class="split">
         <div>
-          <h4 class="case-title">Selected prerequisites · candidates #457, #715</h4>
-          <p class="case-note">stone pickaxe의 선행 단계인 table 설치와 wood pickaxe 제작이 모두 PDDL prompt에 전달됐다.</p>
-          <pre>place_table · candidate #457
-<span class="leak-highlight">inv_wood:         2 → 0
-ach_place_table:  0 → 1
-table:            없음 → [[2, 2]]
-selected:         true</span>
+          <h4 class="case-title">Selected success · candidate #981</h4>
+          <p class="case-note">make_wood_sword 성공 transition이 선택되어 PDDL prompt까지 전달됐다.</p>
+          <pre>context
+<span class="leak-highlight">  inv_wood: 1
+  player: [4, 1]
+  facing: [-1, 0]
+  table: [[3, 0]]</span>
 
-make_wood_pickaxe · candidate #715
-<span class="leak-highlight">inv_wood:                 1 → 0
-inv_wood_pickaxe:         0 → 1
-ach_make_wood_pickaxe:    0 → 1
-selected:                 true</span></pre>
+action: make_wood_sword
+<span class="leak-highlight">inv_wood:            1 → 0
+inv_wood_sword:      0 → 1
+ach_make_wood_sword: 0 → 1
+score: 254
+selected: true</span></pre>
         </div>
         <div>
-          <h4 class="case-title">Generated PDDL · level 6</h4>
-          <p class="case-note">생성된 domain은 마지막 두 단계만 구현해, 관측된 prerequisite operator를 실행 계획에 넣을 수 없었다.</p>
-          <pre>(:action collect_stone
-  :parameters ()
-  :precondition (and)
-  :effect (increase (inv_stone) 1)
+          <h4 class="case-title">Initial generated PDDL · level 1</h4>
+          <p class="case-note">성공 transition이 prompt에 있었지만, 생성된 domain은 현재 mission인 place_table만 모델링했다.</p>
+          <pre>(:action do
+  :parameters (?item - resource)
+  :precondition (resource_present ?item)
+  :effect (increase (inv_wood) 1)
 )
 
-(:action make_stone_pickaxe
+(:action place_table
   :parameters ()
-  :precondition (&gt;= (inv_stone) 3)
+  :precondition (&gt;= (inv_wood) 2)
   :effect
     (and
-      (decrease (inv_stone) 3)
-      (increase (inv_stone_pickaxe) 1)
-      (ach_make_stone_pickaxe))
+      (decrease (inv_wood) 2)
+      (increase (ach_place_table) 1))
 )
-<span class="leak-highlight"># place_table operator 없음
-# make_wood_pickaxe operator 없음</span></pre>
+<span class="leak-highlight"># make_wood_sword operator 없음</span></pre>
         </div>
       </div>
       <p class="takeaway"><strong>소결:</strong> 동일 action의 성공과 no-op을 서로 다른 context에서 대조해야 한다.</p>
@@ -1032,8 +1031,8 @@ prediction:
       <div class="analysis-conclusion">
         <h2>결론</h2>
         <ul>
-          <li><strong>다양한 context의 탐색</strong> — candidate #427 같은 no-op을 버리면 table prerequisite를 식별할 수 없다. 성공·실패 evidence를 함께 보존한다.</li>
-          <li><strong>Mechanic 단위 추상화</strong> — candidates #457·#715처럼 transition을 선택해도 operator chain에서 소실될 수 있다. 조건–행동–효과와 선행 관계를 한 단위로 묶는다.</li>
+          <li><strong>다양한 context의 탐색</strong> — candidate #427·#495처럼 성공과 no-op을 대조하되, 여기서 끝내지 않는다. 같은 action의 여러 성공 context까지 함께 봐야 반복되는 조건과 우연히 동반된 상태를 구분할 수 있다.</li>
+          <li><strong>규칙 발견과 코드 생성의 분리</strong> — candidate #981의 성공 mechanic도 PDDL 생성 단계에서 소실됐다. 먼저 여러 transition에서 조건–행동–효과 규칙을 확정하고, 그 규칙을 PDDL·WM·scorer 코드로 각각 변환한다.</li>
           <li><strong>모듈 간 공유</strong> — candidate #430의 recipe는 PDDL만 학습하고 WM은 no-op으로 남았다. 같은 mechanic을 scorer·PDDL·WM이 공통으로 사용한다.</li>
         </ul>
       </div>
