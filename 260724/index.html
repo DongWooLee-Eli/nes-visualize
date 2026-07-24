@@ -373,7 +373,7 @@
       </div>
 
       <div data-choice-panel="versions" data-choice-value="v0">
-        <h2>v0 · Initial PDDL without transition</h2>
+        <h2>v0 · Initial PDDL without interaction</h2>
         <div class="diagram">
           <pre class="mermaid">
 graph TD
@@ -633,39 +633,6 @@ PDDL plan:
 low-level setup:
 <span class="leak-highlight">  visited: 1,608
   success: false</span></pre>
-            </div>
-          </div>
-
-          <p><strong>재료 조건 실패 · level 13</strong> — PDDL은 table 하나만 계산했지만, 실제 executor가 인접 조건을 복구하려 table을 하나 더 설치해 iron 단계의 wood가 소진됐다.</p>
-          <div class="split">
-            <div>
-              <h3>PDDL resource budget</h3>
-              <pre>collect_wood × 5
-
-place_table          -2
-make_wood_pickaxe    -1
-make_stone_pickaxe   -1
-make_iron_pickaxe    -1
-
-iron pickaxe 직전:
-<span class="leak-highlight">  wood = 5 - 2 - 1 - 1 = 1</span></pre>
-            </div>
-            <div>
-              <h3>Actual execution</h3>
-              <pre>make_stone_pickaxe subplan:
-<span class="leak-highlight">  … → place_table
-    → make_stone_pickaxe</span>
-
-actual:
-  collect_wood × 6
-<span class="leak-highlight">  place_table × 2     -4
-  wood pickaxe        -1
-  stone pickaxe       -1
-  inv_wood             0</span>
-
-make_iron_pickaxe:
-<span class="leak-highlight">  requires inv_wood ≥ 1
-  precondition failed</span></pre>
             </div>
           </div>
         </div>

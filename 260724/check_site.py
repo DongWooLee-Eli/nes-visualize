@@ -39,10 +39,11 @@ assert 'data-choice="examples-v0"' in html
 assert ">실패 사례 1</button>" in html and ">실패 사례 2</button>" in html
 assert "Domain desc. ON · original · seed 42 · 11/14 solved" in html
 assert "common adjacent cell: 없음" in html and "visited: 1,608" in html
-assert "collect_wood × 5" in html and "place_table × 2" in html and "precondition failed" in html
+assert "재료 조건 실패 · level 13" not in html and "PDDL resource budget" not in html
 assert 'id="log-version"' in html and 'id="log-roles"' in html
 assert html.count('data-log-role=') == 3
 overview = html[html.index('id="versions"'):html.index('id="results"')]
+assert "v0 · Initial PDDL without interaction" in overview and "v0 · Initial PDDL without transition" not in overview
 assert '<a href="#versions">Overview</a>' in html and '<a href="#versions">버전</a>' not in html
 assert '<p class="overview-heading"><strong>Recap:</strong></p>' in overview
 assert "<th>TheoryCoder2 (v0)</th>" in overview and "<td>Domain desc. OFF</td>" in overview
