@@ -51,6 +51,9 @@ assert "Domain desc. OFF (v0)" not in overview
 assert "long-horizon planning이 domain knowledge 문제가 두드러지는 과업 조건이다." in overview
 assert "기존 연구, 문제 설정을 고려할 때 online, non-demo 세팅으로 가야한다." in overview
 assert "Research Question: domain description 없음 + online learning setting에서 high-level을 어떻게 복원할까?" in overview
+assert "Generated scorer의 핵심 구조" in overview
+assert 'def score_transition(transition: dict, search_context: dict) -> float:' in overview
+assert '9000.0 * target' in overview and '1200.0 * collect_stone' in overview
 assert overview.count('class="overview-heading"') == 3 and ".overview-heading { font-size: 18px; }" in html
 assert overview.index('aria-label="버전별 research question"') < overview.index('class="overview-heading">버전별 핵심 차이</h1>') < overview.index('data-choice="versions"')
 assert "Revision trigger" in html and ">Trigger<" not in html

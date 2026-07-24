@@ -439,6 +439,29 @@ flowchart TB
     D --> E
           </pre>
         </div>
+        <p class="caption">Generated scorer의 핵심 구조 · original · seed 43 · level 6 · make stone pickaxe (축약)</p>
+        <pre>def score_transition(transition: dict, search_context: dict) -> float:
+    before = transition.get("before", {})
+    after = transition.get("after", {})
+
+    target = int(bool(after.get("ach_make_stone_pickaxe", 0))) \
+        - int(bool(before.get("ach_make_stone_pickaxe", 0)))
+    collect_stone = int(bool(after.get("ach_collect_stone", 0))) \
+        - int(bool(before.get("ach_collect_stone", 0)))
+    make_wood_pickaxe = int(bool(after.get("ach_make_wood_pickaxe", 0))) \
+        - int(bool(before.get("ach_make_wood_pickaxe", 0)))
+    place_table = int(bool(after.get("ach_place_table", 0))) \
+        - int(bool(before.get("ach_place_table", 0)))
+    novelty = 0.05 * float(bool(search_context.get("novel_effect", False)))
+
+    score = (
+        9000.0 * target
+        + 1200.0 * collect_stone
+        + 700.0 * make_wood_pickaxe
+        + 350.0 * place_table
+        + novelty
+    )
+    return float(max(-10000.0, min(10000.0, score)))</pre>
         <ul class="caption">
           <li>warmup: 15 / level</li>
           <li>beam width: 3</li>
