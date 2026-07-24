@@ -29,7 +29,7 @@ assert all(
 )
 assert 'data-choice="versions"' in html
 assert html.count('data-choice-panel="versions"') == 4
-assert 'A["환경 interaction 정보 없이<br/>[Domain description] · Goal · Action · State<br/>Neutral few-shot example"]' in html
+assert 'A["환경 interaction 정보 없이<br/><s>Domain description</s> · Goal · Action · State<br/>Neutral few-shot example"]' in html
 assert 'A["기존 + (WM 생성과 동일한) Random transition"]' in html
 assert "실제 transition evidence 없이 prompt 구성 정보만 전달." not in html
 assert 'data-choice="leakage"' in html
