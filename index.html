@@ -14,9 +14,7 @@
     * { box-sizing: border-box; }
     body { margin: 0; min-height: 100vh; background: #f7f7f5; }
     main { width: min(1120px, calc(100% - 40px)); margin: auto; padding: clamp(72px, 12vw, 140px) 0; }
-    .kicker { color: #2867f0; font-size: 11px; font-weight: 700; letter-spacing: .12em; }
     h1 { margin: 18px 0 18px; font-size: clamp(46px, 7vw, 72px); font-weight: 650; line-height: 1; letter-spacing: -.055em; }
-    .intro { max-width: 560px; margin: 0 0 64px; color: #656a66; font-size: 18px; line-height: 1.65; }
     nav { display: grid; gap: 14px; }
     a {
       display: grid;
@@ -36,7 +34,6 @@
     strong { display: block; margin-bottom: 6px; font-size: 20px; }
     span { color: #727773; line-height: 1.5; }
     b { white-space: nowrap; }
-    footer { margin-top: 72px; color: #969a97; font-size: 13px; }
     @media (max-width: 640px) {
       a { grid-template-columns: 1fr auto; }
       time { grid-column: 1 / -1; }
@@ -46,17 +43,14 @@
 </head>
 <body>
   <main>
-    <p class="kicker">NES VISUALIZATIONS</p>
-    <h1>연구 발표<br>아카이브</h1>
-    <p class="intro">실험 결과와 분석 자료를 날짜별로 모았습니다. 아래 항목을 선택하면 해당 발표 페이지가 열립니다.</p>
+    <h1>NES VISUALIZATIONS</h1>
     <nav aria-label="날짜별 발표">
       <a href="./260724/">
         <time datetime="2026-07-24">2026.07.24</time>
-        <span><strong>TC2 High-level Abstraction</strong>v1 · v2 · v3 병목 개선 실험</span>
+        <span><strong>High-level Abstraction w/o Domain Description</strong>v1 · v2 · v3 병목 개선 실험</span>
         <b>열기 →</b>
       </a>
     </nav>
-    <footer>Dongwoo Lee · NES research visualizations</footer>
   </main>
 </body>
 </html>

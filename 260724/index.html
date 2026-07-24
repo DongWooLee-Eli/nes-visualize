@@ -84,7 +84,10 @@
     .brand {
       flex: 0 0 auto;
       margin-right: 34px;
+      padding: 3px 8px;
       color: var(--ink);
+      border: 1px solid var(--line);
+      border-radius: 3px;
       font-size: 13px;
       font-weight: 650;
       text-decoration: none;
@@ -283,7 +286,7 @@
 </head>
 <body>
   <header class="topbar">
-    <a class="brand" href="../">TC2 / 260724</a>
+    <a class="brand" href="../">260724</a>
     <nav class="tabs" aria-label="상위 구성">
       <ul role="tablist">
         <li><a href="#versions">버전</a></li>
@@ -805,7 +808,7 @@ flowchart LR
 
     <section class="panel" id="templates">
       <h1>프롬프트 템플릿</h1>
-      <p class="caption"><code>{}</code> = run마다 달라지는 값. Scorer는 v3에서만 사용한다.</p>
+      <p class="caption"><code>{PLACEHOLDER}</code> = run마다 달라지는 값. Scorer는 v3에서만 사용한다.</p>
 
       <div class="role-grid">
         <article class="role-card" data-template-role="Scorer">
@@ -825,11 +828,11 @@ Use only arithmetic, conditionals, local variables, mapping.get, and these built
 abs, bool, float, int, len, max, min, sum. No imports, I/O, dunder access,
 recursion, loops, exceptions, mutation, or non-finite results.
 
-Mission: {}
-Public state format: {}
-Public actions: {}
-Initial public state: {}
-All warmup transition evidence: {}
+Mission: {MISSION}
+Public state format: {PUBLIC_STATE_FORMAT}
+Public actions: {PUBLIC_ACTIONS}
+Initial public state: {INITIAL_PUBLIC_STATE}
+All warmup transition evidence: {WARMUP_TRANSITIONS}
 
 Neutral novelty scorer:
 ```python
@@ -839,14 +842,14 @@ def score_transition(transition: dict, search_context: dict) -&gt; float:
 
 Previous valid scorer, if any:
 ```python
-{}
+{PREVIOUS_SCORER}
 ```</pre>
           </div>
 
           <div data-choice-panel="template-scorer" data-choice-value="repair">
             <pre>Generate prompt에 다음 문장을 추가:
 
-Repair the scorer. The prior output failed validation with: {}</pre>
+Repair the scorer. The prior output failed validation with: {VALIDATION_ERROR}</pre>
           </div>
         </article>
 
@@ -878,23 +881,23 @@ PDDL GUIDANCE
 - Make :init match the raw state and return exactly one :goal expression.
 
 Domain Description:
-{}
+{DOMAIN_DESCRIPTION}
 
 MISSION:
-{}
+{MISSION}
 
 Raw state:
-{}
+{RAW_STATE}
 
 Action Space:
-{}
+{ACTION_SPACE}
 
 OBSERVED INTERACTION EVIDENCE:
 Ground preconditions and effects in these transitions.
-{}
+{OBSERVED_TRANSITIONS}
 
 YOUR CURRENT DOMAIN FILE, if any:
-{}
+{CURRENT_DOMAIN}
 
 Return the domain and problem in ```pddl``` code blocks.
 
@@ -972,29 +975,29 @@ Constraints:
 
 CURRENT DOMAIN:
 ```pddl
-{}
+{CURRENT_DOMAIN}
 ```
 
 NEW MISSION:
-{}
+{MISSION}
 
 CURRENT RAW STATE:
-{}
+{RAW_STATE}
 
 OBSERVED INTERACTION EVIDENCE:
 Ground revisions in these transitions. Preserve operators unless evidence or a failure signal contradicts them.
-{}
+{OBSERVED_TRANSITIONS}
 
 Action Space:
-{}
+{ACTION_SPACE}
 
 DOMAIN DESCRIPTION:
-{}
+{DOMAIN_DESCRIPTION}
 
 FAILURE SIGNALS:
-- Predicate-classifier error: {}
-- Planner failure or empty plan: {}
-- World-model prediction mismatch: {}
+- Predicate-classifier error: {PREDICATE_ERROR}
+- Planner failure or empty plan: {PLANNER_ERROR}
+- World-model prediction mismatch: {PREDICTION_ERROR}
 
 Return EXACTLY ONE ```pddl``` code block containing only the domain.</pre>
           </div>
@@ -1016,19 +1019,19 @@ Fixed neutral few-shot examples:
 [same fixed block as Init]
 
 Domain file:
-{}
+{DOMAIN_FILE}
 
 Raw state:
-{}
+{RAW_STATE}
 
 Action Space:
-{}
+{ACTION_SPACE}
 
 MISSION:
-{}
+{MISSION}
 
 Domain Description:
-{}</pre>
+{DOMAIN_DESCRIPTION}</pre>
           </div>
 
           <div data-choice-panel="template-pddl" data-choice-value="predicate">
@@ -1044,27 +1047,27 @@ Rules:
 - Return only a ```python``` code block.
 
 Predicates that must be defined:
-{}
+{EXPECTED_PREDICATES}
 
 Starter stubs:
 ```python
-{}
+{PREDICATE_STUBS}
 ```
 
 Domain File:
-{}
+{DOMAIN_FILE}
 
 Problem File:
-{}
+{PROBLEM_FILE}
 
 Raw State:
-{}
+{RAW_STATE}
 
 Current Python Low Level World Model:
-{}
+{WORLD_MODEL}
 
 Game Description:
-{}</pre>
+{GAME_DESCRIPTION}</pre>
           </div>
         </article>
 
@@ -1077,7 +1080,7 @@ Game Description:
 
           <div class="active" data-choice-panel="template-wm" data-choice-value="init">
             <pre>Domain Description:
-{}
+{DOMAIN_DESCRIPTION}
 
 ## Your Task
 
@@ -1087,16 +1090,16 @@ Based on the following observations from random exploration, write a general-pur
 If an action returns no state change, movement may have been prevented by an obstacle.
 
 ### Mission
-{}
+{MISSION}
 
 ### Available Actions
-{}
+{ACTION_SPACE}
 
 ### Current State
-{}
+{CURRENT_STATE}
 
 ### Observed Transitions
-{}
+{OBSERVED_TRANSITIONS}
 
 ### Notes
 - Use `.endswith()` or `.startswith()` instead of hardcoding entity lists.
@@ -1117,10 +1120,10 @@ def transition_model(state, action):
 
           <div data-choice-panel="template-wm" data-choice-value="revise">
             <pre>Domain Description:
-{}
+{DOMAIN_DESCRIPTION}
 
 ### Current Mission
-{}
+{MISSION}
 
 ## Your Task
 
@@ -1129,15 +1132,15 @@ Fix the transition model to handle the cases below.
 Pay attention to the EXPLORATION PLAN and its state transitions.
 
 ### Available Actions
-{}
+{ACTION_SPACE}
 
 ### Current World Model
 ```python
-{}
+{WORLD_MODEL}
 ```
 
 ### Prediction Errors
-{}
+{PREDICTION_ERRORS}
 
 ### Requirements
 1. Return the COMPLETE revised transition_model function.

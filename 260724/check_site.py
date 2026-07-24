@@ -8,12 +8,25 @@ from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 html = (HERE / "index.html").read_text()
+archive = (HERE.parent / "index.html").read_text()
 payload = (HERE / "artifact-manifest.js").read_text()
 manifest = json.loads(
     payload.removeprefix("window.TC2_ARTIFACT_MANIFEST=").removesuffix(";\n")
 )
 
 assert (HERE / "index.html").is_file()
+assert '<a class="brand" href="../">260724</a>' in html and "TC2 / 260724" not in html
+assert "<h1>NES VISUALIZATIONS</h1>" in archive
+assert "<strong>High-level Abstraction w/o Domain Description</strong>" in archive
+assert all(
+    text not in archive
+    for text in (
+        "연구 발표 아카이브",
+        "실험 결과와 분석 자료를 날짜별로 모았습니다.",
+        "NES research visualizations",
+        "TC2 High-level Abstraction",
+    )
+)
 assert 'data-choice="versions"' in html
 assert html.count('data-choice-panel="versions"') == 4
 assert 'A["Transition 없이<br/>[Domain description] · Goal · Action · State<br/>Neutral few-shot example"]' in html
@@ -60,8 +73,36 @@ assert all(
     f'data-choice="template-{role}"' in templates
     for role in ("scorer", "pddl", "wm")
 )
-assert templates.count("{}") >= 25
-assert "Repair the scorer. The prior output failed validation with: {}" in templates
+assert "{}" not in templates
+assert all(value == value.upper() for value in re.findall(r"\{([a-z_]+)\}", templates, re.I))
+assert "Repair the scorer. The prior output failed validation with: {VALIDATION_ERROR}" in templates
+assert all(
+    placeholder in templates
+    for placeholder in (
+        "{MISSION}",
+        "{PUBLIC_STATE_FORMAT}",
+        "{PUBLIC_ACTIONS}",
+        "{INITIAL_PUBLIC_STATE}",
+        "{WARMUP_TRANSITIONS}",
+        "{PREVIOUS_SCORER}",
+        "{DOMAIN_DESCRIPTION}",
+        "{RAW_STATE}",
+        "{ACTION_SPACE}",
+        "{OBSERVED_TRANSITIONS}",
+        "{CURRENT_DOMAIN}",
+        "{PREDICATE_ERROR}",
+        "{PLANNER_ERROR}",
+        "{PREDICTION_ERROR}",
+        "{DOMAIN_FILE}",
+        "{EXPECTED_PREDICATES}",
+        "{PREDICATE_STUBS}",
+        "{PROBLEM_FILE}",
+        "{WORLD_MODEL}",
+        "{GAME_DESCRIPTION}",
+        "{CURRENT_STATE}",
+        "{PREDICTION_ERRORS}",
+    )
+)
 assert all(
     value in templates
     for value in (
